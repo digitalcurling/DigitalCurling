@@ -85,7 +85,7 @@ private:
     std::unique_ptr<simulation::ISimulator> const simulator_;
     normal_game::Setting const game_setting_;
     normal_game::State game_state_;
-    std::optional<normal_game::MoveResult> last_move_result_;
+    std::optional<std::array<std::optional<Vector2>, kStoneMax>> last_end_stone_positions_;
 };
 
 // -----

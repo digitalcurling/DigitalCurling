@@ -25,7 +25,7 @@ State::State()
     , current_end_first(TeamId::k0)
     , current_end(0)
     , extra_end_score(0)
-    , game_result()
+    , result()
 {}
 
 std::uint32_t State::GetScore(TeamId team) const
@@ -53,7 +53,7 @@ std::uint32_t State::GetScore(TeamId team) const
 
 TeamId State::GetCurrentTeam() const
 {
-    if (game_result) {  // ゲームがすでに終わっている．
+    if (result) {  // ゲームがすでに終わっている．
         return TeamId::kInvalid;
     }
 
@@ -86,13 +86,7 @@ TeamId State::GetCurrentTeam() const
 
 namespace {
 
-constexpr float kHogLineYOnSheet = 10.9725f;
-constexpr float kTeeLineYOnSheet = 17.3735f;
-constexpr float kBackLineYOnSheet = 19.2025f;
-constexpr float kHackLineYOnSheet = 21.0315f;
-constexpr float kBackBoardYOnSheet = 22.8605f;
-constexpr float kHouseRadius = 1.829f;
-constexpr Vector2 kTee(0.f, kTeeLineYOnSheet);
+constexpr Vector2 kTee(0.f, coordinate::GetTeeLineY(coordinate::Id::kSimulation));
 
 
 inline float GetShotAngularVelocity(move::Shot::Rotation shot_rotation)
@@ -114,90 +108,22 @@ inline float GetShotAngularVelocity(move::Shot::Rotation shot_rotation)
 }
 
 
-inline bool GetSheetSide(std::uint8_t current_end)
-{
-    return current_end % 2 == 0;
-}
-
-
-/// <summary>
-/// 座標をシート座標系に変換する．
-/// </summary>
-/// <param name="pos_on_shot"><paramref name="sheet_side"/>で指定したサイドのショット座標系</param>
-/// <param name="sheet_side">サイド</param>
-/// <returns>シート座標系</returns>
-inline Vector2 TransformPositionToSheet(Vector2 pos_on_shot, bool sheet_side)
-{
-    if (!sheet_side) {
-        // side 0
-        return { pos_on_shot.x, pos_on_shot.y - kHackLineYOnSheet };
-    } else {
-        // side 1
-        return { -pos_on_shot.x, -pos_on_shot.y + kHackLineYOnSheet };
-    }
-}
-
-
-/// <summary>
-/// ショット座標系に変換する．
-/// </summary>
-/// <param name="pos_on_sheet">シート座標系</param>
-/// <param name="sheet_side">サイド</param>
-/// <returns><paramref name="sheet_side"/>で指定したサイドのショット座標系</returns>
-inline Vector2 TransformPositionToShot(Vector2 pos_on_sheet, bool sheet_side)
-{
-    if (!sheet_side) {
-        // side 0
-        return { pos_on_sheet.x, pos_on_sheet.y + kHackLineYOnSheet };
-    } else {
-        // side 1
-        return { -pos_on_sheet.x, -pos_on_sheet.y + kHackLineYOnSheet };
-    }
-}
-
-
-/// <summary>
-/// 角度をシート座標系に変換する．
-/// </summary>
-/// <param name="angle_on_shot"><paramref name="sheet_side"/>で指定したサイドでの角度</param>
-/// <param name="sheet_side">サイド</param>
-/// <returns>シート座標系での角度</returns>
-inline float TransformAngleToSheet(float angle_on_shot, bool sheet_side)
-{
-    if (!sheet_side) {
-        // side 0
-        return angle_on_shot;
-    } else {
-        // side 1
-        return angle_on_shot + kPi;
-    }
-}
-
-inline Vector2 TransformVelocityToSheet(Vector2 velocity_on_shot, bool sheet_side)
-{
-    if (!sheet_side) {
-        // side 0
-        return velocity_on_shot;
-    } else {
-        // side 1
-        return -velocity_on_shot;
-    }
-}
-
 /// <summary>
 /// 両サイドで異なるシート座標をサイド0側にひとまとめにする．
 /// </summary>
-/// <param name="pos_on_sheet">シート座標系</param>
-/// <param name="sheet_side">サイド</param>
+/// <param name="pos_sim">シート座標系</param>
+/// <param name="shot_side">サイド</param>
 /// <returns>サイド0側のシート座標</returns>
-inline Vector2 CanonicalizePositionOnSheet(Vector2 pos_on_sheet, bool sheet_side)
+inline Vector2 CanonicalizePositionOnSheet(Vector2 pos_sim, coordinate::Id shot_side)
 {
-    if (!sheet_side) {
-        // side 0
-        return pos_on_sheet;
-    } else {
-        // side 1
-        return -pos_on_sheet;
+    switch (shot_side) {
+        case coordinate::Id::kShot0:
+            return pos_sim;
+        case coordinate::Id::kShot1:
+            return -pos_sim;
+        default:
+            assert(false);
+            return Vector2();  // 到達しない
     }
 }
 
@@ -208,15 +134,15 @@ inline Vector2 CanonicalizePositionOnSheet(Vector2 pos_on_sheet, bool sheet_side
 /// <param name="stone_position"></param>
 /// <param name="sheet_width"></param>
 /// <param name="stone_radius"></param>
-/// <param name="sheet_side"></param>
+/// <param name="shot_side"></param>
 /// <returns></returns>
-inline bool IsStoneValidWhileSimulation(Vector2 stone_position, float sheet_width, float stone_radius, bool sheet_side)
+inline bool IsStoneValidWhileSimulation(Vector2 stone_position, float sheet_width, float stone_radius, coordinate::Id shot_side)
 {
-    Vector2 const canonical_stone_position = CanonicalizePositionOnSheet(stone_position, sheet_side);
+    Vector2 const canonical_stone_position = CanonicalizePositionOnSheet(stone_position, shot_side);
     return canonical_stone_position.x + stone_radius < sheet_width / 2.f
         && canonical_stone_position.x - stone_radius > -sheet_width / 2.f
-        && canonical_stone_position.y - stone_radius < kBackLineYOnSheet  // バックラインの内側判定(例外的なので注意)
-        && canonical_stone_position.y - stone_radius > -kBackBoardYOnSheet;  // バックボードの内側
+        && canonical_stone_position.y - stone_radius < coordinate::GetBackLineY(coordinate::Id::kSimulation)  // バックラインの内側判定(例外的なので注意)
+        && canonical_stone_position.y - stone_radius > -coordinate::GetBackBoardY(coordinate::Id::kSimulation);  // バックボードの内側
 
     // バックラインの内側判定 について
     // ストーンがバックラインに少しでも掛かっていれば内側と見なされるため
@@ -234,19 +160,19 @@ inline bool IsStoneValidWhileSimulation(Vector2 stone_position, float sheet_widt
 /// </remarks>
 /// <param name="stone_position"></param>
 /// <param name="stone_radius"></param>
-/// <param name="sheet_side"></param>
+/// <param name="shot_side"></param>
 /// <returns></returns>
-inline bool IsStoneInPlayArea(Vector2 stone_position, float stone_radius, bool sheet_side)
+inline bool IsStoneInPlayArea(Vector2 stone_position, float stone_radius, coordinate::Id shot_side)
 {
-    Vector2 const canonical_stone_position = CanonicalizePositionOnSheet(stone_position, sheet_side);
-    return canonical_stone_position.y - stone_radius > kHogLineYOnSheet;
+    Vector2 const canonical_stone_position = CanonicalizePositionOnSheet(stone_position, shot_side);
+    return canonical_stone_position.y - stone_radius > coordinate::GetHogLineY(coordinate::Id::kSimulation);
 }
 
 
-inline bool IsStoneInHouse(Vector2 stone_position, float stone_radius, bool sheet_side)
+inline bool IsStoneInHouse(Vector2 stone_position, float stone_radius, coordinate::Id shot_side)
 {
-    Vector2 const canonical_stone_position = CanonicalizePositionOnSheet(stone_position, sheet_side);
-    return (canonical_stone_position - kTee).Length() < kHouseRadius + stone_radius;
+    Vector2 const canonical_stone_position = CanonicalizePositionOnSheet(stone_position, shot_side);
+    return (canonical_stone_position - kTee).Length() < coordinate::kHouseRadius + stone_radius;
 }
 
 
@@ -259,18 +185,18 @@ inline bool IsStoneInHouse(Vector2 stone_position, float stone_radius, bool shee
 /// <param name="stone_radius"></param>
 /// <param name="sheet_side"></param>
 /// <returns></returns>
-inline bool IsStoneInFreeGuardZone(Vector2 stone_position, float stone_radius, bool sheet_side)
+inline bool IsStoneInFreeGuardZone(Vector2 stone_position, float stone_radius, coordinate::Id shot_side)
 {
-    if (IsStoneInHouse(stone_position, stone_radius, sheet_side)) {
+    if (IsStoneInHouse(stone_position, stone_radius, shot_side)) {
         return false;
     }
 
-    Vector2 const canonical_stone_position = CanonicalizePositionOnSheet(stone_position, sheet_side);
-    return canonical_stone_position.y + stone_radius < kTeeLineYOnSheet;
+    Vector2 const canonical_stone_position = CanonicalizePositionOnSheet(stone_position, shot_side);
+    return canonical_stone_position.y + stone_radius < coordinate::GetTeeLineY(coordinate::Id::kSimulation);
 }
 
 
-inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float stone_radius, bool sheet_side, TeamId current_end_first)
+inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float stone_radius, coordinate::Id shot_side, TeamId current_end_first)
 {
     assert(current_end_first != TeamId::kInvalid);
 
@@ -278,7 +204,7 @@ inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float ston
     std::array<float, kStoneMax> distances{};
     for (StoneId i = 0; i < kStoneMax; ++i) {
         if (stones[i]) {
-            auto const canonical_stone_position = CanonicalizePositionOnSheet(stones[i]->position, sheet_side);
+            auto const canonical_stone_position = CanonicalizePositionOnSheet(stones[i]->position, shot_side);
             distances[i] = (canonical_stone_position - kTee).Length();
         } else {
             distances[i] = std::numeric_limits<float>::max();
@@ -288,8 +214,8 @@ inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float ston
     // プレイヤー0のNo.1ストーンまでの距離をminDistance0に
     // プレイヤー1のNo.1ストーンまでの距離をminDistance1に格納．
     std::array<float, 2> minDistance{ {
-        kHouseRadius + stone_radius,
-        kHouseRadius + stone_radius} };
+        coordinate::kHouseRadius + stone_radius,
+        coordinate::kHouseRadius + stone_radius} };
 
     for (StoneId i = 0; i < kStoneMax; ++i) {
         size_t const team_id = (i + static_cast<size_t>(current_end_first)) % 2;
@@ -320,18 +246,6 @@ inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float ston
 }
 
 
-void StoreStonePositions(std::array<std::optional<Vector2>, kStoneMax> & stone_positions, simulation::AllStoneData const& all_stone_data, bool sheet_side)
-{
-    for (StoneId i = 0; i < kStoneMax; ++i) {
-        if (all_stone_data[i]) {
-            stone_positions[i] = TransformPositionToShot(all_stone_data[i]->position, sheet_side);
-        } else {
-            stone_positions[i] = std::nullopt;
-        }
-    }
-}
-
-
 Vector2 RandomizeShotVelocity(Vector2 shot_velocity, float stddev_shot_speed, float stddev_shot_angle)
 {
     thread_local auto random_engine = std::default_random_engine(std::random_device()());
@@ -351,34 +265,48 @@ void ApplyMove(
     Setting const& setting,
     State & state,
     simulation::ISimulator & simulator,
-    Move & move,
-    MoveResult & move_result)
+    Move & move)
 {
+    using namespace coordinate;
+
     // TODO 例外時の保証
 
     // ゲームが既に終了している
-    if (state.game_result) return;
+    if (state.result) return;
 
     assert(state.current_end_first != TeamId::kInvalid);
 
-    bool const sheet_side = GetSheetSide(state.current_end);
+    auto const shot_side = GetShotSide(state.current_end);
     float const stone_radius = simulator.GetStoneRadius();
     bool is_shot = std::holds_alternative<move::Shot>(move);
 
     // シート上のストーンの初期状態を設定
 
     simulation::AllStoneData initial_stones;
-    for (StoneId i = 0; i < kStoneMax; ++i) {
-        if (i < state.current_shot && state.stone_positions[i]) {
-            // ストーンの角度はsimulatorから取得する．
-            float const stone_angle = simulator.GetStones()[i] ? simulator.GetStones()[i]->angle : 0.f;
-            initial_stones[i] = simulation::StoneData(
-                TransformPositionToSheet(*state.stone_positions[i], sheet_side),
-                stone_angle,
-                Vector2(0.f, 0.f),
-                0.f);
-        } else {
-            initial_stones[i] = std::nullopt;
+    {
+        auto const& stones = simulator.GetStones();
+        for (StoneId i = 0; i < kStoneMax; ++i) {
+            if (i < state.current_shot && state.stone_positions[i]) {
+                auto const stone_pos_sim = TransformPosition(*state.stone_positions[i], shot_side, Id::kSimulation);
+
+                // ストーンの角度はシミュレータから取得する．
+                // ただし，シミュレータ内でストーンを動かしていないと思われる場合のみ使用する．
+                float stone_angle_sim = 0.f;
+                constexpr float kEpsilon = 0.0001f;  // 許容誤差．この値は座標変換の誤差を考えて大きめにしている(FLT_EPSILONでは小さすぎる)が，ぶっちゃけ適当である．
+                if (stones[i]
+                    && std::abs(stones[i]->position.x - stone_pos_sim.x) <= kEpsilon
+                    && std::abs(stones[i]->position.y - stone_pos_sim.y) <= kEpsilon) {
+                    stone_angle_sim = stones[i]->angle;
+                }
+
+                initial_stones[i] = simulation::StoneData(
+                    stone_pos_sim,
+                    stone_angle_sim,
+                    Vector2(0.f, 0.f),
+                    0.f);
+            } else {
+                initial_stones[i] = std::nullopt;
+            }
         }
     }
 
@@ -393,22 +321,25 @@ void ApplyMove(
             shot.velocity = RandomizeShotVelocity(shot.velocity, setting.stddev_shot_speed, setting.stddev_shot_angle);
         }
         initial_stones[state.current_shot] = simulation::StoneData(
-            TransformPositionToSheet(Vector2(0.f, 0.f), sheet_side),
-            TransformAngleToSheet(0.f, sheet_side),
-            TransformVelocityToSheet(shot.velocity, sheet_side),
-            GetShotAngularVelocity(shot.rotation));
+            TransformPosition(Vector2(0.f, 0.f), shot_side, Id::kSimulation),
+            TransformAngle(0.f, shot_side, Id::kSimulation),
+            TransformVelocity(shot.velocity, shot_side, Id::kSimulation),
+            TransformAngularVelocity(GetShotAngularVelocity(shot.rotation), shot_side, Id::kSimulation));
     }
 
     simulator.SetStones(initial_stones);
 
     // シミュレーション
     if (is_shot) {
+        // すべてのストーンが停止するまでループ
         while (!simulator.AreAllStonesStopped()) {
             simulator.Step();
             simulation::AllStoneData stones = simulator.GetStones();
+
+            // シート外に出たストーンを除外
             bool stone_removed = false;
             for (StoneId i = 0; i <= state.current_shot; ++i) {
-                if (stones[i] && !IsStoneValidWhileSimulation(stones[i]->position, setting.sheet_width, stone_radius, sheet_side)) {
+                if (stones[i] && !IsStoneValidWhileSimulation(stones[i]->position, setting.sheet_width, stone_radius, shot_side)) {
                     stones[i] = std::nullopt;
                     stone_removed = true;
                 }
@@ -416,6 +347,8 @@ void ApplyMove(
             if (stone_removed) {
                 simulator.SetStones(stones);
             }
+
+            // コールバック
             if (setting.on_step) {
                 setting.on_step(simulator);
             }
@@ -426,7 +359,7 @@ void ApplyMove(
             simulation::AllStoneData stones = simulator.GetStones();
             bool stone_removed = false;
             for (StoneId i = 0; i <= state.current_shot; ++i) {
-                if (stones[i] && !IsStoneInPlayArea(stones[i]->position, stone_radius, sheet_side)) {
+                if (stones[i] && !IsStoneInPlayArea(stones[i]->position, stone_radius, shot_side)) {
                     stones[i] = std::nullopt;
                     stone_removed = true;
                 }
@@ -442,7 +375,7 @@ void ApplyMove(
         if (state.current_shot < free_guard_zone_count) {
             simulation::AllStoneData const& stones = simulator.GetStones();
             for (StoneId i = (state.current_shot + 1) % 2; i < state.current_shot; i += 2) {  // 相手のショットを列挙
-                if (initial_stones[i] && IsStoneInFreeGuardZone(initial_stones[i]->position, stone_radius, sheet_side)
+                if (initial_stones[i] && IsStoneInFreeGuardZone(initial_stones[i]->position, stone_radius, shot_side)
                     && !stones[i]) {
                     free_guard_faul = true;
                     break;
@@ -454,16 +387,13 @@ void ApplyMove(
         }
     }
 
-    // move_resultを構築
-    move_result.team = state.GetCurrentTeam();
-    move_result.shot = state.current_shot;
-    move_result.end = state.current_end;
-    StoreStonePositions(move_result.stone_positions, simulator.GetStones(), sheet_side);
+    // state.current_shot, state.current_endなどが更新される前に，ショットを行ったチームを記録しておく．
+    auto const moved_team = state.GetCurrentTeam();
 
     // エンド終了時の処理
     if (state.current_shot == 15) {
         // スコア算出
-        auto const score = CheckScore(simulator.GetStones(), stone_radius, sheet_side, state.current_end_first);
+        auto const score = CheckScore(simulator.GetStones(), stone_radius, shot_side, state.current_end_first);
 
         // スコアを反映
         if (state.current_end < setting.end) {  // 通常エンド
@@ -499,21 +429,28 @@ void ApplyMove(
             // 次の手は無い．
             state.current_end_first = TeamId::kInvalid;
 
-            state.game_result.emplace();
+            state.result.emplace();
             if (score_sum > 0) {
-                state.game_result->win = TeamId::k0;
-                state.game_result->reason = GameResult::Reason::kScore;
+                state.result->win = TeamId::k0;
+                state.result->reason = Result::Reason::kScore;
             } else if (score_sum < 0) {
-                state.game_result->win = TeamId::k1;
-                state.game_result->reason = GameResult::Reason::kScore;
+                state.result->win = TeamId::k1;
+                state.result->reason = Result::Reason::kScore;
             } else if (state.current_end >= kExtraEndMax) {  // スコア差無し かつ 延長エンド数限界
-                state.game_result->win = TeamId::kInvalid;
-                state.game_result->reason = GameResult::Reason::kInvalid;
+                state.result->win = TeamId::kInvalid;
+                state.result->reason = Result::Reason::kInvalid;
             }
         }
 
     } else {  // エンド中の処理
-        StoreStonePositions(state.stone_positions, simulator.GetStones(), sheet_side);
+        auto const& stones = simulator.GetStones();
+        for (StoneId i = 0; i < kStoneMax; ++i) {
+            if (stones[i]) {
+                state.stone_positions[i] = TransformPosition(stones[i]->position, Id::kSimulation, shot_side);
+            } else {
+                state.stone_positions[i] = std::nullopt;
+            }
+        }
         ++state.current_shot;
     }
 
@@ -522,13 +459,13 @@ void ApplyMove(
         // 次の手は無い．
         state.current_end_first = TeamId::kInvalid;
 
-        state.game_result.emplace();
-        switch (move_result.team) {
+        state.result.emplace();
+        switch (moved_team) {
             case TeamId::k0:
-                state.game_result->win = TeamId::k1;
+                state.result->win = TeamId::k1;
                 break;
             case TeamId::k1:
-                state.game_result->win = TeamId::k0;
+                state.result->win = TeamId::k0;
                 break;
             default:
                 assert(false);
@@ -538,10 +475,10 @@ void ApplyMove(
         std::visit(
             Overloaded{
                 [&state](move::Concede) {
-                    state.game_result->reason = GameResult::Reason::kConcede;
+                    state.result->reason = Result::Reason::kConcede;
                 },
                 [&state](move::TimeLimit) {
-                    state.game_result->reason = GameResult::Reason::kTimeLimit;
+                    state.result->reason = Result::Reason::kTimeLimit;
                 },
                 [](auto const&) {
                     assert(false);

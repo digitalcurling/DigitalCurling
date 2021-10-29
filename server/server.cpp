@@ -197,7 +197,7 @@ void Channel::OnRead(size_t client_id, std::string && input_message, std::chrono
                 DeliverUpdateMessage(move);
 
                 // if game is over, ...
-                if (game_state_.game_result) {
+                if (game_state_.result) {
                     DeliverGameOverMessage();
                     // 以降，クライアントの接続解除を待つ．
                 }
@@ -347,9 +347,23 @@ void Channel::Update(normal_game::Move & move)
         Log::Info() << j.dump();
     }
 
-    normal_game::MoveResult move_result;
-    normal_game::ApplyMove(game_setting_, game_state_, *simulator_, move, move_result);
-    last_move_result_ = move_result;
+    normal_game::ApplyMove(game_setting_, game_state_, *simulator_, move);
+
+    // エンド終了時にストーン位置を報告する．
+    if (game_state_.current_shot == 0 && game_state_.current_end > 0) {  // エンド終了直後か？
+        last_end_stone_positions_.emplace();
+        auto const& stones = simulator_->GetStones();
+        auto const prev_end_side = coordinate::GetShotSide(game_state_.current_end - 1);
+        for (size_t i = 0; i < kStoneMax; ++i) {
+            if (stones[i]) {
+                (*last_end_stone_positions_)[i] = coordinate::TransformPosition(stones[i]->position, coordinate::Id::kSimulation, prev_end_side);
+            } else {
+                (*last_end_stone_positions_)[i] = std::nullopt;
+            }
+        }
+    } else {
+        last_end_stone_positions_ = std::nullopt;
+    }
 
     // 延長エンドの残り時間を設定．
     if (game_state_.current_end >= game_setting_.end && game_state_.current_shot == 0) {
@@ -378,7 +392,7 @@ void Channel::DeliverUpdateMessage(std::optional<normal_game::Move> const& last_
         { "state", game_state_ },
         { "remaining_times", std::move(remaining_times) },
         { "last_move", last_move },
-        { "last_move_result", last_move_result_ }
+        { "last_end_stone_positions", last_end_stone_positions_ }
     };
 
     auto const message = jout_update.dump();

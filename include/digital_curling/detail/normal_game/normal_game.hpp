@@ -11,6 +11,20 @@ namespace digital_curling::normal_game {
 
 
 /// <summary>
+/// 延長戦を含まないエンド数の最大値
+/// </summary>
+constexpr std::uint8_t kEndMax = 10;
+
+
+
+/// <summary>
+/// 延長戦を含めたエンド数の最大値(<see cref="State::current_end"/> >= <see cref="kExtraEndMax"/>のときは無効なエンド)
+/// </summary>
+constexpr std::uint8_t kExtraEndMax = 255;
+
+
+
+/// <summary>
 /// チームを識別するために用いる
 /// </summary>
 enum class TeamId : std::int8_t {
@@ -35,20 +49,6 @@ NLOHMANN_JSON_SERIALIZE_ENUM(TeamId, {
     {TeamId::k1, 1},
     {TeamId::kInvalid, nullptr},
 })
-
-
-
-/// <summary>
-/// 延長戦を含まないエンド数の最大値
-/// </summary>
-constexpr std::uint8_t kEndMax = 10;
-
-
-
-/// <summary>
-/// 延長戦を含めたエンド数の最大値(<see cref="State::current_end"/> >= <see cref="kExtraEndMax"/>のときは無効なエンド)
-/// </summary>
-constexpr std::uint8_t kExtraEndMax = 255;
 
 
 
@@ -116,7 +116,7 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
 /// <summary>
 /// 試合の結果を格納する．
 /// </summary>
-struct GameResult {
+struct Result {
 
     /// <summary>
     /// 勝敗が定まった理由
@@ -135,23 +135,23 @@ struct GameResult {
     /// <summary>
     /// 勝者．引き分けの場合は<see cref="TeamId::kInvalid"/>が格納される．
     /// </summary>
-    TeamId win;
+    TeamId win = TeamId::k0;
 
     /// <summary>
     /// 勝敗の要因．
     /// </summary>
-    Reason reason;
+    Reason reason = Reason::kScore;
 };
 
-NLOHMANN_JSON_SERIALIZE_ENUM(GameResult::Reason, {
-    {GameResult::Reason::kScore, "score"},
-    {GameResult::Reason::kConcede, "concede"},
-    {GameResult::Reason::kTimeLimit, "time_limit"},
-    {GameResult::Reason::kInvalid, nullptr},
+NLOHMANN_JSON_SERIALIZE_ENUM(Result::Reason, {
+    {Result::Reason::kScore, "score"},
+    {Result::Reason::kConcede, "concede"},
+    {Result::Reason::kTimeLimit, "time_limit"},
+    {Result::Reason::kInvalid, nullptr},
 })
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
-    GameResult,
+    Result,
     win,
     reason
 )
@@ -162,6 +162,7 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
 /// 試合の状態を表す．
 /// </summary>
 struct State {
+
     /// <summary>
     /// 初期盤面を構築する．
     /// </summary>
@@ -206,9 +207,9 @@ struct State {
     std::int8_t extra_end_score;
 
     /// <summary>
-    /// ゲーム結果．<c>std::nullopt</c>の間は試合中．
+    /// 試合結果．<c>std::nullopt</c>の間は試合中．
     /// </summary>
-    std::optional<GameResult> game_result;
+    std::optional<Result> result;
 
     /// <summary>
     /// チームの現在までの合計スコアを得る
@@ -232,7 +233,7 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
     current_end_first,
     current_end,
     extra_end_score,
-    game_result
+    result
 )
 
 
@@ -265,7 +266,7 @@ struct Shot {
     /// <summary>
     /// ショットの初期回転方向
     /// </summary>
-    Rotation rotation;
+    Rotation rotation = Rotation::kCCW;
 };
 
 NLOHMANN_JSON_SERIALIZE_ENUM(Shot::Rotation, {
@@ -305,41 +306,6 @@ using Move = std::variant<move::Shot, move::Concede, move::TimeLimit>;
 
 
 /// <summary>
-/// 行動の結果を格納します．
-/// </summary>
-struct MoveResult {
-    /// <summary>
-    /// 行動を行ったチーム．
-    /// </summary>
-    TeamId team;
-
-    /// <summary>
-    /// ショット番号
-    /// </summary>
-    StoneId shot;
-
-    /// <summary>
-    /// エンド番号
-    /// </summary>
-    std::uint8_t end;
-
-    /// <summary>
-    /// 行動後のストーンの位置
-    /// </summary>
-    std::array<std::optional<Vector2>, kStoneMax> stone_positions;
-};
-
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
-    MoveResult,
-    team,
-    shot,
-    end,
-    stone_positions
-)
-
-
-
-/// <summary>
 /// 行動を適用し，試合を進める．
 /// </summary>
 /// <remarks>
@@ -349,13 +315,11 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
 /// <param name="state">試合状態(入力および出力)</param>
 /// <param name="simulator">ストーンの物理シミュレータ(入力および出力)</param>
 /// <param name="move">行動(入力および出力)．ショットの場合は乱数が加えられた値を返す．</param>
-/// <param name="move_result">行動の結果(出力)</param>
 void ApplyMove(
     Setting const& setting,
     State & state,
     simulation::ISimulator & simulator,
-    Move & move,
-    MoveResult & move_result);
+    Move & move);
 
 
 
