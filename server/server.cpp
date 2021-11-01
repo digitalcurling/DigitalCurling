@@ -126,7 +126,7 @@ void Channel::OnRead(size_t client_id, std::string && input_message, std::chrono
                     { "rule", "normal" },
                     { "game_setting", game_setting_ },
                     { "simulator_setting", simulator_->GetSetting() },
-                    { "team_id", client_id },
+                    { "team", client_id },
                     { "time_limit", server_setting_.time_limit.count() },
                     { "extra_time_limit", server_setting_.extra_time_limit.count() },
                 };
@@ -375,12 +375,6 @@ void Channel::Update(game::Move & move)
 
 void Channel::DeliverUpdateMessage(std::optional<game::Move> const& last_move)
 {
-    // update states
-    auto const next_turn_client = ToClientId(game_state_.GetCurrentTeam());
-    auto const opponent_next_turn = OpponentClient(next_turn_client);
-    clients_[next_turn_client].state = Client::State::kMyTurn;
-    clients_[opponent_next_turn].state = Client::State::kOpponentTurn;
-
     // 残り時間
     json remaining_times;
     for (auto const& client : clients_) {
@@ -399,17 +393,27 @@ void Channel::DeliverUpdateMessage(std::optional<game::Move> const& last_move)
 
     Log::Info() << message;
 
-    DeliverMessage(next_turn_client, message, clients_[next_turn_client].remaining_time);
-    DeliverMessage(opponent_next_turn, message);
+    if (game_state_.result) {
+        for (auto & client : clients_) {
+            client.state = Client::State::kGameOver;
+        }
+        DeliverMessage(0, message);
+        DeliverMessage(1, message);
+    } else {
+        auto const next_turn_client = ToClientId(game_state_.GetCurrentTeam());
+        auto const opponent_next_turn = OpponentClient(next_turn_client);
+
+        clients_[next_turn_client].state = Client::State::kMyTurn;
+        clients_[opponent_next_turn].state = Client::State::kOpponentTurn;
+
+        DeliverMessage(next_turn_client, message, clients_[next_turn_client].remaining_time);
+        DeliverMessage(opponent_next_turn, message);
+    }
+
 }
 
 void Channel::DeliverGameOverMessage()
 {
-    // update clients' state
-    for (auto & client : clients_) {
-        client.state = Client::State::kGameOver;
-    }
-
     // deliver game_over message
     json const jout_game_over = {
         {"cmd", "game_over"}

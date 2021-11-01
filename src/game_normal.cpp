@@ -241,7 +241,7 @@ inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float ston
         coordinate::kHouseRadius + stone_radius} };
 
     for (StoneId i = 0; i < kStoneMax; ++i) {
-        size_t const team_id = (i + static_cast<size_t>(current_end_first)) % 2;
+        auto const team_id = (i + static_cast<StoneId>(current_end_first)) % StoneId(2);
         if (distances[i] < minDistance[team_id]) {
             minDistance[team_id] = distances[i];
         }
@@ -251,15 +251,15 @@ inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float ston
 
     if (minDistance[0] < minDistance[1]) {
         // プレイヤー0の得点
-        for (StoneId i = static_cast<size_t>(current_end_first); i < kStoneMax; i += 2) {  // プレイヤー0のストーンを列挙
-            if (distances[i] < minDistance[0]) {  // minDistance*は最大でもハウス半径+石半径になっているので，ハウス内の判定も同時に行える．
+        for (StoneId i = static_cast<StoneId>(current_end_first); i < kStoneMax; i += 2) {  // プレイヤー0のストーンを列挙
+            if (distances[i] < minDistance[1]) {  // minDistance*は最大でもハウス半径+石半径になっているので，ハウス内の判定も同時に行える．
                 score++;
             }
         }
     } else {
         // プレイヤー1の得点
-        for (StoneId i = (static_cast<size_t>(current_end_first) + 1) % 2; i < kStoneMax; i += 2) {  // プレイヤー1のストーンを列挙
-            if (distances[i] < minDistance[1]) {
+        for (StoneId i = (static_cast<StoneId>(current_end_first) + StoneId(1)) % StoneId(2); i < kStoneMax; i += 2) {  // プレイヤー1のストーンを列挙
+            if (distances[i] < minDistance[0]) {
                 score--;
             }
         }
