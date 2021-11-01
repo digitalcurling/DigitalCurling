@@ -15,11 +15,11 @@ namespace {
 constexpr int kProtocolVersion = 1;
 constexpr auto kVersionCheckTimeout = std::chrono::seconds(10);
 
-inline size_t ToClientId(normal_game::TeamId team_id)
+inline size_t ToClientId(game::Team team)
 {
-    switch (team_id) {
-        case normal_game::TeamId::k0: return 0;
-        case normal_game::TeamId::k1: return 1;
+    switch (team) {
+        case game::Team::k0: return 0;
+        case game::Team::k1: return 1;
         default: assert(false); return -1;
     }
 }
@@ -38,7 +38,7 @@ inline size_t OpponentClient(size_t client_id)
 
 } // unnamed namespace
 
-Channel::Channel(std::function<void()> && stop_accept, Setting const& server_setting, normal_game::Setting const& game_setting, simulation::ISimulatorSetting const& simulator_setting)
+Channel::Channel(std::function<void()> && stop_accept, Setting const& server_setting, game::normal::Setting const& game_setting, simulation::ISimulatorSetting const& simulator_setting)
     : stop_accept_(std::move(stop_accept))
     , server_setting_(server_setting)
     , clients_{ {
@@ -190,7 +190,7 @@ void Channel::OnRead(size_t client_id, std::string && input_message, std::chrono
                 auto const moved_client = ToClientId(game_state_.GetCurrentTeam());
                 clients_[moved_client].remaining_time -= elapsed_time;
 
-                normal_game::Move move = jin.get<normal_game::Move>();
+                game::Move move = jin.get<game::Move>();
 
                 // update client's states and deliver message
                 Update(move);
@@ -306,7 +306,7 @@ void Channel::OnInputTimeout(size_t client_id)
             Log::Debug() << "Client " << client_id << " timed out.";
             // 制限時間切れにより負け．
             clients_[client_id].remaining_time = std::chrono::seconds(0);
-            normal_game::Move move = normal_game::move::TimeLimit();
+            game::Move move = game::TimeLimit();
             Update(move);
             DeliverUpdateMessage(move);
             DeliverGameOverMessage();
@@ -332,12 +332,12 @@ void Channel::DeliverMessage(size_t client_id, std::string const& message, std::
     }
 }
 
-void Channel::Update(normal_game::Move & move)
+void Channel::Update(game::Move & move)
 {
     auto current_client = ToClientId(game_state_.GetCurrentTeam());
     if (clients_[current_client].remaining_time.count() <= 0) {
         Log::Debug() << "Client " << current_client << " lost the game because of the time limit.";
-        move = normal_game::move::TimeLimit();
+        move = game::TimeLimit();
     }
 
     {
@@ -347,7 +347,7 @@ void Channel::Update(normal_game::Move & move)
         Log::Info() << j.dump();
     }
 
-    normal_game::ApplyMove(game_setting_, game_state_, *simulator_, move);
+    game::normal::ApplyMove(game_setting_, game_state_, *simulator_, move);
 
     // エンド終了時にストーン位置を報告する．
     if (game_state_.current_shot == 0 && game_state_.current_end > 0) {  // エンド終了直後か？
@@ -373,7 +373,7 @@ void Channel::Update(normal_game::Move & move)
     }
 }
 
-void Channel::DeliverUpdateMessage(std::optional<normal_game::Move> const& last_move)
+void Channel::DeliverUpdateMessage(std::optional<game::Move> const& last_move)
 {
     // update states
     auto const next_turn_client = ToClientId(game_state_.GetCurrentTeam());
@@ -597,7 +597,7 @@ Server::Server(boost::asio::io_context & io_context,
     boost::asio::ip::tcp::endpoint const& listen_endpoint0,
     boost::asio::ip::tcp::endpoint const& listen_endpoint1,
     Setting const& server_setting,
-    normal_game::Setting const& game_setting,
+    game::normal::Setting const& game_setting,
     simulation::ISimulatorSetting const& simulator_setting)
     : acceptors_{{ { io_context, listen_endpoint0 }, { io_context, listen_endpoint1 } }}
     , channel_([this] { StopAccept(); }, server_setting, game_setting, simulator_setting)

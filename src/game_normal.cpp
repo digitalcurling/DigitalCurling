@@ -1,11 +1,12 @@
-﻿#include "digital_curling/detail/normal_game/normal_game.hpp"
+﻿#include "digital_curling/detail/game/normal.hpp"
 
 #include <cassert>
 #include <stdexcept>
 #include <random>
 #include <limits>
+#include "digital_curling/detail/coordinate.hpp"
 
-namespace digital_curling::normal_game {
+namespace digital_curling::game::normal {
 
 namespace {
 
@@ -18,68 +19,90 @@ template<class... Ts> Overloaded(Ts...)->Overloaded<Ts...>;
 
 
 
+void to_json(nlohmann::json & j, Setting const& v)
+{
+    j["randomize_initial_shot_velocity"] = v.randomize_initial_shot_velocity;
+    j["end"] = v.end;
+    j["sheet_width"] = v.sheet_width;
+    j["five_rock_rule"] = v.five_rock_rule;
+    j["max_shot_speed"] = v.max_shot_speed;
+    j["shot_randomizer"] = *v.shot_randomizer;
+}
+
+void from_json(nlohmann::json const& j, Setting & v)
+{
+    j.at("randomize_initial_shot_velocity").get_to(v.randomize_initial_shot_velocity);
+    j.at("end").get_to(v.end);
+    j.at("sheet_width").get_to(v.sheet_width);
+    j.at("five_rock_rule").get_to(v.five_rock_rule);
+    j.at("max_shot_speed").get_to(v.max_shot_speed);
+    v.shot_randomizer = j.at("shot_randomizer").get<std::unique_ptr<IShotRandomizer>>();
+}
+
+
+
 State::State()
     : stone_positions()
     , scores({})
     , current_shot(0)
-    , current_end_first(TeamId::k0)
+    , current_end_first(Team::k0)
     , current_end(0)
     , extra_end_score(0)
     , result()
 {}
 
-std::uint32_t State::GetScore(TeamId team) const
+std::uint32_t State::GetScore(Team team) const
 {
-    assert(team != TeamId::kInvalid);
+    assert(team != Team::kInvalid);
 
     std::uint32_t score_sum = 0;
 
     for (auto const score : scores) {
-        if (team == TeamId::k0 && score > 0) {
+        if (team == Team::k0 && score > 0) {
             score_sum += score;
-        } else if (team == TeamId::k1 && score < 0) {
+        } else if (team == Team::k1 && score < 0) {
             score_sum -= score;
         }
     }
 
-    if (team == TeamId::k0 && extra_end_score > 0) {
+    if (team == Team::k0 && extra_end_score > 0) {
         score_sum += extra_end_score;
-    } else if (team == TeamId::k1 && extra_end_score < 0) {
+    } else if (team == Team::k1 && extra_end_score < 0) {
         score_sum -= extra_end_score;
     }
 
     return score_sum;
 }
 
-TeamId State::GetCurrentTeam() const
+Team State::GetCurrentTeam() const
 {
     if (result) {  // ゲームがすでに終わっている．
-        return TeamId::kInvalid;
+        return Team::kInvalid;
     }
 
     switch (current_end_first) {
-        case TeamId::k0:
+        case Team::k0:
             if (current_shot % 2 == 0) {
-                return TeamId::k0;
+                return Team::k0;
             } else {
-                return TeamId::k1;
+                return Team::k1;
             }
             break;  // 到達しない
 
-        case TeamId::k1:
+        case Team::k1:
             if (current_shot % 2 == 0) {
-                return TeamId::k1;
+                return Team::k1;
             } else {
-                return TeamId::k0;
+                return Team::k0;
             }
             break;  // 到達しない
 
-        case TeamId::kInvalid:
+        case Team::kInvalid:
             assert(false);
             break;
     }
 
-    return TeamId::k0;  // 到達しない
+    return Team::k0;  // 到達しない
 }
 
 
@@ -89,14 +112,14 @@ namespace {
 constexpr Vector2 kTee(0.f, coordinate::GetTeeLineY(coordinate::Id::kSimulation));
 
 
-inline float GetShotAngularVelocity(move::Shot::Rotation shot_rotation)
+inline float GetShotAngularVelocity(Shot::Rotation shot_rotation)
 {
     float angular_velocity_sign = 1.f;
     switch (shot_rotation) {
-        case move::Shot::Rotation::kCCW:
+        case Shot::Rotation::kCCW:
             angular_velocity_sign = 1.f;
             break;
-        case move::Shot::Rotation::kCW:
+        case Shot::Rotation::kCW:
             angular_velocity_sign = -1.f;
             break;
         default:
@@ -196,9 +219,9 @@ inline bool IsStoneInFreeGuardZone(Vector2 stone_position, float stone_radius, c
 }
 
 
-inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float stone_radius, coordinate::Id shot_side, TeamId current_end_first)
+inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float stone_radius, coordinate::Id shot_side, Team current_end_first)
 {
-    assert(current_end_first != TeamId::kInvalid);
+    assert(current_end_first != Team::kInvalid);
 
     // 全ストーンのティーからの位置を計算し，格納．
     std::array<float, kStoneMax> distances{};
@@ -274,11 +297,11 @@ void ApplyMove(
     // ゲームが既に終了している
     if (state.result) return;
 
-    assert(state.current_end_first != TeamId::kInvalid);
+    assert(state.current_end_first != Team::kInvalid);
 
     auto const shot_side = GetShotSide(state.current_end);
     float const stone_radius = simulator.GetStoneRadius();
-    bool is_shot = std::holds_alternative<move::Shot>(move);
+    bool is_shot = std::holds_alternative<Shot>(move);
 
     // シート上のストーンの初期状態を設定
 
@@ -311,14 +334,14 @@ void ApplyMove(
     }
 
     if (is_shot) {
-        move::Shot & shot = std::get<move::Shot>(move);
+        Shot & shot = std::get<Shot>(move);
         // 最大速度制限を適用．
         if (auto speed = shot.velocity.Length(); speed > setting.max_shot_speed) {
             shot.velocity *= setting.max_shot_speed / speed;
         }
         // 乱数を加える
         if (setting.randomize_initial_shot_velocity) {
-            shot.velocity = RandomizeShotVelocity(shot.velocity, setting.stddev_shot_speed, setting.stddev_shot_angle);
+            shot.velocity = setting.shot_randomizer->Randomize(shot.velocity);
         }
         initial_stones[state.current_shot] = simulation::StoneData(
             TransformPosition(Vector2(0.f, 0.f), shot_side, Id::kSimulation),
@@ -404,9 +427,9 @@ void ApplyMove(
 
         // 手番の変更．スコアが0(ブランクエンド)の時は変更されない．
         if (score > 0) {
-            state.current_end_first = TeamId::k1;
+            state.current_end_first = Team::k1;
         } else if (score < 0) {
-            state.current_end_first = TeamId::k0;
+            state.current_end_first = Team::k0;
         }
 
         // ストーン位置のリセット
@@ -427,17 +450,17 @@ void ApplyMove(
             score_sum += state.extra_end_score;
 
             // 次の手は無い．
-            state.current_end_first = TeamId::kInvalid;
+            state.current_end_first = Team::kInvalid;
 
             state.result.emplace();
             if (score_sum > 0) {
-                state.result->win = TeamId::k0;
+                state.result->win = Team::k0;
                 state.result->reason = Result::Reason::kScore;
             } else if (score_sum < 0) {
-                state.result->win = TeamId::k1;
+                state.result->win = Team::k1;
                 state.result->reason = Result::Reason::kScore;
             } else if (state.current_end >= kExtraEndMax) {  // スコア差無し かつ 延長エンド数限界
-                state.result->win = TeamId::kInvalid;
+                state.result->win = Team::kInvalid;
                 state.result->reason = Result::Reason::kInvalid;
             }
         }
@@ -457,15 +480,15 @@ void ApplyMove(
     // コンシードや時間切れの場合はstateを上書きする．
     if (!is_shot) {
         // 次の手は無い．
-        state.current_end_first = TeamId::kInvalid;
+        state.current_end_first = Team::kInvalid;
 
         state.result.emplace();
         switch (moved_team) {
-            case TeamId::k0:
-                state.result->win = TeamId::k1;
+            case Team::k0:
+                state.result->win = Team::k1;
                 break;
-            case TeamId::k1:
-                state.result->win = TeamId::k0;
+            case Team::k1:
+                state.result->win = Team::k0;
                 break;
             default:
                 assert(false);
@@ -474,10 +497,10 @@ void ApplyMove(
 
         std::visit(
             Overloaded{
-                [&state](move::Concede) {
+                [&state](Concede) {
                     state.result->reason = Result::Reason::kConcede;
                 },
-                [&state](move::TimeLimit) {
+                [&state](TimeLimit) {
                     state.result->reason = Result::Reason::kTimeLimit;
                 },
                 [](auto const&) {
@@ -488,40 +511,4 @@ void ApplyMove(
     }
 }
 
-} // namespace digital_curling::normal_game
-
-namespace nlohmann {
-
-void adl_serializer<digital_curling::normal_game::Move>::to_json(json & j, digital_curling::normal_game::Move const& m)
-{
-    std::visit(
-        [&j](auto const& m) {
-            j["type"] = std::decay_t<decltype(m)>::kType;
-        },
-        m);
-
-    if (std::holds_alternative<digital_curling::normal_game::move::Shot>(m)) {
-        auto const& shot = std::get<digital_curling::normal_game::move::Shot>(m);
-        j["velocity"] = shot.velocity;
-        j["rotation"] = shot.rotation;
-    }
-}
-
-void adl_serializer<digital_curling::normal_game::Move>::from_json(json const& j, digital_curling::normal_game::Move & m)
-{
-    auto type = j.at("type").get<std::string>();
-    if (type == digital_curling::normal_game::move::Shot::kType) {
-        digital_curling::normal_game::move::Shot shot;
-        j.at("velocity").get_to(shot.velocity);
-        j.at("rotation").get_to(shot.rotation);
-        m = std::move(shot);
-    } else if (type == digital_curling::normal_game::move::Concede::kType) {
-        m = digital_curling::normal_game::move::Concede();
-    } else if (type == digital_curling::normal_game::move::TimeLimit::kType) {
-        m = digital_curling::normal_game::move::TimeLimit();
-    } else {
-        throw std::runtime_error("Move type was not found.");
-    }
-}
-
-} // namespace nlohmann
+} // namespace digital_curling::game::normal

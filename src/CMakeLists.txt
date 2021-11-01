@@ -5,12 +5,15 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/extern/box2d "${PROJECT_BINARY_DIR}/exter
 add_subdirectory(${PROJECT_SOURCE_DIR}/extern/nlohmann_json "${PROJECT_BINARY_DIR}/extern/nlohmann_json")
 
 set(DIGITAL_CURLING_INCLUDE_FILES
+    "../include/digital_curling/digital_curling.hpp"
     "../include/digital_curling/detail/common.hpp"
-    "../include/digital_curling/detail/normal_game/normal_game.hpp"
+    "../include/digital_curling/detail/coordinate.hpp"
+    "../include/digital_curling/detail/version.hpp"
+    "../include/digital_curling/detail/game/common.hpp"
+    "../include/digital_curling/detail/game/normal_dist_shot_randomizer.hpp"
+    "../include/digital_curling/detail/game/normal.hpp"
     "../include/digital_curling/detail/simulation/simulator.hpp"
     "../include/digital_curling/detail/simulation/fcv1.hpp"
-    "../include/digital_curling/detail/version.hpp"
-    "../include/digital_curling/digital_curling.hpp"
 )
 
 set(DIGITAL_CURLING_GENERATED_INCLUDE_FILES
@@ -20,10 +23,12 @@ set(DIGITAL_CURLING_GENERATED_INCLUDE_FILES
 set(DIGITAL_CURLING_SOURCE_FILES
     "box2d_util.hpp"
     "common.cpp"
-    "normal_game.cpp"
-    "simulator.cpp"
-    "simulator_fcv1.hpp"
-    "simulator_fcv1.cpp"
+    "game_common.cpp"
+    "game_normal_dist_shot_randomizer.cpp"
+    "game_normal.cpp"
+    "simulation_fcv1.hpp"
+    "simulation_fcv1.cpp"
+    "simulation_simulator.cpp"
     "${CMAKE_CURRENT_BINARY_DIR}/version.cpp"  # generated from version.cpp.in
 )
 

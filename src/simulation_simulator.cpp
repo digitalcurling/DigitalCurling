@@ -1,7 +1,5 @@
 ﻿#include "digital_curling/detail/simulation/simulator.hpp"
-#include <unordered_map>
-#include <functional>
-#include "simulator_fcv1.hpp"
+#include "simulation_fcv1.hpp"
 
 namespace digital_curling::simulation {
 
@@ -16,24 +14,12 @@ void to_json(nlohmann::json & j, ISimulatorSetting const& setting)
 
 namespace nlohmann {
 
-namespace {
-
-template <class T>
-std::unique_ptr<digital_curling::simulation::ISimulatorSetting> CreateSimulatorSettingImpl(json const& j)
-{
-    auto setting = std::make_unique<T>();
-    *setting = j.get<T>();
-    return setting;
-}
-
-} // unnamed namespace
-
 std::unique_ptr<digital_curling::simulation::ISimulatorSetting> adl_serializer<std::unique_ptr<digital_curling::simulation::ISimulatorSetting>>::from_json(json const & j)
 {
     auto type = j.at("type").get<std::string>();
 
     if (type == digital_curling::simulation::SimulatorFCV1Setting::kType) {
-        return CreateSimulatorSettingImpl<digital_curling::simulation::SimulatorFCV1Setting>(j);
+        return std::make_unique<digital_curling::simulation::SimulatorFCV1Setting>(j.get<digital_curling::simulation::SimulatorFCV1Setting>());
     } else {
         throw std::runtime_error("no such type simulator.");
     }
