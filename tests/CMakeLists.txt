@@ -27,6 +27,7 @@ digital_curling_add_test(digital_curling__test
     "test/util.hpp"
     "test/util.cpp"
     "test/test_simulator.cpp"
+    "test/test_coordinate.cpp"
 )
 
 target_link_libraries(digital_curling__test digital_curling::digital_curling)

@@ -149,8 +149,11 @@ constexpr float TransformAngle(float angle, Id from, Id to) noexcept
 {
     if (from == to) return angle;
 
-    // 軸の方向が変化するのはどちらかがKShot1の場合のみ
-    if (from == Id::kShot1 || to == Id::kShot1) {
+    // 軸の方向が変化するのはfrom/toのどちらかがkShot1の場合のみ
+    if (from == Id::kShot1) {
+        return angle - kPi;
+    }
+    if (to == Id::kShot1) {
         return angle + kPi;
     }
     return angle;
@@ -188,11 +191,13 @@ constexpr float GetCenterLineX(Id coord) noexcept
 /// <summary>
 /// ホグラインのy座標を得る．
 /// </summary>
+/// <param name="side">false: シミュレーション座標系で負の側, true: シミュレーション座標系で正の側</param>
 /// <param name="coord">座標系</param>
 /// <returns><paramref name="coord"/>座標系のホグラインのy座標</returns>
-constexpr float GetHogLineY(Id coord) noexcept
+constexpr float GetHogLineY(bool side, Id coord) noexcept
 {
-    return TransformPosition(Vector2(0.f, detail::kHogLineYOnSimulation), Id::kSimulation, coord).y;
+    auto y_simulation = side ? detail::kHogLineYOnSimulation : -detail::kHogLineYOnSimulation;
+    return TransformPosition(Vector2(0.f, y_simulation), Id::kSimulation, coord).y;
 }
 
 
@@ -200,11 +205,13 @@ constexpr float GetHogLineY(Id coord) noexcept
 /// <summary>
 /// ティーラインのy座標を得る．
 /// </summary>
+/// <param name="side">false: シミュレーション座標系で負の側, true: シミュレーション座標系で正の側</param>
 /// <param name="coord">座標系</param>
 /// <returns><paramref name="coord"/>座標系のティーラインのy座標</returns>
-constexpr float GetTeeLineY(Id coord) noexcept
+constexpr float GetTeeLineY(bool side, Id coord) noexcept
 {
-    return TransformPosition(Vector2(0.f, detail::kTeeLineYOnSimulation), Id::kSimulation, coord).y;
+    auto y_simulation = side ? detail::kTeeLineYOnSimulation : -detail::kTeeLineYOnSimulation;
+    return TransformPosition(Vector2(0.f, y_simulation), Id::kSimulation, coord).y;
 }
 
 
@@ -212,11 +219,13 @@ constexpr float GetTeeLineY(Id coord) noexcept
 /// <summary>
 /// バックラインのy座標を得る．
 /// </summary>
+/// <param name="side">false: シミュレーション座標系で負の側, true: シミュレーション座標系で正の側</param>
 /// <param name="coord">座標系</param>
 /// <returns><paramref name="coord"/>座標系のバックラインのy座標</returns>
-constexpr float GetBackLineY(Id coord) noexcept
+constexpr float GetBackLineY(bool side, Id coord) noexcept
 {
-    return TransformPosition(Vector2(0.f, detail::kBackLineYOnSimulation), Id::kSimulation, coord).y;
+    auto y_simulation = side ? detail::kBackLineYOnSimulation : -detail::kBackLineYOnSimulation;
+    return TransformPosition(Vector2(0.f, y_simulation), Id::kSimulation, coord).y;
 }
 
 
@@ -224,11 +233,13 @@ constexpr float GetBackLineY(Id coord) noexcept
 /// <summary>
 /// ハックのy座標を得る．
 /// </summary>
+/// <param name="side">false: シミュレーション座標系で負の側, true: シミュレーション座標系で正の側</param>
 /// <param name="coord">座標系</param>
 /// <returns><paramref name="coord"/>座標系のハックのy座標</returns>
-constexpr float GetHackY(Id coord) noexcept
+constexpr float GetHackY(bool side, Id coord) noexcept
 {
-    return TransformPosition(Vector2(0.f, detail::kHackYOnSimulation), Id::kSimulation, coord).y;
+    auto y_simulation = side ? detail::kHackYOnSimulation : -detail::kHackYOnSimulation;
+    return TransformPosition(Vector2(0.f, y_simulation), Id::kSimulation, coord).y;
 }
 
 
@@ -236,11 +247,13 @@ constexpr float GetHackY(Id coord) noexcept
 /// <summary>
 /// バックボード(シートの端)のy座標を得る．
 /// </summary>
+/// <param name="side">false: シミュレーション座標系で負の側, true: シミュレーション座標系で正の側</param>
 /// <param name="coord">座標系</param>
 /// <returns><paramref name="coord"/>座標系のバックボードのy座標</returns>
-constexpr float GetBackBoardY(Id coord) noexcept
+constexpr float GetBackBoardY(bool side, Id coord) noexcept
 {
-    return TransformPosition(Vector2(0.f, detail::kBackBoardYOnSimulation), Id::kSimulation, coord).y;
+    auto y_simulation = side ? detail::kBackBoardYOnSimulation : -detail::kBackBoardYOnSimulation;
+    return TransformPosition(Vector2(0.f, y_simulation), Id::kSimulation, coord).y;
 }
 
 } // namespace digital_curling::coordinate

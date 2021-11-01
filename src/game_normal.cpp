@@ -109,7 +109,7 @@ Team State::GetCurrentTeam() const
 
 namespace {
 
-constexpr Vector2 kTee(0.f, coordinate::GetTeeLineY(coordinate::Id::kSimulation));
+constexpr Vector2 kTee(0.f, coordinate::GetTeeLineY(true, coordinate::Id::kSimulation));
 
 
 inline float GetShotAngularVelocity(Shot::Rotation shot_rotation)
@@ -164,8 +164,8 @@ inline bool IsStoneValidWhileSimulation(Vector2 stone_position, float sheet_widt
     Vector2 const canonical_stone_position = CanonicalizePositionOnSheet(stone_position, shot_side);
     return canonical_stone_position.x + stone_radius < sheet_width / 2.f
         && canonical_stone_position.x - stone_radius > -sheet_width / 2.f
-        && canonical_stone_position.y - stone_radius < coordinate::GetBackLineY(coordinate::Id::kSimulation)  // バックラインの内側判定(例外的なので注意)
-        && canonical_stone_position.y - stone_radius > -coordinate::GetBackBoardY(coordinate::Id::kSimulation);  // バックボードの内側
+        && canonical_stone_position.y - stone_radius < coordinate::GetBackLineY(true, coordinate::Id::kSimulation)  // バックラインの内側判定(例外的なので注意)
+        && canonical_stone_position.y - stone_radius > -coordinate::GetBackBoardY(true, coordinate::Id::kSimulation);  // バックボードの内側
 
     // バックラインの内側判定 について
     // ストーンがバックラインに少しでも掛かっていれば内側と見なされるため
@@ -188,7 +188,7 @@ inline bool IsStoneValidWhileSimulation(Vector2 stone_position, float sheet_widt
 inline bool IsStoneInPlayArea(Vector2 stone_position, float stone_radius, coordinate::Id shot_side)
 {
     Vector2 const canonical_stone_position = CanonicalizePositionOnSheet(stone_position, shot_side);
-    return canonical_stone_position.y - stone_radius > coordinate::GetHogLineY(coordinate::Id::kSimulation);
+    return canonical_stone_position.y - stone_radius > coordinate::GetHogLineY(true, coordinate::Id::kSimulation);
 }
 
 
@@ -215,7 +215,7 @@ inline bool IsStoneInFreeGuardZone(Vector2 stone_position, float stone_radius, c
     }
 
     Vector2 const canonical_stone_position = CanonicalizePositionOnSheet(stone_position, shot_side);
-    return canonical_stone_position.y + stone_radius < coordinate::GetTeeLineY(coordinate::Id::kSimulation);
+    return canonical_stone_position.y + stone_radius < coordinate::GetTeeLineY(true, coordinate::Id::kSimulation);
 }
 
 

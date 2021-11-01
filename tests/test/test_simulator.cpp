@@ -3,14 +3,14 @@
 namespace dc = digital_curling;
 using nlohmann::json;
 
-TEST(simulator, AllStoneStop)
+TEST(SimulatorFCV1Test, AllStoneStop)
 {
     dc::simulation::SimulatorFCV1Setting setting;
     auto simulator = setting.CreateSimulator();
     EXPECT_TRUE(simulator->AreAllStonesStopped());
 }
 
-TEST(simulator_setting, FCV1)
+TEST(SimulatorFCV1SettingTest, Json)
 {
     dc::simulation::SimulatorFCV1Setting setting_simple1;
     setting_simple1.seconds_per_frame *= 10.f; // set non-default value
