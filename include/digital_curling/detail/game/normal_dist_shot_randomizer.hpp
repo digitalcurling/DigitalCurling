@@ -41,6 +41,8 @@ private:
 
 
 
+// json
+
 namespace nlohmann {
 
 template <>

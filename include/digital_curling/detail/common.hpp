@@ -17,6 +17,20 @@ constexpr float kPi = 3.14159265359f;
 
 
 /// <summary>
+/// ストーンのインデックスに用いる型
+/// </summary>
+using StoneId = std::uint8_t;
+
+
+
+/// <summary>
+/// シミュレータ上に配置可能なストーンの最大数
+/// </summary>
+constexpr StoneId kStoneMax = 16;
+
+
+
+/// <summary>
 /// 2次元ベクトル
 /// </summary>
 struct Vector2 {
@@ -91,26 +105,18 @@ constexpr Vector2 operator / (Vector2 v, float f)
     return { v.x / f, v.y / f };
 }
 
-void to_json(nlohmann::json &, Vector2 const&);
-void from_json(nlohmann::json const&, Vector2 &);
-
-
-
-/// <summary>
-/// ストーンのインデックスに用いる型
-/// </summary>
-using StoneId = std::uint8_t;
-
-
-
-/// <summary>
-/// シミュレータ上に配置可能なストーンの最大数
-/// </summary>
-constexpr StoneId kStoneMax = 16;
-
 } // namespace digital_curling
 
 
+
+// json
+
+namespace digital_curling {
+
+void to_json(nlohmann::json &, Vector2 const&);
+void from_json(nlohmann::json const&, Vector2 &);
+
+} // namespace digital_curling
 
 namespace nlohmann {
 

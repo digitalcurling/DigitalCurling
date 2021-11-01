@@ -62,16 +62,12 @@ struct Setting {
     std::function<void(simulation::ISimulator const &)> on_step;
 };
 
-void to_json(nlohmann::json &, Setting const&);
-void from_json(nlohmann::json const&, Setting &);
-
 
 
 /// <summary>
 /// 試合の状態を表す．
 /// </summary>
 struct State {
-
     /// <summary>
     /// 初期盤面を構築する．
     /// </summary>
@@ -134,17 +130,6 @@ struct State {
     Team GetCurrentTeam() const;
 };
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
-    State,
-    stone_positions,
-    scores,
-    current_shot,
-    current_end_first,
-    current_end,
-    extra_end_score,
-    result
-)
-
 
 
 /// <summary>
@@ -162,6 +147,31 @@ void ApplyMove(
     State & state,
     simulation::ISimulator & simulator,
     Move & move);
+
+
+
+
+} // namespace digital_curling::game::normal
+
+
+
+// json
+
+namespace digital_curling::game::normal {
+
+void to_json(nlohmann::json &, Setting const&);
+void from_json(nlohmann::json const&, Setting &);
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
+    State,
+    stone_positions,
+    scores,
+    current_shot,
+    current_end_first,
+    current_end,
+    extra_end_score,
+    result
+)
 
 } // namespace digital_curling::game::normal
 

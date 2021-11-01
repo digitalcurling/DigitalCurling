@@ -140,7 +140,6 @@ public:
     virtual void ToJson(nlohmann::json & json) const = 0;
 };
 
-void to_json(nlohmann::json &, ISimulatorSetting const&);
 
 
 
@@ -206,7 +205,14 @@ public:
 
 
 
-// for json serialize
+// json
+
+namespace digital_curling::simulation {
+
+void to_json(nlohmann::json &, ISimulatorSetting const&);
+
+} // namespace digital_curling::simulation
+
 namespace nlohmann {
 
 template <>

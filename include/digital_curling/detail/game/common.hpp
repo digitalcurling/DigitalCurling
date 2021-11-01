@@ -26,12 +26,6 @@ enum class Team : std::int8_t {
     kInvalid
 };
 
-NLOHMANN_JSON_SERIALIZE_ENUM(Team, {
-    {Team::k0, 0},
-    {Team::k1, 1},
-    {Team::kInvalid, nullptr},
-})
-
 
 
 /// <summary>
@@ -64,19 +58,6 @@ struct Result {
     Reason reason = Reason::kScore;
 };
 
-NLOHMANN_JSON_SERIALIZE_ENUM(Result::Reason, {
-    {Result::Reason::kScore, "score"},
-    {Result::Reason::kConcede, "concede"},
-    {Result::Reason::kTimeLimit, "time_limit"},
-    {Result::Reason::kInvalid, nullptr},
-})
-
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
-    Result,
-    win,
-    reason
-)
-
 
 
 /// <summary>
@@ -105,11 +86,6 @@ struct Shot {
     /// </summary>
     Rotation rotation = Rotation::kCCW;
 };
-
-NLOHMANN_JSON_SERIALIZE_ENUM(Shot::Rotation, {
-    {Shot::Rotation::kCCW, "ccw"},
-    {Shot::Rotation::kCW, "cw"},
-})
 
 
 
@@ -168,15 +144,44 @@ public:
     static std::shared_ptr<IShotRandomizer> GetDefault();
 };
 
-void to_json(nlohmann::json &, IShotRandomizer const&);
-
 } // namespace digital_curling::game
 
 
 
+// json
+
+namespace digital_curling::game {
+
+NLOHMANN_JSON_SERIALIZE_ENUM(Team, {
+    {Team::k0, 0},
+    {Team::k1, 1},
+    {Team::kInvalid, nullptr},
+})
+
+NLOHMANN_JSON_SERIALIZE_ENUM(Result::Reason, {
+    {Result::Reason::kScore, "score"},
+    {Result::Reason::kConcede, "concede"},
+    {Result::Reason::kTimeLimit, "time_limit"},
+    {Result::Reason::kInvalid, nullptr},
+})
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
+    Result,
+    win,
+    reason
+)
+
+NLOHMANN_JSON_SERIALIZE_ENUM(Shot::Rotation, {
+    {Shot::Rotation::kCCW, "ccw"},
+    {Shot::Rotation::kCW, "cw"},
+})
+
+void to_json(nlohmann::json &, IShotRandomizer const&);
+
+} // namespace digital_curling::game
+
 namespace nlohmann {
 
-// For serializing/deserializing normal_game::Move to/from json
 template <>
 struct adl_serializer<digital_curling::game::Move> {
     static void to_json(json & j, digital_curling::game::Move const& m);

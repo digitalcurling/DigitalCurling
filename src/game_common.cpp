@@ -3,6 +3,8 @@
 
 namespace digital_curling::game {
 
+
+
 std::shared_ptr<IShotRandomizer> IShotRandomizer::GetDefault()
 {
     static auto shot_randomizer = std::make_shared<NormalDistShotRandomizer>();
