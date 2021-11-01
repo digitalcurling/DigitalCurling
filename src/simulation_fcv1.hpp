@@ -1,5 +1,5 @@
-﻿#ifndef DIGITAL_CURLING_SRC_SIMULATOR_FCV1_HPP
-#define DIGITAL_CURLING_SRC_SIMULATOR_FCV1_HPP
+﻿#ifndef DIGITAL_CURLING_SRC_SIMULATION_FCV1_HPP
+#define DIGITAL_CURLING_SRC_SIMULATION_FCV1_HPP
 
 #include "digital_curling/detail/simulation/simulator.hpp"
 #include "digital_curling/detail/simulation/fcv1.hpp"
@@ -57,4 +57,4 @@ private:
 
 } // namespace digital_curling::simulation
 
-#endif // DIGITAL_CURLING_SRC_SIMULATOR_FCV1_HPP
+#endif // DIGITAL_CURLING_SRC_SIMULATION_FCV1_HPP

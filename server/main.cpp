@@ -93,9 +93,9 @@ int main(int argc, char* const argv[])
             server_setting.extra_time_limit = std::chrono::seconds(j_config.at("extra_time_limit").get<std::chrono::seconds::rep>());
         }
 
-        normal_game::Setting game_setting;
+        game::normal::Setting game_setting;
         if (j_config.contains("game_setting")) {
-            game_setting = j_config.at("game_setting").get<normal_game::Setting>();
+            game_setting = j_config.at("game_setting").get<game::normal::Setting>();
         }
 
         std::unique_ptr<simulation::ISimulatorSetting> simulator_setting;

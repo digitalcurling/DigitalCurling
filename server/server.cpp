@@ -15,11 +15,11 @@ namespace {
 constexpr int kProtocolVersion = 1;
 constexpr auto kVersionCheckTimeout = std::chrono::seconds(10);
 
-inline size_t ToClientId(normal_game::TeamId team_id)
+inline size_t ToClientId(game::Team team)
 {
-    switch (team_id) {
-        case normal_game::TeamId::k0: return 0;
-        case normal_game::TeamId::k1: return 1;
+    switch (team) {
+        case game::Team::k0: return 0;
+        case game::Team::k1: return 1;
         default: assert(false); return -1;
     }
 }
@@ -38,7 +38,7 @@ inline size_t OpponentClient(size_t client_id)
 
 } // unnamed namespace
 
-Channel::Channel(std::function<void()> && stop_accept, Setting const& server_setting, normal_game::Setting const& game_setting, simulation::ISimulatorSetting const& simulator_setting)
+Channel::Channel(std::function<void()> && stop_accept, Setting const& server_setting, game::normal::Setting const& game_setting, simulation::ISimulatorSetting const& simulator_setting)
     : stop_accept_(std::move(stop_accept))
     , server_setting_(server_setting)
     , clients_{ {
@@ -126,7 +126,7 @@ void Channel::OnRead(size_t client_id, std::string && input_message, std::chrono
                     { "rule", "normal" },
                     { "game_setting", game_setting_ },
                     { "simulator_setting", simulator_->GetSetting() },
-                    { "team_id", client_id },
+                    { "team", client_id },
                     { "time_limit", server_setting_.time_limit.count() },
                     { "extra_time_limit", server_setting_.extra_time_limit.count() },
                 };
@@ -190,14 +190,14 @@ void Channel::OnRead(size_t client_id, std::string && input_message, std::chrono
                 auto const moved_client = ToClientId(game_state_.GetCurrentTeam());
                 clients_[moved_client].remaining_time -= elapsed_time;
 
-                normal_game::Move move = jin.get<normal_game::Move>();
+                game::Move move = jin.get<game::Move>();
 
                 // update client's states and deliver message
                 Update(move);
                 DeliverUpdateMessage(move);
 
                 // if game is over, ...
-                if (game_state_.game_result) {
+                if (game_state_.result) {
                     DeliverGameOverMessage();
                     // 以降，クライアントの接続解除を待つ．
                 }
@@ -306,7 +306,7 @@ void Channel::OnInputTimeout(size_t client_id)
             Log::Debug() << "Client " << client_id << " timed out.";
             // 制限時間切れにより負け．
             clients_[client_id].remaining_time = std::chrono::seconds(0);
-            normal_game::Move move = normal_game::move::TimeLimit();
+            game::Move move = game::TimeLimit();
             Update(move);
             DeliverUpdateMessage(move);
             DeliverGameOverMessage();
@@ -332,12 +332,12 @@ void Channel::DeliverMessage(size_t client_id, std::string const& message, std::
     }
 }
 
-void Channel::Update(normal_game::Move & move)
+void Channel::Update(game::Move & move)
 {
     auto current_client = ToClientId(game_state_.GetCurrentTeam());
     if (clients_[current_client].remaining_time.count() <= 0) {
         Log::Debug() << "Client " << current_client << " lost the game because of the time limit.";
-        move = normal_game::move::TimeLimit();
+        move = game::TimeLimit();
     }
 
     {
@@ -347,9 +347,23 @@ void Channel::Update(normal_game::Move & move)
         Log::Info() << j.dump();
     }
 
-    normal_game::MoveResult move_result;
-    normal_game::ApplyMove(game_setting_, game_state_, *simulator_, move, move_result);
-    last_move_result_ = move_result;
+    game::normal::ApplyMove(game_setting_, game_state_, *simulator_, move);
+
+    // エンド終了時にストーン位置を報告する．
+    if (game_state_.current_shot == 0 && game_state_.current_end > 0) {  // エンド終了直後か？
+        last_end_stone_positions_.emplace();
+        auto const& stones = simulator_->GetStones();
+        auto const prev_end_side = coordinate::GetShotSide(game_state_.current_end - 1);
+        for (size_t i = 0; i < kStoneMax; ++i) {
+            if (stones[i]) {
+                (*last_end_stone_positions_)[i] = coordinate::TransformPosition(stones[i]->position, coordinate::Id::kSimulation, prev_end_side);
+            } else {
+                (*last_end_stone_positions_)[i] = std::nullopt;
+            }
+        }
+    } else {
+        last_end_stone_positions_ = std::nullopt;
+    }
 
     // 延長エンドの残り時間を設定．
     if (game_state_.current_end >= game_setting_.end && game_state_.current_shot == 0) {
@@ -359,14 +373,8 @@ void Channel::Update(normal_game::Move & move)
     }
 }
 
-void Channel::DeliverUpdateMessage(std::optional<normal_game::Move> const& last_move)
+void Channel::DeliverUpdateMessage(std::optional<game::Move> const& last_move)
 {
-    // update states
-    auto const next_turn_client = ToClientId(game_state_.GetCurrentTeam());
-    auto const opponent_next_turn = OpponentClient(next_turn_client);
-    clients_[next_turn_client].state = Client::State::kMyTurn;
-    clients_[opponent_next_turn].state = Client::State::kOpponentTurn;
-
     // 残り時間
     json remaining_times;
     for (auto const& client : clients_) {
@@ -378,24 +386,34 @@ void Channel::DeliverUpdateMessage(std::optional<normal_game::Move> const& last_
         { "state", game_state_ },
         { "remaining_times", std::move(remaining_times) },
         { "last_move", last_move },
-        { "last_move_result", last_move_result_ }
+        { "last_end_stone_positions", last_end_stone_positions_ }
     };
 
     auto const message = jout_update.dump();
 
     Log::Info() << message;
 
-    DeliverMessage(next_turn_client, message, clients_[next_turn_client].remaining_time);
-    DeliverMessage(opponent_next_turn, message);
+    if (game_state_.result) {
+        for (auto & client : clients_) {
+            client.state = Client::State::kGameOver;
+        }
+        DeliverMessage(0, message);
+        DeliverMessage(1, message);
+    } else {
+        auto const next_turn_client = ToClientId(game_state_.GetCurrentTeam());
+        auto const opponent_next_turn = OpponentClient(next_turn_client);
+
+        clients_[next_turn_client].state = Client::State::kMyTurn;
+        clients_[opponent_next_turn].state = Client::State::kOpponentTurn;
+
+        DeliverMessage(next_turn_client, message, clients_[next_turn_client].remaining_time);
+        DeliverMessage(opponent_next_turn, message);
+    }
+
 }
 
 void Channel::DeliverGameOverMessage()
 {
-    // update clients' state
-    for (auto & client : clients_) {
-        client.state = Client::State::kGameOver;
-    }
-
     // deliver game_over message
     json const jout_game_over = {
         {"cmd", "game_over"}
@@ -583,7 +601,7 @@ Server::Server(boost::asio::io_context & io_context,
     boost::asio::ip::tcp::endpoint const& listen_endpoint0,
     boost::asio::ip::tcp::endpoint const& listen_endpoint1,
     Setting const& server_setting,
-    normal_game::Setting const& game_setting,
+    game::normal::Setting const& game_setting,
     simulation::ISimulatorSetting const& simulator_setting)
     : acceptors_{{ { io_context, listen_endpoint0 }, { io_context, listen_endpoint1 } }}
     , channel_([this] { StopAccept(); }, server_setting, game_setting, simulator_setting)

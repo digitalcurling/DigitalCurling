@@ -6,8 +6,6 @@
 
 namespace digital_curling {
 
-
-
 /// <summary>
 /// バージョンを得る
 /// </summary>
@@ -37,8 +35,6 @@ std::uint32_t GetVersionMinor();
 /// </summary>
 /// <returns>パッチバージョン</returns>
 std::uint32_t GetVersionPatch();
-
-
 
 } // namespace digital_curling
 

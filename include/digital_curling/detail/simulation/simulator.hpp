@@ -8,13 +8,6 @@
 
 namespace digital_curling::simulation {
 
-
-
-// forward declaration
-class ISimulator;
-
-
-
 /// <summary>
 /// ストーンの位置と速度
 /// </summary>
@@ -125,6 +118,8 @@ struct StoneCollision {
 
 
 
+class ISimulator;
+
 /// <summary>
 /// <see cref="ISimulator"/>を構築するための設定
 /// </summary>
@@ -145,7 +140,6 @@ public:
     virtual void ToJson(nlohmann::json & json) const = 0;
 };
 
-void to_json(nlohmann::json &, ISimulatorSetting const&);
 
 
 
@@ -207,13 +201,18 @@ public:
     virtual ~ISimulator() = default;
 };
 
+} // namespace digital_curling::simulation
 
+
+
+// json
+
+namespace digital_curling::simulation {
+
+void to_json(nlohmann::json &, ISimulatorSetting const&);
 
 } // namespace digital_curling::simulation
 
-// -------------------------------------------------------------------------------------
-
-// for json serialize
 namespace nlohmann {
 
 template <>
