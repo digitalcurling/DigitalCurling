@@ -1,13 +1,12 @@
 ﻿#include "digital_curling/detail/game/common.hpp"
+#include "digital_curling/detail/game/random_seed_normal_dist_shot_randomizer.hpp"
 #include "digital_curling/detail/game/normal_dist_shot_randomizer.hpp"
 
 namespace digital_curling::game {
 
-
-
 std::shared_ptr<IShotRandomizer> IShotRandomizer::GetDefault()
 {
-    static auto shot_randomizer = std::make_shared<NormalDistShotRandomizer>();
+    static auto shot_randomizer = std::make_shared<RandomSeedNormalDistShotRandomizer>();
     return shot_randomizer;
 }
 
@@ -58,7 +57,9 @@ std::unique_ptr<digital_curling::game::IShotRandomizer> adl_serializer<std::uniq
 {
     auto type = j.at("type").get<std::string>();
 
-    if (type == digital_curling::game::NormalDistShotRandomizer::kType) {
+    if (type == digital_curling::game::RandomSeedNormalDistShotRandomizer::kType) {
+        return std::make_unique<digital_curling::game::RandomSeedNormalDistShotRandomizer>(j.get<digital_curling::game::RandomSeedNormalDistShotRandomizer>());
+    } else if (type == digital_curling::game::NormalDistShotRandomizer::kType) {
         return std::make_unique<digital_curling::game::NormalDistShotRandomizer>(j.get<digital_curling::game::NormalDistShotRandomizer>());
     } else {
         throw std::runtime_error("no such type shot randomizer.");
