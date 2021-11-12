@@ -43,7 +43,7 @@ public:
     Channel(
         std::function<void()> && stop_accept,
         Setting const& server_setting,
-        game::normal::Setting const& game_setting,
+        game::Setting const& game_setting,
         simulation::ISimulatorSetting const& simulator_setting);
 
     void Join(size_t client_id, std::shared_ptr<TCPSession> const& tcp_session);
@@ -83,8 +83,8 @@ private:
     Setting server_setting_;
     std::array<Client, 2> clients_;
     std::unique_ptr<simulation::ISimulator> const simulator_;
-    game::normal::Setting const game_setting_;
-    game::normal::State game_state_;
+    game::Setting const game_setting_;
+    game::State game_state_;
     std::optional<std::array<std::optional<Vector2>, kStoneMax>> last_end_stone_positions_;
 };
 
@@ -138,7 +138,7 @@ public:
         boost::asio::ip::tcp::endpoint const& listen_endpoint0,
         boost::asio::ip::tcp::endpoint const& listen_endpoint1,
         Setting const& server_setting,
-        game::normal::Setting const& game_setting,
+        game::Setting const& game_setting,
         simulation::ISimulatorSetting const& simulator_setting);
 
 private:

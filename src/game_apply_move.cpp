@@ -1,12 +1,12 @@
-﻿#include "digital_curling/detail/game/normal.hpp"
+﻿#include "digital_curling/detail/game/apply_move.hpp"
 
 #include <cassert>
 #include <stdexcept>
-#include <random>
 #include <limits>
 #include "digital_curling/detail/coordinate.hpp"
+#include "digital_curling/detail/constants.hpp"
 
-namespace digital_curling::game::normal {
+namespace digital_curling::game {
 
 namespace {
 
@@ -36,7 +36,7 @@ void from_json(nlohmann::json const& j, Setting & v)
     j.at("sheet_width").get_to(v.sheet_width);
     j.at("five_rock_rule").get_to(v.five_rock_rule);
     j.at("max_shot_speed").get_to(v.max_shot_speed);
-    v.shot_randomizer = j.at("shot_randomizer").get<std::unique_ptr<IShotRandomizer>>();
+    v.shot_randomizer = j.at("shot_randomizer").get<std::unique_ptr<random::IShotRandomizer>>();
 }
 
 
@@ -112,14 +112,14 @@ namespace {
 constexpr Vector2 kTee(0.f, coordinate::GetTeeLineY(true, coordinate::Id::kSimulation));
 
 
-inline float GetShotAngularVelocity(Shot::Rotation shot_rotation)
+inline float GetShotAngularVelocity(moves::Shot::Rotation shot_rotation)
 {
     float angular_velocity_sign = 1.f;
     switch (shot_rotation) {
-        case Shot::Rotation::kCCW:
+        case moves::Shot::Rotation::kCCW:
             angular_velocity_sign = 1.f;
             break;
-        case Shot::Rotation::kCW:
+        case moves::Shot::Rotation::kCW:
             angular_velocity_sign = -1.f;
             break;
         default:
@@ -225,7 +225,7 @@ inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float ston
 
     // 全ストーンのティーからの位置を計算し，格納．
     std::array<float, kStoneMax> distances{};
-    for (StoneId i = 0; i < kStoneMax; ++i) {
+    for (std::uint8_t i = 0; i < kStoneMax; ++i) {
         if (stones[i]) {
             auto const canonical_stone_position = CanonicalizePositionOnSheet(stones[i]->position, shot_side);
             distances[i] = (canonical_stone_position - kTee).Length();
@@ -240,8 +240,8 @@ inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float ston
         coordinate::kHouseRadius + stone_radius,
         coordinate::kHouseRadius + stone_radius} };
 
-    for (StoneId i = 0; i < kStoneMax; ++i) {
-        auto const team_id = (i + static_cast<StoneId>(current_end_first)) % StoneId(2);
+    for (std::uint8_t i = 0; i < kStoneMax; ++i) {
+        auto const team_id = (i + static_cast<std::uint8_t>(current_end_first)) % 2;
         if (distances[i] < minDistance[team_id]) {
             minDistance[team_id] = distances[i];
         }
@@ -251,14 +251,14 @@ inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float ston
 
     if (minDistance[0] < minDistance[1]) {
         // プレイヤー0の得点
-        for (StoneId i = static_cast<StoneId>(current_end_first); i < kStoneMax; i += 2) {  // プレイヤー0のストーンを列挙
+        for (std::uint8_t i = static_cast<std::uint8_t>(current_end_first); i < kStoneMax; i += 2) {  // プレイヤー0のストーンを列挙
             if (distances[i] < minDistance[1]) {  // minDistance*は最大でもハウス半径+石半径になっているので，ハウス内の判定も同時に行える．
                 score++;
             }
         }
     } else {
         // プレイヤー1の得点
-        for (StoneId i = (static_cast<StoneId>(current_end_first) + StoneId(1)) % StoneId(2); i < kStoneMax; i += 2) {  // プレイヤー1のストーンを列挙
+        for (std::uint8_t i = (static_cast<std::uint8_t>(current_end_first) + 1) % 2; i < kStoneMax; i += 2) {  // プレイヤー1のストーンを列挙
             if (distances[i] < minDistance[0]) {
                 score--;
             }
@@ -267,18 +267,6 @@ inline std::int8_t CheckScore(simulation::AllStoneData const& stones, float ston
 
     return score;
 }
-
-
-Vector2 RandomizeShotVelocity(Vector2 shot_velocity, float stddev_shot_speed, float stddev_shot_angle)
-{
-    thread_local auto random_engine = std::default_random_engine(std::random_device()());
-    auto speed_random_dist = std::normal_distribution<float>(0.f, stddev_shot_speed);
-    auto angle_random_dist = std::normal_distribution<float>(0.f, stddev_shot_angle);
-    float const speed = shot_velocity.Length() + speed_random_dist(random_engine);
-    float const angle = std::atan2(shot_velocity.y, shot_velocity.x) + angle_random_dist(random_engine);
-    return speed * Vector2(std::cos(angle), std::sin(angle));
-}
-
 
 
 } // unnamed namespace
@@ -301,14 +289,14 @@ void ApplyMove(
 
     auto const shot_side = GetShotSide(state.current_end);
     float const stone_radius = simulator.GetStoneRadius();
-    bool is_shot = std::holds_alternative<Shot>(move);
+    bool is_shot = std::holds_alternative<moves::Shot>(move);
 
     // シート上のストーンの初期状態を設定
 
     simulation::AllStoneData initial_stones;
     {
         auto const& stones = simulator.GetStones();
-        for (StoneId i = 0; i < kStoneMax; ++i) {
+        for (std::uint8_t i = 0; i < kStoneMax; ++i) {
             if (i < state.current_shot && state.stone_positions[i]) {
                 auto const stone_pos_sim = TransformPosition(*state.stone_positions[i], shot_side, Id::kSimulation);
 
@@ -334,7 +322,7 @@ void ApplyMove(
     }
 
     if (is_shot) {
-        Shot & shot = std::get<Shot>(move);
+        moves::Shot & shot = std::get<moves::Shot>(move);
         // 最大速度制限を適用．
         if (auto speed = shot.velocity.Length(); speed > setting.max_shot_speed) {
             shot.velocity *= setting.max_shot_speed / speed;
@@ -361,7 +349,7 @@ void ApplyMove(
 
             // シート外に出たストーンを除外
             bool stone_removed = false;
-            for (StoneId i = 0; i <= state.current_shot; ++i) {
+            for (std::uint8_t i = 0; i <= state.current_shot; ++i) {
                 if (stones[i] && !IsStoneValidWhileSimulation(stones[i]->position, setting.sheet_width, stone_radius, shot_side)) {
                     stones[i] = std::nullopt;
                     stone_removed = true;
@@ -381,7 +369,7 @@ void ApplyMove(
         {
             simulation::AllStoneData stones = simulator.GetStones();
             bool stone_removed = false;
-            for (StoneId i = 0; i <= state.current_shot; ++i) {
+            for (std::uint8_t i = 0; i <= state.current_shot; ++i) {
                 if (stones[i] && !IsStoneInPlayArea(stones[i]->position, stone_radius, shot_side)) {
                     stones[i] = std::nullopt;
                     stone_removed = true;
@@ -397,7 +385,7 @@ void ApplyMove(
         std::uint8_t const free_guard_zone_count = setting.five_rock_rule ? 5 : 4;
         if (state.current_shot < free_guard_zone_count) {
             simulation::AllStoneData const& stones = simulator.GetStones();
-            for (StoneId i = (state.current_shot + 1) % 2; i < state.current_shot; i += 2) {  // 相手のショットを列挙
+            for (std::uint8_t i = (state.current_shot + 1) % 2; i < state.current_shot; i += 2) {  // 相手のショットを列挙
                 if (initial_stones[i] && IsStoneInFreeGuardZone(initial_stones[i]->position, stone_radius, shot_side)
                     && !stones[i]) {
                     free_guard_faul = true;
@@ -467,7 +455,7 @@ void ApplyMove(
 
     } else {  // エンド中の処理
         auto const& stones = simulator.GetStones();
-        for (StoneId i = 0; i < kStoneMax; ++i) {
+        for (std::uint8_t i = 0; i < kStoneMax; ++i) {
             if (stones[i]) {
                 state.stone_positions[i] = TransformPosition(stones[i]->position, Id::kSimulation, shot_side);
             } else {
@@ -497,10 +485,10 @@ void ApplyMove(
 
         std::visit(
             Overloaded{
-                [&state](Concede) {
+                [&state](moves::Concede) {
                     state.result->reason = Result::Reason::kConcede;
                 },
-                [&state](TimeLimit) {
+                [&state](moves::TimeLimit) {
                     state.result->reason = Result::Reason::kTimeLimit;
                 },
                 [](auto const&) {
@@ -511,4 +499,43 @@ void ApplyMove(
     }
 }
 
-} // namespace digital_curling::game::normal
+} // namespace digital_curling::game
+
+
+
+namespace nlohmann {
+
+void adl_serializer<digital_curling::game::Move>::to_json(json & j, digital_curling::game::Move const& m)
+{
+    std::visit(
+        [&j](auto const& m) {
+            j["type"] = std::decay_t<decltype(m)>::kType;
+        },
+        m);
+
+    if (std::holds_alternative<digital_curling::game::moves::Shot>(m)) {
+        auto const& shot = std::get<digital_curling::game::moves::Shot>(m);
+        j["velocity"] = shot.velocity;
+        j["rotation"] = shot.rotation;
+    }
+}
+
+void adl_serializer<digital_curling::game::Move>::from_json(json const& j, digital_curling::game::Move & m)
+{
+    auto type = j.at("type").get<std::string>();
+    if (type == digital_curling::game::moves::Shot::kType) {
+        digital_curling::game::moves::Shot shot;
+        j.at("velocity").get_to(shot.velocity);
+        j.at("rotation").get_to(shot.rotation);
+        m = std::move(shot);
+    } else if (type == digital_curling::game::moves::Concede::kType) {
+        m = digital_curling::game::moves::Concede();
+    } else if (type == digital_curling::game::moves::TimeLimit::kType) {
+        m = digital_curling::game::moves::TimeLimit();
+    } else {
+        throw std::runtime_error("Move type was not found.");
+    }
+}
+
+
+} // namespace nlohmann

@@ -1,7 +1,7 @@
 ﻿#ifndef DIGITAL_CURLING_COORDINATE_HPP
 #define DIGITAL_CURLING_COORDINATE_HPP
 
-#include "common.hpp"
+#include "vector2.hpp"
 
 namespace digital_curling::coordinate {
 
@@ -255,6 +255,8 @@ constexpr float GetBackBoardY(bool side, Id coord) noexcept
     auto y_simulation = side ? detail::kBackBoardYOnSimulation : -detail::kBackBoardYOnSimulation;
     return TransformPosition(Vector2(0.f, y_simulation), Id::kSimulation, coord).y;
 }
+
+
 
 } // namespace digital_curling::coordinate
 

@@ -2,7 +2,7 @@
 #define DIGITAL_CURLING_SRC_SIMULATION_FCV1_HPP
 
 #include "digital_curling/detail/simulation/simulator.hpp"
-#include "digital_curling/detail/simulation/fcv1.hpp"
+#include "digital_curling/detail/simulation/simulator_fcv1_setting.hpp"
 #include "box2d_util.hpp"
 
 namespace digital_curling::simulation {

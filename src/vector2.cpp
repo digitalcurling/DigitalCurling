@@ -1,4 +1,4 @@
-﻿#include "digital_curling/detail/common.hpp"
+﻿#include "digital_curling/detail/vector2.hpp"
 
 namespace digital_curling {
 

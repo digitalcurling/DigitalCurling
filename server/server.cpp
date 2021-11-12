@@ -38,7 +38,7 @@ inline size_t OpponentClient(size_t client_id)
 
 } // unnamed namespace
 
-Channel::Channel(std::function<void()> && stop_accept, Setting const& server_setting, game::normal::Setting const& game_setting, simulation::ISimulatorSetting const& simulator_setting)
+Channel::Channel(std::function<void()> && stop_accept, Setting const& server_setting, game::Setting const& game_setting, simulation::ISimulatorSetting const& simulator_setting)
     : stop_accept_(std::move(stop_accept))
     , server_setting_(server_setting)
     , clients_{ {
@@ -306,7 +306,7 @@ void Channel::OnInputTimeout(size_t client_id)
             Log::Debug() << "Client " << client_id << " timed out.";
             // 制限時間切れにより負け．
             clients_[client_id].remaining_time = std::chrono::seconds(0);
-            game::Move move = game::TimeLimit();
+            game::Move move = game::moves::TimeLimit();
             Update(move);
             DeliverUpdateMessage(move);
             DeliverGameOverMessage();
@@ -337,7 +337,7 @@ void Channel::Update(game::Move & move)
     auto current_client = ToClientId(game_state_.GetCurrentTeam());
     if (clients_[current_client].remaining_time.count() <= 0) {
         Log::Debug() << "Client " << current_client << " lost the game because of the time limit.";
-        move = game::TimeLimit();
+        move = game::moves::TimeLimit();
     }
 
     {
@@ -347,7 +347,7 @@ void Channel::Update(game::Move & move)
         Log::Info() << j.dump();
     }
 
-    game::normal::ApplyMove(game_setting_, game_state_, *simulator_, move);
+    game::ApplyMove(game_setting_, game_state_, *simulator_, move);
 
     // エンド終了時にストーン位置を報告する．
     if (game_state_.current_shot == 0 && game_state_.current_end > 0) {  // エンド終了直後か？
@@ -601,7 +601,7 @@ Server::Server(boost::asio::io_context & io_context,
     boost::asio::ip::tcp::endpoint const& listen_endpoint0,
     boost::asio::ip::tcp::endpoint const& listen_endpoint1,
     Setting const& server_setting,
-    game::normal::Setting const& game_setting,
+    game::Setting const& game_setting,
     simulation::ISimulatorSetting const& simulator_setting)
     : acceptors_{{ { io_context, listen_endpoint0 }, { io_context, listen_endpoint1 } }}
     , channel_([this] { StopAccept(); }, server_setting, game_setting, simulator_setting)

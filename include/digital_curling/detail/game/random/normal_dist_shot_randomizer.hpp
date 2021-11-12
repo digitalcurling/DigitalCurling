@@ -1,11 +1,13 @@
-﻿#ifndef DIGITAL_CURLING_GAME_NORMAL_DIST_SHOT_RANDOMIZER_HPP
-#define DIGITAL_CURLING_GAME_NORMAL_DIST_SHOT_RANDOMIZER_HPP
+﻿#ifndef DIGITAL_CURLING_GAME_RANDOM_NORMAL_DIST_SHOT_RANDOMIZER_HPP
+#define DIGITAL_CURLING_GAME_RANDOM_NORMAL_DIST_SHOT_RANDOMIZER_HPP
 
 #include <random>
 #include <memory>
-#include "common.hpp"
+#include "shot_randomizer.hpp"
 
-namespace digital_curling::game {
+namespace digital_curling::game::random {
+
+
 
 /// <summary>
 /// ショットの初速と角度に正規分布の乱数を加えるIShotRandomizerの実装(シード指定あり)
@@ -45,17 +47,19 @@ private:
     std::unique_ptr<Impl> impl_;
 };
 
-} // namespace digital_curling::game
+
+
+} // namespace digital_curling::game::random
 
 
 
 // json
 
-namespace digital_curling::game {
+namespace digital_curling::game::random {
 
 void to_json(nlohmann::json &, NormalDistShotRandomizer const&);
 void from_json(nlohmann::json const&, NormalDistShotRandomizer &);
 
-} // namespace digital_curling::game
+} // namespace digital_curling::game::random
 
-#endif // DIGITAL_CURLING_GAME_NORMAL_DIST_SHOT_RANDOMIZER_HPP
+#endif // DIGITAL_CURLING_GAME_RANDOM_NORMAL_DIST_SHOT_RANDOMIZER_HPP

@@ -1,11 +1,11 @@
-﻿#include "digital_curling/detail/game/normal_dist_shot_randomizer.hpp"
+﻿#include "digital_curling/detail/game/random/normal_dist_shot_randomizer.hpp"
 
 #include <thread>
 #include <mutex>
 #include <unordered_map>
 #include "shot_randomizer_common.hpp"
 
-namespace digital_curling::game {
+namespace digital_curling::game::random {
 
 class NormalDistShotRandomizer::Impl {
 public:
