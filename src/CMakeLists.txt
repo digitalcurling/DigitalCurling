@@ -6,15 +6,28 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/extern/nlohmann_json "${PROJECT_BINARY_DI
 
 set(DIGITAL_CURLING_INCLUDE_FILES
     "../include/digital_curling/digital_curling.hpp"
-    "../include/digital_curling/detail/common.hpp"
+    "../include/digital_curling/detail/constants.hpp"
     "../include/digital_curling/detail/coordinate.hpp"
+    "../include/digital_curling/detail/json.hpp"
+    "../include/digital_curling/detail/vector2.hpp"
     "../include/digital_curling/detail/version.hpp"
-    "../include/digital_curling/detail/game/common.hpp"
-    "../include/digital_curling/detail/game/normal_dist_shot_randomizer.hpp"
-    "../include/digital_curling/detail/game/random_seed_normal_dist_shot_randomizer.hpp"
-    "../include/digital_curling/detail/game/normal.hpp"
+    "../include/digital_curling/detail/game/apply_move.hpp"
+    "../include/digital_curling/detail/game/constants.hpp"
+    "../include/digital_curling/detail/game/result.hpp"
+    "../include/digital_curling/detail/game/setting.hpp"
+    "../include/digital_curling/detail/game/state.hpp"
+    "../include/digital_curling/detail/game/team.hpp"
+    "../include/digital_curling/detail/game/moves/concede.hpp"
+    "../include/digital_curling/detail/game/moves/shot.hpp"
+    "../include/digital_curling/detail/game/moves/time_limit.hpp"
+    "../include/digital_curling/detail/game/random/normal_dist_shot_randomizer.hpp"
+    "../include/digital_curling/detail/game/random/random_seed_normal_dist_shot_randomizer.hpp"
+    "../include/digital_curling/detail/game/random/shot_randomizer.hpp"
+    "../include/digital_curling/detail/simulation/simulator_fcv1_setting.hpp"
+    "../include/digital_curling/detail/simulation/simulator_setting.hpp"
     "../include/digital_curling/detail/simulation/simulator.hpp"
-    "../include/digital_curling/detail/simulation/fcv1.hpp"
+    "../include/digital_curling/detail/simulation/stone_collision.hpp"
+    "../include/digital_curling/detail/simulation/stone_data.hpp"
 )
 
 set(DIGITAL_CURLING_GENERATED_INCLUDE_FILES
@@ -23,15 +36,15 @@ set(DIGITAL_CURLING_GENERATED_INCLUDE_FILES
 
 set(DIGITAL_CURLING_SOURCE_FILES
     "box2d_util.hpp"
-    "common.cpp"
-    "game_common.cpp"
-    "game_normal_dist_shot_randomizer.cpp"
-    "game_random_seed_normal_dist_shot_randomizer.cpp"
+    "game_apply_move.cpp"
+    "game_random_normal_dist_shot_randomizer.cpp"
+    "game_random_random_seed_normal_dist_shot_randomizer.cpp"
+    "game_random_shot_randomizer.cpp"
     "shot_randomizer_common.hpp"
-    "game_normal.cpp"
     "simulation_fcv1.hpp"
     "simulation_fcv1.cpp"
-    "simulation_simulator.cpp"
+    "simulation_simulator_setting.cpp"
+    "vector2.cpp"
     "${CMAKE_CURRENT_BINARY_DIR}/version.cpp"  # generated from version.cpp.in
 )
 

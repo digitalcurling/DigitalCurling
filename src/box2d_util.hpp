@@ -2,7 +2,7 @@
 #define DIGITAL_CURLING_SRC_BOX2D_UTIL_HPP
 
 #include "box2d/box2d.h"
-#include "digital_curling/detail/common.hpp"
+#include "digital_curling/detail/vector2.hpp"
 
 namespace digital_curling {
 

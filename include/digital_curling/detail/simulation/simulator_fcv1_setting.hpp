@@ -1,9 +1,13 @@
-﻿#ifndef DIGITAL_CURLING_SIMULATION_FCV1_HPP
-#define DIGITAL_CURLING_SIMULATION_FCV1_HPP
+﻿#ifndef DIGITAL_CURLING_SIMULATION_SIMULATOR_FCV1_SETTING_HPP
+#define DIGITAL_CURLING_SIMULATION_SIMULATOR_FCV1_SETTING_HPP
 
-#include "simulator.hpp"
+#include <memory>
+#include "../json.hpp"
+#include "simulator_setting.hpp"
 
 namespace digital_curling::simulation {
+
+
 
 /// <summary>
 /// FCV1(Friction-CurlVelocity 1)シミュレータの設定
@@ -24,6 +28,8 @@ public:
     virtual void ToJson(nlohmann::json & json) const override;
 };
 
+
+
 } // namespace digital_curling::simulation
 
 
@@ -37,4 +43,4 @@ void from_json(nlohmann::json const&, SimulatorFCV1Setting &);
 
 } // namespace digital_curling::simulation
 
-#endif // DIGITAL_CURLING_SIMULATION_FCV1_HPP
+#endif // DIGITAL_CURLING_SIMULATION_SIMULATOR_FCV1_SETTING_HPP

@@ -1,8 +1,8 @@
-﻿#include "digital_curling/detail/game/random_seed_normal_dist_shot_randomizer.hpp"
+﻿#include "digital_curling/detail/game/random/random_seed_normal_dist_shot_randomizer.hpp"
 
 #include "shot_randomizer_common.hpp"
 
-namespace digital_curling::game {
+namespace digital_curling::game::random {
 
 RandomSeedNormalDistShotRandomizer::RandomSeedNormalDistShotRandomizer() = default;
 
@@ -36,5 +36,5 @@ void from_json(nlohmann::json const& j, RandomSeedNormalDistShotRandomizer & v)
     j.at("stddev_angle").get_to(v.stddev_angle);
 }
 
-} // namespace digital_curling::game
+} // namespace digital_curling::game::random
 

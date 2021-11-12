@@ -1,9 +1,9 @@
-﻿#ifndef DIGITAL_CURLING_GAME_RANDOM_SEED_NORMAL_DIST_SHOT_RANDOMIZER_HPP
-#define DIGITAL_CURLING_GAME_RANDOM_SEED_NORMAL_DIST_SHOT_RANDOMIZER_HPP
+﻿#ifndef DIGITAL_CURLING_GAME_RANDOM_RANDOM_SEED_NORMAL_DIST_SHOT_RANDOMIZER_HPP
+#define DIGITAL_CURLING_GAME_RANDOM_RANDOM_SEED_NORMAL_DIST_SHOT_RANDOMIZER_HPP
 
-#include "common.hpp"
+#include "shot_randomizer.hpp"
 
-namespace digital_curling::game {
+namespace digital_curling::game::random {
 
 /// <summary>
 /// ショットの初速と角度に正規分布の乱数を加えるIShotRandomizerの実装(シードがランダムなバージョン)
@@ -32,17 +32,17 @@ public:
     virtual void ToJson(nlohmann::json & j) const override;
 };
 
-} // namespace digital_curling::game
+} // namespace digital_curling::game::random
 
 
 
 // json
 
-namespace digital_curling::game {
+namespace digital_curling::game::random {
 
 void to_json(nlohmann::json &, RandomSeedNormalDistShotRandomizer const&);
 void from_json(nlohmann::json const&, RandomSeedNormalDistShotRandomizer &);
 
-} // namespace digital_curling::game
+} // namespace digital_curling::game::random
 
-#endif // DIGITAL_CURLING_GAME_RANDOM_SEED_NORMAL_DIST_SHOT_RANDOMIZER_HPP
+#endif // DIGITAL_CURLING_GAME_RANDOM_RANDOM_SEED_NORMAL_DIST_SHOT_RANDOMIZER_HPP

@@ -1,8 +1,9 @@
 ﻿#ifndef DIGITAL_CURLING_SRC_SHOT_RANDOMIZER_COMMON_HPP
 #define DIGITAL_CURLING_SRC_SHOT_RANDOMIZER_COMMON_HPP
 
+#include <cmath>
 #include <random>
-#include "digital_curling/detail/common.hpp"
+#include "digital_curling/detail/vector2.hpp"
 
 namespace digital_curling::game::detail {
 

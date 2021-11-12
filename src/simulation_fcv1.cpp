@@ -262,8 +262,8 @@ void SimulatorFCV1::ContactListener::PostSolve(b2Contact* contact, const b2Conta
     auto b_body = contact->GetFixtureB()->GetBody();
 
     StoneCollision collision;
-    collision.a_id = static_cast<StoneId>(a_body->GetUserData().pointer);
-    collision.b_id = static_cast<StoneId>(b_body->GetUserData().pointer);
+    collision.a_id = static_cast<std::uint8_t>(a_body->GetUserData().pointer);
+    collision.b_id = static_cast<std::uint8_t>(b_body->GetUserData().pointer);
     collision.a_position = ToDC2Vector2(a_body->GetWorldCenter());
     collision.b_position = ToDC2Vector2(b_body->GetWorldCenter());
     b2WorldManifold world_manifold;

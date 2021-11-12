@@ -1,4 +1,4 @@
-﻿#include "digital_curling/detail/simulation/simulator.hpp"
+﻿#include "digital_curling/detail/simulation/simulator_setting.hpp"
 #include "simulation_fcv1.hpp"
 
 namespace digital_curling::simulation {
