@@ -1,12 +1,13 @@
 # Digital Curling :curling_stone: version 3
 
-Digital Curling is a curling simulation platform for creating curling AI.
-
+- [README (Japanese Version)](./README.md)
 - [Official site](http://minerva.cs.uec.ac.jp/cgi-bin/curling/wiki.cgi)
 
-## Feature
+Digital Curling is a curling simulation platform for creating curling AI.
 
-This repository provides...
+## Overview
+
+### What is Provided in this Repository
 
 - Library for developing a curling AI
 - TCP/IP server for playing a curling match
@@ -16,9 +17,13 @@ This repository provides...
 - Using a new physics simulator
 - Currently normal rule (non mix-doubles rule) is only supported.
 
-### Language
+### Library
 
-- C++17
+- Language: C++17
+- Build Tool: CMake
+- Multi-platform support
+  - Tested in Windows and Ubuntu--18.04 LTS (WSL2)
+  - Not tested in Mac, but we plan to do so.
 
 ## Building
 
@@ -58,14 +63,21 @@ See [examples](https://github.com/digitalcurling/DigitalCurling-AI-example).
 
 ### Server config file
 
+Config file format is JSON.
+
 ```json
 {
     "port": [10000, 10001]
 }
 ```
 
+- `"port"`: The ports to be connected by Team 0 and Team 1, respectively.
+
 The detail of the config file is under construction.
 
+### Protocol
+
+Under construction
 
 ## GUI
 
