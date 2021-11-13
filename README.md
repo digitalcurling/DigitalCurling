@@ -79,7 +79,9 @@ cmake --build . --config RelWithDebInfo
 
 ### 通信プロトコル
 
-工事中
+- [プロトコル仕様書](https://github.com/digitalcurling/DigitalCurling/wiki/Protocol)
+
+⚠️  プロトコルのパースはライブラリで行うことができます．ライブラリを使う限りではプロトコル仕様書を読む必要はありません．
 
 ## GUI
 
