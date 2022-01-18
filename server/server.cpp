@@ -484,8 +484,8 @@ void TCPSession::ReadLine()
             }
 
             if (error) {
-                // このエラーはクライアントが正常に接続を解除した際にも呼ばれる
-                Log::Debug() << "error in client " << client_id_ << " read line. " << error.message();
+                // この部分はクライアントが正常に接続を解除した際にも呼ばれる
+                Log::Debug() << "Client " << client_id_ << "'s session will be stopped. - " << error.message();
                 channel_.Leave(client_id_);
                 Stop();
                 return;
