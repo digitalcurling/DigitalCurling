@@ -343,11 +343,9 @@ void ApplyMove(
     // シミュレーション
     if (is_shot) {
         // すべてのストーンが停止するまでループ
-        while (!simulator.AreAllStonesStopped()) {
-            simulator.Step();
-            simulation::AllStoneData stones = simulator.GetStones();
-
+        while (true) {
             // シート外に出たストーンを除外
+            simulation::AllStoneData stones = simulator.GetStones();
             bool stone_removed = false;
             for (std::uint8_t i = 0; i <= state.current_shot; ++i) {
                 if (stones[i] && !IsStoneValidWhileSimulation(stones[i]->position, setting.sheet_width, stone_radius, shot_side)) {
@@ -363,6 +361,14 @@ void ApplyMove(
             if (setting.on_step) {
                 setting.on_step(simulator);
             }
+
+            // ストーン停止判定
+            if (simulator.AreAllStonesStopped()) {
+                break;
+            }
+
+            // ステップ
+            simulator.Step();
         }
 
         // すべてのストーンが停止した後，プレイエリア外のストーンを削除
