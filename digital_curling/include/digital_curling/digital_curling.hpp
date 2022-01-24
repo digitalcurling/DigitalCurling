@@ -3,7 +3,6 @@
 
 #include "detail/constants.hpp"
 #include "detail/coordinate.hpp"
-#include "detail/json.hpp"
 #include "detail/vector2.hpp"
 #include "detail/version.hpp"
 #include "detail/game/apply_move.hpp"

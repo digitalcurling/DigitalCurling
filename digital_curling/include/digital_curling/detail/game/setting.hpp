@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <memory>
 #include <functional>
-#include "../json.hpp"
 #include "../simulation/simulator.hpp"
 #include "random/shot_randomizer.hpp"
 
@@ -51,17 +50,6 @@ struct Setting {
     /// </summary>
     std::function<void(simulation::ISimulator const &)> on_step;
 };
-
-} // namespace digital_curling::game
-
-
-
-// json
-
-namespace digital_curling::game {
-
-void to_json(nlohmann::json &, Setting const&);
-void from_json(nlohmann::json const&, Setting &);
 
 } // namespace digital_curling::game
 

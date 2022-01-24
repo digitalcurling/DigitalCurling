@@ -8,9 +8,7 @@ namespace digital_curling::game::moves {
 /// <summary>
 /// 行動：制限時間超過
 /// </summary>
-struct TimeLimit {
-    static constexpr char kType[] = "time_limit";
-};
+struct TimeLimit {};
 
 
 

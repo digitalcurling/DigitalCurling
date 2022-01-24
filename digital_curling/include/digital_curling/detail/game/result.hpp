@@ -2,10 +2,11 @@
 #define DIGITAL_CURLING_GAME_RESULT_HPP
 
 #include <cstdint>
-#include "../json.hpp"
 #include "team.hpp"
 
 namespace digital_curling::game {
+
+
 
 /// <summary>
 /// 試合の結果を格納する．
@@ -37,26 +38,7 @@ struct Result {
     Reason reason = Reason::kScore;
 };
 
-} // namespace digital_curling::game
 
-
-
-// json
-
-namespace digital_curling::game {
-
-NLOHMANN_JSON_SERIALIZE_ENUM(Result::Reason, {
-    {Result::Reason::kScore, "score"},
-    {Result::Reason::kConcede, "concede"},
-    {Result::Reason::kTimeLimit, "time_limit"},
-    {Result::Reason::kInvalid, nullptr},
-})
-
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
-    Result,
-    win,
-    reason
-)
 
 } // namespace digital_curling::game
 

@@ -11,8 +11,6 @@ namespace digital_curling::game::random {
 /// </summary>
 class RandomSeedNormalDistShotRandomizer : public IShotRandomizer {
 public:
-    static constexpr char kType[] = "random_seed_normal_dist";
-
     /// <summary>
     /// ショットの初速に加わる乱数(正規分布をとる)の標準偏差．
     /// </summary>
@@ -29,19 +27,7 @@ public:
 
     virtual ~RandomSeedNormalDistShotRandomizer();
     virtual Vector2 Randomize(Vector2 shot_velocity) override;
-    virtual void ToJson(nlohmann::json & j) const override;
 };
-
-} // namespace digital_curling::game::random
-
-
-
-// json
-
-namespace digital_curling::game::random {
-
-void to_json(nlohmann::json &, RandomSeedNormalDistShotRandomizer const&);
-void from_json(nlohmann::json const&, RandomSeedNormalDistShotRandomizer &);
 
 } // namespace digital_curling::game::random
 

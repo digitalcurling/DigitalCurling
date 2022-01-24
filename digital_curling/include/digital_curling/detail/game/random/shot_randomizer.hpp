@@ -3,7 +3,6 @@
 
 #include <memory>
 #include "../../vector2.hpp"
-#include "../../json.hpp"
 
 namespace digital_curling::game::random {
 
@@ -27,12 +26,6 @@ public:
     virtual Vector2 Randomize(Vector2 shot_velocity) = 0;
 
     /// <summary>
-    /// JSONに変換する．
-    /// </summary>
-    /// <param name="j">出力先</param>
-    virtual void ToJson(nlohmann::json & j) const = 0;
-
-    /// <summary>
     /// デフォルトのショットランダマイザを得る．
     /// </summary>
     /// <returns>デフォルトのショットランダマイザ</returns>
@@ -42,25 +35,5 @@ public:
 
 
 } // namespace digital_curling::game::random
-
-
-
-// json
-
-namespace digital_curling::game::random {
-
-void to_json(nlohmann::json &, IShotRandomizer const&);
-
-} // namespace digital_curling::game::random
-
-namespace nlohmann {
-
-template <>
-struct adl_serializer<std::unique_ptr<digital_curling::game::random::IShotRandomizer>> {
-    static std::unique_ptr<digital_curling::game::random::IShotRandomizer> from_json(json const&);
-    static void to_json(json &, std::unique_ptr<digital_curling::game::random::IShotRandomizer> const&);
-};
-
-} // namespace nlohmann
 
 #endif // DIGITAL_CURLING_GAME_RANDOM_SHOT_RANDOMIZER_HPP

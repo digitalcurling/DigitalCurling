@@ -1,14 +1,10 @@
 # box2d
 add_subdirectory(${PROJECT_SOURCE_DIR}/extern/box2d "${PROJECT_BINARY_DIR}/extern/box2d")
 
-# nlohmann_json
-add_subdirectory(${PROJECT_SOURCE_DIR}/extern/nlohmann_json "${PROJECT_BINARY_DIR}/extern/nlohmann_json")
-
 set(DIGITAL_CURLING_INCLUDE_FILES
     "include/digital_curling/digital_curling.hpp"
     "include/digital_curling/detail/constants.hpp"
     "include/digital_curling/detail/coordinate.hpp"
-    "include/digital_curling/detail/json.hpp"
     "include/digital_curling/detail/vector2.hpp"
     "include/digital_curling/detail/version.hpp"
     "include/digital_curling/detail/game/apply_move.hpp"
@@ -43,8 +39,6 @@ set(DIGITAL_CURLING_SOURCE_FILES
     "src/shot_randomizer_common.hpp"
     "src/simulation_fcv1.hpp"
     "src/simulation_fcv1.cpp"
-    "src/simulation_simulator_setting.cpp"
-    "src/vector2.cpp"
     "${CMAKE_CURRENT_BINARY_DIR}/version.cpp"  # generated from version.cpp.in
 )
 
@@ -64,8 +58,6 @@ target_include_directories(digital_curling__digital_curling
 )
 
 target_link_libraries(digital_curling__digital_curling
-  PUBLIC
-    nlohmann_json::nlohmann_json
   PRIVATE
     box2d
 )

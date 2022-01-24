@@ -2,7 +2,6 @@
 #define DIGITAL_CURLING_GAME_APPLY_MOVE_HPP
 
 #include <variant>
-#include "../json.hpp"
 #include "../simulation/simulator.hpp"
 #include "setting.hpp"
 #include "state.hpp"
@@ -40,19 +39,5 @@ void ApplyMove(
 
 
 } // namespace digital_curling::game
-
-
-
-// json
-
-namespace nlohmann {
-
-template <>
-struct adl_serializer<digital_curling::game::Move> {
-    static void to_json(json & j, digital_curling::game::Move const& m);
-    static void from_json(json const& j, digital_curling::game::Move & m);
-};
-
-} // namespace nlohmann
 
 #endif // DIGITAL_CURLING_GAME_APPLY_MOVE_HPP

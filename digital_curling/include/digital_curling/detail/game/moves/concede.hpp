@@ -8,9 +8,7 @@ namespace digital_curling::game::moves {
 /// <summary>
 /// 行動：コンシード
 /// </summary>
-struct Concede {
-    static constexpr char kType[] = "concede";
-};
+struct Concede {};
 
 
 

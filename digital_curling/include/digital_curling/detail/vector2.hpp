@@ -2,7 +2,6 @@
 #define DIGITAL_CURLING_VECTOR2_HPP
 
 #include <cmath>
-#include "json.hpp"
 
 namespace digital_curling {
 
@@ -86,17 +85,5 @@ constexpr Vector2 operator / (Vector2 v, float f)
 
 
 } // namespace digital_curling
-
-
-
-// json
-
-namespace digital_curling {
-
-void to_json(nlohmann::json &, Vector2 const&);
-void from_json(nlohmann::json const&, Vector2 &);
-
-} // namespace digital_curling
-
 
 #endif // DIGITAL_CURLING_VECTOR2_HPP

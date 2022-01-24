@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <array>
 #include <optional>
-#include "../json.hpp"
 #include "../vector2.hpp"
 #include "../constants.hpp"
 #include "constants.hpp"
@@ -77,25 +76,6 @@ struct State {
     /// <returns>現在ショットを行うプレイヤー</returns>
     Team GetCurrentTeam() const;
 };
-
-} // namespace digital_curling::game
-
-
-
-// json
-
-namespace digital_curling::game {
-
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
-    State,
-    stone_positions,
-    scores,
-    current_shot,
-    current_end_first,
-    current_end,
-    extra_end_score,
-    result
-)
 
 } // namespace digital_curling::game
 

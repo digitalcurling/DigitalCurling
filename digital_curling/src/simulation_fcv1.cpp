@@ -13,21 +13,6 @@ std::unique_ptr<ISimulator> SimulatorFCV1Setting::CreateSimulator() const
     return std::make_unique<SimulatorFCV1>(*this);
 }
 
-void SimulatorFCV1Setting::ToJson(nlohmann::json & j) const
-{
-    j = *this;
-}
-
-void to_json(nlohmann::json & j, const SimulatorFCV1Setting & setting)
-{
-    j["type"] = SimulatorFCV1Setting::kType;
-    j["seconds_per_frame"] = setting.seconds_per_frame;
-}
-
-void from_json(nlohmann::json const& j, SimulatorFCV1Setting & setting)
-{
-    j.at("seconds_per_frame").get_to(setting.seconds_per_frame);
-}
 
 
 //----------------------------------

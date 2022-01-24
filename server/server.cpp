@@ -1,6 +1,6 @@
 ﻿#include "server.hpp"
 #include <atomic>
-#include "nlohmann/json.hpp"
+#include "digital_curling/json.hpp"
 #include "log.hpp"
 
 namespace digital_curling::server {

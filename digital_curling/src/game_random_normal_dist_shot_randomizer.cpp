@@ -74,24 +74,4 @@ Vector2 NormalDistShotRandomizer::Randomize(Vector2 shot_velocity)
     return detail::RandomizeShotVelocityNormalDist(shot_velocity, *engine, stddev_speed, stddev_angle);
 }
 
-void NormalDistShotRandomizer::ToJson(nlohmann::json & j) const
-{
-    j = *this;
-}
-
-void to_json(nlohmann::json & j, NormalDistShotRandomizer const& v)
-{
-    j["type"] = NormalDistShotRandomizer::kType;
-    j["stddev_speed"] = v.stddev_speed;
-    j["stddev_angle"] = v.stddev_angle;
-    j["seed"] = v.seed;
-}
-
-void from_json(nlohmann::json const& j, NormalDistShotRandomizer & v)
-{
-    j.at("stddev_speed").get_to(v.stddev_speed);
-    j.at("stddev_angle").get_to(v.stddev_angle);
-    j.at("seed").get_to(v.seed);
-}
-
 } // namespace digital_curling::game

@@ -30,6 +30,9 @@ digital_curling_add_test(digital_curling__test
     "test/test_coordinate.cpp"
 )
 
-target_link_libraries(digital_curling__test digital_curling::digital_curling)
+target_link_libraries(digital_curling__test
+    digital_curling::digital_curling
+    digital_curling::json
+)
 
 # TODO テストのカレントディレクトリを設定する

@@ -18,29 +18,6 @@ template<class... Ts> Overloaded(Ts...)->Overloaded<Ts...>;
 } // unnamed namespace
 
 
-
-void to_json(nlohmann::json & j, Setting const& v)
-{
-    j["randomize_initial_shot_velocity"] = v.randomize_initial_shot_velocity;
-    j["end"] = v.end;
-    j["sheet_width"] = v.sheet_width;
-    j["five_rock_rule"] = v.five_rock_rule;
-    j["max_shot_speed"] = v.max_shot_speed;
-    j["shot_randomizer"] = *v.shot_randomizer;
-}
-
-void from_json(nlohmann::json const& j, Setting & v)
-{
-    j.at("randomize_initial_shot_velocity").get_to(v.randomize_initial_shot_velocity);
-    j.at("end").get_to(v.end);
-    j.at("sheet_width").get_to(v.sheet_width);
-    j.at("five_rock_rule").get_to(v.five_rock_rule);
-    j.at("max_shot_speed").get_to(v.max_shot_speed);
-    v.shot_randomizer = j.at("shot_randomizer").get<std::unique_ptr<random::IShotRandomizer>>();
-}
-
-
-
 State::State()
     : stone_positions()
     , scores({})
@@ -506,42 +483,3 @@ void ApplyMove(
 }
 
 } // namespace digital_curling::game
-
-
-
-namespace nlohmann {
-
-void adl_serializer<digital_curling::game::Move>::to_json(json & j, digital_curling::game::Move const& m)
-{
-    std::visit(
-        [&j](auto const& m) {
-            j["type"] = std::decay_t<decltype(m)>::kType;
-        },
-        m);
-
-    if (std::holds_alternative<digital_curling::game::moves::Shot>(m)) {
-        auto const& shot = std::get<digital_curling::game::moves::Shot>(m);
-        j["velocity"] = shot.velocity;
-        j["rotation"] = shot.rotation;
-    }
-}
-
-void adl_serializer<digital_curling::game::Move>::from_json(json const& j, digital_curling::game::Move & m)
-{
-    auto type = j.at("type").get<std::string>();
-    if (type == digital_curling::game::moves::Shot::kType) {
-        digital_curling::game::moves::Shot shot;
-        j.at("velocity").get_to(shot.velocity);
-        j.at("rotation").get_to(shot.rotation);
-        m = std::move(shot);
-    } else if (type == digital_curling::game::moves::Concede::kType) {
-        m = digital_curling::game::moves::Concede();
-    } else if (type == digital_curling::game::moves::TimeLimit::kType) {
-        m = digital_curling::game::moves::TimeLimit();
-    } else {
-        throw std::runtime_error("Move type was not found.");
-    }
-}
-
-
-} // namespace nlohmann

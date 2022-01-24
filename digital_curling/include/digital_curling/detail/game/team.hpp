@@ -2,7 +2,6 @@
 #define DIGITAL_CURLING_GAME_TEAM_HPP
 
 #include <cstdint>
-#include "../json.hpp"
 
 namespace digital_curling::game {
 
@@ -29,20 +28,6 @@ enum class Team : std::int8_t {
 };
 
 
-
-} // namespace digital_curling::game
-
-
-
-// json
-
-namespace digital_curling::game {
-
-NLOHMANN_JSON_SERIALIZE_ENUM(Team, {
-    {Team::k0, 0},
-    {Team::k1, 1},
-    {Team::kInvalid, nullptr},
-})
 
 } // namespace digital_curling::game
 

@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iomanip>
 #include <filesystem>
+#include "digital_curling/json.hpp"
 #include "server.hpp"
 #include "log.hpp"
 

@@ -1,7 +1,6 @@
 ﻿#ifndef DIGITAL_CURLING_GAME_MOVES_SHOT_HPP
 #define DIGITAL_CURLING_GAME_MOVES_SHOT_HPP
 
-#include "../../json.hpp"
 #include "../../vector2.hpp"
 
 namespace digital_curling::game::moves {
@@ -12,8 +11,6 @@ namespace digital_curling::game::moves {
 /// 行動：ショット
 /// </summary>
 struct Shot {
-    static constexpr char kType[] = "shot";
-
     /// <summary>
     /// ショットの回転方向
     /// </summary>
@@ -36,19 +33,6 @@ struct Shot {
 };
 
 
-
-} // namespace digital_curling::game::moves
-
-
-
-// json
-
-namespace digital_curling::game::moves {
-
-NLOHMANN_JSON_SERIALIZE_ENUM(Shot::Rotation, {
-    {Shot::Rotation::kCCW, "ccw"},
-    {Shot::Rotation::kCW, "cw"},
-})
 
 } // namespace digital_curling::game::moves
 
