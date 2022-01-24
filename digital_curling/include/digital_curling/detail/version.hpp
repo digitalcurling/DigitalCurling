@@ -1,4 +1,7 @@
-﻿#ifndef DIGITAL_CURLING_VERSION_HPP
+﻿/// \file
+/// \brief バージョン取得関数を定義します
+
+#ifndef DIGITAL_CURLING_VERSION_HPP
 #define DIGITAL_CURLING_VERSION_HPP
 
 #include <cstdint>
@@ -6,34 +9,30 @@
 
 namespace digital_curling {
 
-/// <summary>
-/// バージョンを得る
-/// </summary>
-/// <returns>バージョン文字列(例: "1.0.0")</returns>
+/// \brief バージョンを得る
+///
+/// \returns バージョン文字列(例: "1.0.0")
 std::string GetVersion();
 
 
 
-/// <summary>
-/// メジャーバージョンを得る
-/// </summary>
-/// <returns>メジャーバージョン</returns>
+/// \brief メジャーバージョンを得る
+///
+/// \returns メジャーバージョン
 std::uint32_t GetVersionMajor();
 
 
 
-/// <summary>
-/// マイナーバージョンを得る
-/// </summary>
-/// <returns>マイナーバージョン</returns>
+/// \brief マイナーバージョンを得る
+///
+/// \returns マイナーバージョン
 std::uint32_t GetVersionMinor();
 
 
 
-/// <summary>
-/// パッチバージョンを得る
-/// </summary>
-/// <returns>パッチバージョン</returns>
+/// \brief パッチバージョンを得る
+///
+/// \returns パッチバージョン
 std::uint32_t GetVersionPatch();
 
 } // namespace digital_curling

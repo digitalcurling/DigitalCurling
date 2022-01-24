@@ -1,4 +1,7 @@
-﻿#ifndef DIGITAL_CURLING_GAME_MOVES_SHOT_HPP
+﻿/// \file
+/// \brief Shot を定義します
+
+#ifndef DIGITAL_CURLING_GAME_MOVES_SHOT_HPP
 #define DIGITAL_CURLING_GAME_MOVES_SHOT_HPP
 
 #include "../../vector2.hpp"
@@ -7,29 +10,19 @@ namespace digital_curling::game::moves {
 
 
 
-/// <summary>
-/// 行動：ショット
-/// </summary>
+/// \brief 行動：ショット
+///
+/// \sa Move
 struct Shot {
-    /// <summary>
-    /// ショットの回転方向
-    /// </summary>
+    /// \brief ショットの回転方向
     enum class Rotation : std::uint8_t {
-        /// <summary>反時計回り</summary>
-        kCCW,
-        /// <summary>時計回り</summary>
-        kCW
+        kCCW, ///< 反時計回り
+        kCW   ///< 時計回り
     };
 
-    /// <summary>
-    /// ショットの初速度
-    /// </summary>
-    Vector2 velocity;
+    Vector2 velocity; ///< ショットの初速度
 
-    /// <summary>
-    /// ショットの初期回転方向
-    /// </summary>
-    Rotation rotation = Rotation::kCCW;
+    Rotation rotation = Rotation::kCCW; ///< ショットの初期回転方向
 };
 
 

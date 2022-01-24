@@ -1,4 +1,7 @@
-﻿#ifndef DIGITAL_CURLING_SIMULATION_STONE_DATA_HPP
+﻿/// \file
+/// \brief StoneData, AllStoneData を定義します
+
+#ifndef DIGITAL_CURLING_SIMULATION_STONE_DATA_HPP
 #define DIGITAL_CURLING_SIMULATION_STONE_DATA_HPP
 
 #include <array>
@@ -10,37 +13,30 @@ namespace digital_curling::simulation {
 
 
 
-/// <summary>
-/// ストーンの位置と速度
-/// </summary>
+/// \brief ストーンの位置，角度，速度，角速度を格納します
 struct StoneData {
 
-    /// <summary>
-    /// ストーンの中心の座標 [m]
-    /// </summary>
-    Vector2 position;
+    Vector2 position; ///< ストーンの中心の座標(m)
 
-    /// <summary>
-    /// 角度 [radian]
-    /// </summary>
-    float angle;
+    float angle; ///< 角度(radian)
 
-    /// <summary>
-    /// 速度 [m/s]
-    /// </summary>
-    Vector2 linear_velocity;
+    Vector2 linear_velocity; ///< 速度(m/s)
 
-    /// <summary>
-    /// 角速度 [radian/s]
-    /// </summary>
-    float angular_velocity;
+    float angular_velocity; ///< 角速度(radian/s)
 
+    /// \brief 全データを0で初期化します
     StoneData()
         : position()
         , angle(0.f)
         , linear_velocity()
         , angular_velocity(0.f) {}
 
+    /// \brief 与えられたデータで初期化します
+    ///
+    /// \param[in] position 位置(m)
+    /// \param[in] angle 角度(radian)
+    /// \param[in] linear_velocity 速度(m/s)
+    /// \param[in] angular_velocity 角速度(radian/s)
     StoneData(Vector2 position, float angle, Vector2 linear_velocity, float angular_velocity)
         : position(position)
         , angle(angle)
@@ -50,9 +46,9 @@ struct StoneData {
 
 
 
-/// <summary>
-/// 全てのストーンの位置と速度。盤面に存在しないストーンはstd::nulloptとして表される。
-/// </summary>
+/// \brief 全ストーンの位置と速度
+///
+/// 盤面に存在しないストーンは \c std::nullopt として表されます．
 using AllStoneData = std::array<std::optional<StoneData>, kStoneMax>;
 
 

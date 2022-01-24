@@ -1,28 +1,31 @@
-﻿#ifndef DIGITAL_CURLING_GAME_RANDOM_RANDOM_SEED_NORMAL_DIST_SHOT_RANDOMIZER_HPP
+﻿/// \file
+/// \brief RandomSeedNormalDistShotRandomizer を定義します
+
+#ifndef DIGITAL_CURLING_GAME_RANDOM_RANDOM_SEED_NORMAL_DIST_SHOT_RANDOMIZER_HPP
 #define DIGITAL_CURLING_GAME_RANDOM_RANDOM_SEED_NORMAL_DIST_SHOT_RANDOMIZER_HPP
 
 #include "shot_randomizer.hpp"
 
 namespace digital_curling::game::random {
 
-/// <summary>
-/// ショットの初速と角度に正規分布の乱数を加えるIShotRandomizerの実装(シードがランダムなバージョン)
-/// 乱数生成器のシード値は関数Randomizeを呼び出した全てのスレッドでランダムに決定されます．
-/// </summary>
+/// \brief ショットの初速と角度に正規分布の乱数を加えるIShotRandomizerの実装(シードがランダムなバージョン)
+///
+/// 乱数生成器のシード値は Randomize() を呼び出した全てのスレッドでランダムに決定されます．
 class RandomSeedNormalDistShotRandomizer : public IShotRandomizer {
 public:
-    /// <summary>
-    /// ショットの初速に加わる乱数(正規分布をとる)の標準偏差．
-    /// </summary>
+    /// \brief ショットの初速に加わる正規分布乱数の標準偏差．
     float stddev_speed = 0.001f;
 
-    /// <summary>
-    /// ショットの初期角度に加わる乱数(正規分布をとる)の標準偏差．
-    /// </summary>
+    /// \brief ショットの初期角度に加わる正規分布乱数の標準偏差．
     float stddev_angle = 0.001f;
 
+    /// \brief デフォルトコンストラクタ
     RandomSeedNormalDistShotRandomizer();
+
+    /// \brief コピーコンストラクタ
     RandomSeedNormalDistShotRandomizer(RandomSeedNormalDistShotRandomizer const&);
+
+    /// \brief コピー代入演算子
     RandomSeedNormalDistShotRandomizer & operator = (RandomSeedNormalDistShotRandomizer const&);
 
     virtual ~RandomSeedNormalDistShotRandomizer();

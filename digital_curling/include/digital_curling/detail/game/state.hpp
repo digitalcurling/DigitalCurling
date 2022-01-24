@@ -1,4 +1,7 @@
-﻿#ifndef DIGITAL_CURLING_GAME_STATE_HPP
+﻿/// \file
+/// \brief State を定義します
+
+#ifndef DIGITAL_CURLING_GAME_STATE_HPP
 #define DIGITAL_CURLING_GAME_STATE_HPP
 
 #include <cstdint>
@@ -11,69 +14,57 @@
 
 namespace digital_curling::game {
 
-/// <summary>
-/// 試合の状態を表す．
-/// </summary>
+/// \brief 試合の状態を表す
 struct State {
-    /// <summary>
-    /// 初期盤面を構築する．
-    /// </summary>
+    /// \brief 初期盤面を構築する
     State();
 
+    /// \brief 盤面をコピーする
     State(State const&) = default;
+
+    /// \brief 盤面をコピーする
     State& operator = (State const&) = default;
 
-    /// <summary>
-    /// ストーンの座標．
-    /// 座標系はストーンの発射地点を(0, 0)，ショットする方向(反対側のハウスがある向き)をy軸正方向とする．
-    /// </summary>
+    /// \brief ストーンの座標．
+    ///
+    /// 座標系はストーンの発射地点(ハックの位置)を原点，ショットする方向(反対側のハウスがある向き)をy軸正方向としています．
     std::array<std::optional<Vector2>, kStoneMax> stone_positions;
 
-    /// <summary>
-    /// 0エンド目から<see cref="current_end"/>エンド目(最大で<see cref="Setting::end"/>)までのスコアを格納する．
+    /// \brief 0エンド目から \ref current_end エンド目(最大で Setting::end )までのスコアを格納する．
+    ///
     /// 各スコアは正ならチーム0，負ならチーム1の得点．0はブランクエンドを意味する．
-    /// </summary>
-    /// <remarks>
-    /// 延長エンドのスコアは別に<see cref="extra_end_score"/>に格納される．
-    /// </remarks>
+    ///
+    /// 延長エンドのスコアは別に \ref extra_end_score に格納される．
     std::array<std::int8_t, kEndMax> scores;
 
-    /// <summary>
-    /// 現在のショット番号．<c>0 &lt;= current_shot &lt;= 15</c>
-    /// </summary>
+    /// \brief 現在のショット番号．0以上，15以下．
     std::uint8_t current_shot;
 
-    /// <summary>
-    /// 現在のエンドの先行．ゲーム終了後は<see cref="Team::kInvalid"/>が格納される．
-    /// </summary>
+    /// \brief 現在のエンドの先行．
+    ///
+    /// ゲーム終了後は Team::kInvalid が格納される．
     Team current_end_first;
 
-    /// <summary>
-    /// 現在のエンド．<c>0 &lt;= current_end</c>
-    /// </summary>
+    /// \brief 現在のエンド．0以上．
     std::uint8_t current_end;
 
-    /// <summary>
-    /// 延長エンドのスコア．
-    /// </summary>
+    /// \brief 延長エンドのスコア．
     std::int8_t extra_end_score;
 
-    /// <summary>
-    /// 試合結果．<c>std::nullopt</c>の間は試合中．
-    /// </summary>
+    /// \brief 試合結果
+    /// \c std::nullopt の値は試合中を意味します
     std::optional<Result> result;
 
-    /// <summary>
-    /// チームの現在までの合計スコアを得る
-    /// </summary>
-    /// <param name="team">チームID．<see cref="Team::kInvalid"/>は渡さないでください．</param>
-    /// <returns>引数で指定したプレイヤーの合計スコア</returns>
+    /// \brief チームの現在までの合計スコアを得る
+    ///
+    /// \param[in] team チームID． Team::kInvalid は渡さないでください．
+    /// \returns 引数で指定したプレイヤーの合計スコア
     std::uint32_t GetScore(Team team) const;
 
-    /// <summary>
-    /// 現在ショットを行うチームを得る．ゲームがすでに終了している場合<see cref="Team::kInvalid"/>を返す．
-    /// </summary>
-    /// <returns>現在ショットを行うプレイヤー</returns>
+    /// \brief 現在ショットを行うチームを得る．
+    ///
+    /// ゲームがすでに終了している場合 Team::kInvalid を返す．
+    /// \returns 現在ショットを行うプレイヤー
     Team GetCurrentTeam() const;
 };
 

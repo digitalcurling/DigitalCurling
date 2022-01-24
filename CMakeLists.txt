@@ -32,3 +32,5 @@ if(DIGITAL_CURLING_BUILD_TEST)
     add_subdirectory(tests)
 endif()
 
+# documents
+add_subdirectory(doc)
