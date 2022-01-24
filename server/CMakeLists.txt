@@ -17,6 +17,7 @@ find_package(Threads REQUIRED)
 target_link_libraries(digital_curling__server
   PRIVATE
     digital_curling::digital_curling
+    digital_curling::json
     Boost::headers
     Boost::date_time
     Boost::regex
