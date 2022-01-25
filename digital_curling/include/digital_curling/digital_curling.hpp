@@ -1,4 +1,7 @@
-﻿#ifndef DIGITAL_CURLING_DIGITAL_CURLING_HPP
+﻿/// \file
+/// \brief ユーザーがインクルードするヘッダーファイルです
+
+#ifndef DIGITAL_CURLING_DIGITAL_CURLING_HPP
 #define DIGITAL_CURLING_DIGITAL_CURLING_HPP
 
 #include "detail/constants.hpp"

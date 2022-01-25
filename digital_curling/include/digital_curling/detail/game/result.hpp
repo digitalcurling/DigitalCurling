@@ -1,4 +1,7 @@
-﻿#ifndef DIGITAL_CURLING_GAME_RESULT_HPP
+﻿/// \file
+/// \brief Result を定義します
+
+#ifndef DIGITAL_CURLING_GAME_RESULT_HPP
 #define DIGITAL_CURLING_GAME_RESULT_HPP
 
 #include <cstdint>
@@ -8,33 +11,23 @@ namespace digital_curling::game {
 
 
 
-/// <summary>
-/// 試合の結果を格納する．
-/// </summary>
+/// \brief 試合の結果を格納する．
 struct Result {
 
-    /// <summary>
-    /// 勝敗が定まった理由
-    /// </summary>
+    /// \brief 勝敗が定まった理由
     enum class Reason : std::uint8_t {
-        /// <summary>スコアによる勝敗．</summary>
-        kScore,
-        /// <summary>コンシードによる勝敗．</summary>
-        kConcede,
-        /// <summary>制限時間超過による勝敗．</summary>
-        kTimeLimit,
-        /// <summary>引き分けの際はこの値が格納される．</summary>
-        kInvalid
+        kScore, ///< スコアによる勝敗
+        kConcede, ///< コンシードによる勝敗
+        kTimeLimit, ///<制限時間超過による勝敗
+        kInvalid ///< 無効な値．引き分けの際はこの値が格納される．
     };
 
-    /// <summary>
-    /// 勝者．引き分けの場合は<see cref="Team::kInvalid"/>が格納される．
-    /// </summary>
+    /// \brief 勝利チーム
+    ///
+    /// 引き分けの場合は Team::kInvalid が格納される．
     Team win = Team::k0;
 
-    /// <summary>
-    /// 勝敗の要因．
-    /// </summary>
+    /// \brief 勝敗の理由
     Reason reason = Reason::kScore;
 };
 

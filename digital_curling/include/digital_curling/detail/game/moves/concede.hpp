@@ -1,13 +1,16 @@
-﻿#ifndef DIGITAL_CURLING_GAME_MOVES_CONCEDE_HPP
+﻿/// \file
+/// \brief Concede を定義します
+
+#ifndef DIGITAL_CURLING_GAME_MOVES_CONCEDE_HPP
 #define DIGITAL_CURLING_GAME_MOVES_CONCEDE_HPP
 
 namespace digital_curling::game::moves {
 
 
 
-/// <summary>
-/// 行動：コンシード
-/// </summary>
+/// \brief 行動：コンシード
+///
+/// \sa Move
 struct Concede {};
 
 

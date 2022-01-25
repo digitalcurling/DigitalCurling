@@ -1,4 +1,7 @@
-﻿#ifndef DIGITAL_CURLING_SIMULATION_SIMULATOR_SETTING_HPP
+﻿/// \file
+/// \brief ISimulatorSetting を定義します
+
+#ifndef DIGITAL_CURLING_SIMULATION_SIMULATOR_SETTING_HPP
 #define DIGITAL_CURLING_SIMULATION_SIMULATOR_SETTING_HPP
 
 #include <memory>
@@ -9,17 +12,16 @@ class ISimulator;
 
 
 
-/// <summary>
-/// <see cref="ISimulator"/>を構築するための設定
-/// </summary>
+/// \brief ISimulator を構築するためのクラスです
+///
+/// ISimulator のインスタンスはこのクラスの派生クラスの CreateSimulator() で生成されます．
 class ISimulatorSetting {
 public:
     virtual ~ISimulatorSetting() = default;
 
-    /// <summary>
-    /// シミュレータを作成する
-    /// </summary>
-    /// <returns>新たに作成されたシミュレータ</returns>
+    /// \brief シミュレータを生成する
+    ///
+    /// \returns 生成されたシミュレータ
     virtual std::unique_ptr<ISimulator> CreateSimulator() const = 0;
 };
 

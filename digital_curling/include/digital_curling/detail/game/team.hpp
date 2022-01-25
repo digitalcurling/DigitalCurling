@@ -1,4 +1,7 @@
-﻿#ifndef DIGITAL_CURLING_GAME_TEAM_HPP
+﻿/// \file
+/// \brief Team を定義します
+
+#ifndef DIGITAL_CURLING_GAME_TEAM_HPP
 #define DIGITAL_CURLING_GAME_TEAM_HPP
 
 #include <cstdint>
@@ -7,24 +10,11 @@ namespace digital_curling::game {
 
 
 
-/// <summary>
-/// チームを識別するために用いる
-/// </summary>
+/// \brief チームを識別するために用いる列挙体です．
 enum class Team : std::int8_t {
-    /// <summary>
-    /// チーム0．最初のエンドで先攻のチーム．
-    /// </summary>
-    k0 = 0,
-
-    /// <summary>
-    /// チーム1．最初のエンドで後攻のチーム．
-    /// </summary>
-    k1 = 1,
-
-    /// <summary>
-    /// 無効な値
-    /// </summary>
-    kInvalid
+    k0 = 0, ///< チーム0．最初のエンドで先攻のチーム．
+    k1 = 1, ///< チーム1．最初のエンドで後攻のチーム．
+    kInvalid ///< 無効な値
 };
 
 
