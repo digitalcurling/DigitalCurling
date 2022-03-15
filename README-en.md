@@ -3,7 +3,7 @@
 - [README (Japanese Version)](./README.md)
 - [Official site](http://minerva.cs.uec.ac.jp/cgi-bin/curling/wiki.cgi)
 
-Digital Curling is a curling simulation platform for creating curling AI.
+Digital Curling is a curling simulation system for creating curling AI.
 
 ## Overview
 
@@ -43,13 +43,11 @@ cmake --build . --config RelWithDebInfo
 
 :warning: If CMake could not find Boost, set the environment variable `BOOST_ROOT` to the directory in which Boost installed.
 
-### Installation
-
-Currently not supported
+:warning: Currently, only the static library is supported. Also, installation is not supported.
 
 ## Creating a Curling AI
 
-See [examples](https://github.com/digitalcurling/DigitalCurling-AI-example).
+TODO
 
 ## Playing a Curling Match
 
@@ -63,22 +61,22 @@ See [examples](https://github.com/digitalcurling/DigitalCurling-AI-example).
 
 ### Server config file
 
-Config file format is JSON.
-
-```json
-{
-    "port": [10000, 10001]
-}
-```
-
-- `"port"`: The ports to be connected by Team 0 and Team 1, respectively.
-
-The detail of the config file is under construction.
-
-### Protocol
-
-Under construction
+TODO
 
 ## GUI
 
-Under construction
+TODO
+
+## Versioning
+
+Supports semantic versioning.
+
+- Major version: Incremented when the library compatibility is broken.
+- Minor version: Incremented when new features are added, but the compatibility is not broken.
+- Patch version: Incremented when bug fixed.
+
+:warning: Binary compatibility is not guaranteed for major or minor version updates (to reduce development costs). Binary compatibility is guaranteed when the patch version is upgraded.
+
+# License
+
+MIT License

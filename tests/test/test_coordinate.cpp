@@ -1,4 +1,4 @@
-﻿#include "util.hpp"
+﻿#include "common.hpp"
 
 using digital_curling::Vector2;
 namespace dcco = digital_curling::coordinate;
@@ -37,7 +37,7 @@ constexpr float kHackY = 21.0315f;
 
 } // unnamed namespace
 
-TEST(CoordinateTest, TransformPosition)
+TEST(Coordinate, TransformPosition)
 {
     std::array<Vector2[3], 3> const samples{ {
         // p0
@@ -75,7 +75,7 @@ TEST(CoordinateTest, TransformPosition)
     }
 }
 
-TEST(CoordinateTest, TransformVelocity)
+TEST(Coordinate, TransformVelocity)
 {
     Vector2 const sample[3]{
         { 1.f, 1.f },   // simulation
@@ -92,7 +92,7 @@ TEST(CoordinateTest, TransformVelocity)
     }
 }
 
-TEST(CoordinateTest, TransformAngle)
+TEST(Coordinate, TransformAngle)
 {
     float const sample[3]{
         1.f,   // simulation
@@ -108,7 +108,7 @@ TEST(CoordinateTest, TransformAngle)
     }
 }
 
-TEST(CoordinateTest, TransformAngularVelocity)
+TEST(Coordinate, TransformAngularVelocity)
 {
     float const sample[3]{
         1.f,   // simulation
@@ -125,7 +125,7 @@ TEST(CoordinateTest, TransformAngularVelocity)
 
 }
 
-TEST(CoordinateTest, Positions)
+TEST(Coordinate, Positions)
 {
     // center line
     EXPECT_FLOAT_EQ(0.f, dcco::GetCenterLineX(dcco::Id::kSimulation)) << "center line on Simulation";

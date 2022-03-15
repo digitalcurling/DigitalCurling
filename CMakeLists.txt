@@ -15,8 +15,7 @@ set(CMAKE_CXX_VISIBLIRY_PRESET hidden)
 set(CMAKE_VISIBLITY_INLINES_HIDDEN TRUE)
 
 # main source
-add_subdirectory(digital_curling) # digital_curling::digital_curling
-add_subdirectory(json)   # digital_curling::json
+add_subdirectory(src) # digital_curling::digital_curling
 
 # apps
 option(DIGITAL_CURLING_BUILD_SERVER "Build digital curling server" ON)
