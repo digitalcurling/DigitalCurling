@@ -27,8 +27,8 @@ public:
     float seconds_per_frame = 0.001f;
 
     FCV1SimulatorFactory() = default;
-    FCV1SimulatorFactory(FCV1SimulatorFactory const&); ///< コピーコンストラクタ
-    FCV1SimulatorFactory & operator = (FCV1SimulatorFactory const&); ///< コピー代入演算子
+    FCV1SimulatorFactory(FCV1SimulatorFactory const&) = default; ///< コピーコンストラクタ
+    FCV1SimulatorFactory & operator = (FCV1SimulatorFactory const&) = default; ///< コピー代入演算子
     virtual ~FCV1SimulatorFactory() = default;
 
     virtual std::unique_ptr<ISimulator> CreateSimulator() const override;

@@ -8,8 +8,8 @@ namespace digital_curling::players {
 class IdenticalPlayerStorage : public IPlayerStorage {
 public:
     IdenticalPlayerStorage() = default;
-    IdenticalPlayerStorage(IdenticalPlayerStorage const&) {}
-    IdenticalPlayerStorage & operator = (IdenticalPlayerStorage const&) { return *this; }
+    IdenticalPlayerStorage(IdenticalPlayerStorage const&) = default;
+    IdenticalPlayerStorage& operator = (IdenticalPlayerStorage const&) = default;
     virtual ~IdenticalPlayerStorage() = default;
 
     /// \brief このストレージが持つ状態と同じ状態を持つプレイヤーを生成する

@@ -9,8 +9,8 @@ namespace digital_curling::players {
 class NormalDistPlayerStorage : public IPlayerStorage {
 public:
     NormalDistPlayerStorage() = default;
-    NormalDistPlayerStorage(NormalDistPlayerStorage const&);
-    NormalDistPlayerStorage & operator = (NormalDistPlayerStorage const&);
+    NormalDistPlayerStorage(NormalDistPlayerStorage const&) = default;
+    NormalDistPlayerStorage & operator = (NormalDistPlayerStorage const&) = default;
     virtual ~NormalDistPlayerStorage() = default;
 
     /// \brief このストレージが持つ状態と同じ状態を持つプレイヤーを生成する

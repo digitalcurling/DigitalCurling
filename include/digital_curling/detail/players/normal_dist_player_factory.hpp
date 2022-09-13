@@ -35,8 +35,8 @@ public:
 
     NormalDistPlayerFactory() = default;  ///< デフォルトコンストラクタ
     virtual ~NormalDistPlayerFactory() = default;
-    NormalDistPlayerFactory(NormalDistPlayerFactory const&);  ///< コピーコンストラクタ
-    NormalDistPlayerFactory & operator = (NormalDistPlayerFactory const&);  ///< コピー代入演算子
+    NormalDistPlayerFactory(NormalDistPlayerFactory const&) = default;  ///< コピーコンストラクタ
+    NormalDistPlayerFactory & operator = (NormalDistPlayerFactory const&) = default;  ///< コピー代入演算子
 
     virtual std::unique_ptr<IPlayer> CreatePlayer() const override;
     virtual std::unique_ptr<IPlayerFactory> Clone() const override;

@@ -18,10 +18,12 @@ class ISimulator;
 ///
 /// ISimulator のインスタンスはこのクラスの派生クラスの CreateSimulator() で生成されます．
 class ISimulatorFactory {
-public:
+protected:
     ISimulatorFactory() = default;
-    ISimulatorFactory(ISimulatorFactory const&) = delete;
-    ISimulatorFactory& operator = (ISimulatorFactory const&) = delete;
+    ISimulatorFactory(ISimulatorFactory const&) = default;
+    ISimulatorFactory& operator = (ISimulatorFactory const&) = default;
+
+public:
     virtual ~ISimulatorFactory() = default;
 
     /// \brief シミュレータを生成する

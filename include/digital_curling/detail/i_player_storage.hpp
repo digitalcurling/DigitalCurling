@@ -22,10 +22,12 @@ class IPlayer;
 ///
 /// ストレージは IPlayer のそれぞれの実装と対応関係にあるため， GetPlayerId() で得られるIDが一致していない場合は保存/復元はできません．
 class IPlayerStorage {
-public:
+protected:
     IPlayerStorage() = default;
-    IPlayerStorage(IPlayerStorage const&) = delete;
-    IPlayerStorage & operator = (IPlayerStorage const&) = delete;
+    IPlayerStorage(IPlayerStorage const&) = default;
+    IPlayerStorage & operator = (IPlayerStorage const&) = default;
+
+public:
     virtual ~IPlayerStorage() = default;
 
     /// \brief このストレージが持つ状態と同じ状態を持つプレイヤーを生成する

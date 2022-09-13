@@ -18,10 +18,12 @@ class IPlayer;
 ///
 /// IPlayer のインスタンスはこのクラスの派生クラスの CreatePlayer() で生成されます．
 class IPlayerFactory {
-public:
+protected:
     IPlayerFactory() = default;
-    IPlayerFactory(IPlayerFactory const&) = delete;
-    IPlayerFactory & operator = (IPlayerFactory const&) = delete;
+    IPlayerFactory(IPlayerFactory const&) = default;
+    IPlayerFactory & operator = (IPlayerFactory const&) = default;
+
+public:
     virtual ~IPlayerFactory() = default;
 
     /// \brief プレイヤーを生成する

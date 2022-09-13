@@ -21,10 +21,12 @@ class IPlayerStorage;
 /// 状態の保存には IPlayer::CreateStorage() または IPlayer::Save() を，
 /// 状態の復元には IPlayerStorage::CreatePlayer() または IPlayer::Load() を使用します．
 class IPlayer {
-public:
+protected:
     IPlayer() = default;
-    IPlayer(IPlayer const&) = delete;
-    IPlayer & operator = (IPlayer const&) = delete;
+    IPlayer(IPlayer const&) = default;
+    IPlayer & operator = (IPlayer const&) = default;
+
+public:
     virtual ~IPlayer() = default;
 
     /// \brief ショットを行う．

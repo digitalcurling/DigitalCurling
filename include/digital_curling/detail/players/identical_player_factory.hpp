@@ -19,8 +19,8 @@ class IdenticalPlayerFactory : public IPlayerFactory {
 public:
     IdenticalPlayerFactory() = default;  ///< デフォルトコンストラクタ
     virtual ~IdenticalPlayerFactory() = default; 
-    IdenticalPlayerFactory(IdenticalPlayerFactory const&) {}  ///< コピーコンストラクタ
-    IdenticalPlayerFactory & operator = (IdenticalPlayerFactory const&) { return *this; }  ///< コピー代入演算子
+    IdenticalPlayerFactory(IdenticalPlayerFactory const&) = default;  ///< コピーコンストラクタ
+    IdenticalPlayerFactory & operator = (IdenticalPlayerFactory const&) = default;  ///< コピー代入演算子
 
     virtual std::unique_ptr<IPlayer> CreatePlayer() const override;
     virtual std::unique_ptr<IPlayerFactory> Clone() const override;

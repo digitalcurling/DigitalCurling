@@ -3,25 +3,6 @@
 
 namespace digital_curling::players {
 
-NormalDistPlayerStorage::NormalDistPlayerStorage(NormalDistPlayerStorage const& rhs)
-    : factory(rhs.factory)
-    , engine_data(rhs.engine_data)
-    , speed_dist_data(rhs.speed_dist_data)
-    , angle_dist_data(rhs.angle_dist_data)
-{}
-
-NormalDistPlayerStorage & NormalDistPlayerStorage::operator = (NormalDistPlayerStorage const& rhs)
-{
-    if (this == &rhs) return *this;
-
-    factory = rhs.factory;
-    engine_data = rhs.engine_data;
-    speed_dist_data = rhs.speed_dist_data;
-    angle_dist_data = rhs.angle_dist_data;
-
-    return *this;
-}
-
 std::unique_ptr<IPlayer> NormalDistPlayerStorage::CreatePlayer() const
 {
     return std::make_unique<NormalDistPlayer>(*this);

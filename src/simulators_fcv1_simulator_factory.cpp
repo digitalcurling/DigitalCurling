@@ -3,19 +3,6 @@
 
 namespace digital_curling::simulators {
 
-FCV1SimulatorFactory::FCV1SimulatorFactory(FCV1SimulatorFactory const& rhs)
-    : seconds_per_frame(rhs.seconds_per_frame)
-{}
-
-FCV1SimulatorFactory & FCV1SimulatorFactory::operator = (FCV1SimulatorFactory const& rhs)
-{
-    if (this == &rhs) return *this;
-
-    seconds_per_frame = rhs.seconds_per_frame;
-
-    return *this;
-}
-
 std::unique_ptr<ISimulator> FCV1SimulatorFactory::CreateSimulator() const
 {
     return std::make_unique<FCV1Simulator>(*this);

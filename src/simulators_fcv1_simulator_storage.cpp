@@ -4,23 +4,6 @@
 
 namespace digital_curling::simulators {
 
-FCV1SimulatorStorage::FCV1SimulatorStorage(FCV1SimulatorStorage const& rhs)
-    : factory(rhs.factory)
-    , stones(rhs.stones)
-    , collisions(rhs.collisions)
-{}
-
-FCV1SimulatorStorage & FCV1SimulatorStorage::operator = (FCV1SimulatorStorage const& rhs)
-{
-    if (this == &rhs) return *this;
-
-    factory = rhs.factory;
-    stones = rhs.stones;
-    collisions = rhs.collisions;
-
-    return *this;
-}
-
 FCV1SimulatorStorage::FCV1SimulatorStorage(FCV1SimulatorFactory const& factory)
     : factory(factory)
     , stones()

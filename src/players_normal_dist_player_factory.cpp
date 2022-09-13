@@ -3,26 +3,6 @@
 
 namespace digital_curling::players {
 
-
-NormalDistPlayerFactory::NormalDistPlayerFactory(NormalDistPlayerFactory const& rhs)
-    : max_speed(rhs.max_speed)
-    , stddev_speed(rhs.stddev_speed)
-    , stddev_angle(rhs.stddev_angle)
-    , seed(rhs.seed)
-{}
-
-NormalDistPlayerFactory & NormalDistPlayerFactory::operator = (NormalDistPlayerFactory const& rhs)
-{
-    if (this == &rhs) return *this;
-
-    max_speed = rhs.max_speed;
-    stddev_speed = rhs.stddev_speed;
-    stddev_angle = rhs.stddev_angle;
-    seed = rhs.seed;
-
-    return *this;
-}
-
 std::unique_ptr<IPlayer> NormalDistPlayerFactory::CreatePlayer() const
 {
     return std::make_unique<NormalDistPlayer>(*this);

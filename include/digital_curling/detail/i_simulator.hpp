@@ -128,9 +128,12 @@ public:
 
     // member functions ---
 
+protected:
     ISimulator() = default;
-    ISimulator(ISimulator const&) = delete;
-    ISimulator& operator = (ISimulator const&) = delete;
+    ISimulator(ISimulator const&) = default;
+    ISimulator& operator = (ISimulator const&) = default;
+
+public:
     virtual ~ISimulator() = default;
 
     /// \brief 全ストーンの情報を設定する．

@@ -22,10 +22,12 @@ class ISimulator;
 ///
 /// ストレージは ISimulator のそれぞれの実装と対応関係にあるため， GetSimulatorId() で得られるIDが一致していない場合は保存/復元はできません．
 class ISimulatorStorage {
-public:
+protected:
     ISimulatorStorage() = default;
-    ISimulatorStorage(ISimulatorStorage const&) = delete;
-    ISimulatorStorage & operator = (ISimulatorStorage const&) = delete;
+    ISimulatorStorage(ISimulatorStorage const&) = default;
+    ISimulatorStorage & operator = (ISimulatorStorage const&) = default;
+
+public:
     virtual ~ISimulatorStorage() = default;
 
     /// \brief このストレージが持つ状態と同じ状態を持つシミュレータを生成する

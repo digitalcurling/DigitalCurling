@@ -13,8 +13,8 @@ namespace digital_curling::simulators {
 class FCV1SimulatorStorage : public ISimulatorStorage {
 public:
     FCV1SimulatorStorage() = default;
-    FCV1SimulatorStorage(FCV1SimulatorStorage const&);
-    FCV1SimulatorStorage & operator = (FCV1SimulatorStorage const&);
+    FCV1SimulatorStorage(FCV1SimulatorStorage const&) = default;
+    FCV1SimulatorStorage & operator = (FCV1SimulatorStorage const&) = default;
     FCV1SimulatorStorage(FCV1SimulatorFactory const& factory);
 
     virtual ~FCV1SimulatorStorage() = default;
