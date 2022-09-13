@@ -23,6 +23,7 @@
 #include "detail/i_simulator.hpp"
 #include "detail/i_simulator_factory.hpp"
 #include "detail/i_simulator_storage.hpp"
+#include "detail/move.hpp"
 #include "detail/team.hpp"
 #include "detail/transform.hpp"
 #include "detail/vector2.hpp"

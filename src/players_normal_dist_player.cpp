@@ -27,11 +27,15 @@ NormalDistPlayer::NormalDistPlayer(NormalDistPlayerStorage const& storage)
     LoadEngine(storage.engine_data, storage.speed_dist_data, storage.angle_dist_data);
 }
 
-Vector2 NormalDistPlayer::Play(Vector2 shot_velocity)
+moves::Shot NormalDistPlayer::Play(moves::Shot const& shot)
 {
-    float const speed = std::min(shot_velocity.Length(), factory_.max_speed) + speed_dist_(engine_.value());
-    float const angle = std::atan2(shot_velocity.y, shot_velocity.x) + angle_dist_(engine_.value());
-    return speed * Vector2(std::cos(angle), std::sin(angle));
+    moves::Shot played_shot = shot;
+
+    float const speed = std::min(shot.velocity.Length(), factory_.max_speed) + speed_dist_(engine_.value());
+    float const angle = std::atan2(shot.velocity.y, shot.velocity.x) + angle_dist_(engine_.value());
+    played_shot.velocity = speed * Vector2(std::cos(angle), std::sin(angle));
+
+    return played_shot;
 }
 
 std::unique_ptr<IPlayerStorage> NormalDistPlayer::CreateStorage() const

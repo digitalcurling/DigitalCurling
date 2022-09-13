@@ -10,10 +10,6 @@ namespace digital_curling {
 
 namespace {
 
-// overloadedトリック用ヘルパークラス
-// 参考: https://dev.to/tmr232/that-overloaded-trick-overloading-lambdas-in-c17
-template<class... Ts> struct Overloaded : Ts... { using Ts::operator()...; };
-template<class... Ts> Overloaded(Ts...)->Overloaded<Ts...>;
 
 
 /// \brief ティーの座標
@@ -247,15 +243,8 @@ void ApplyMove(
 
     if (is_shot) {
 
-        // 新規ショットの生成
-        moves::Shot const new_shot = [&] {
-            moves::Shot new_shot_tmp = std::get<moves::Shot>(move);
-
-            // 乱数を加える
-            new_shot_tmp.velocity = player.Play(new_shot_tmp.velocity);
-
-            return new_shot_tmp;
-        }();
+        // 乱数を加えた新規ショットの生成
+        moves::Shot const new_shot = player.Play(std::get<moves::Shot>(move));
 
         // ショット前のストーンを保存しておく
         ISimulator::AllStones const pre_shot_stones = GameState::StonesToAllStones(state.stones, state.end);
@@ -460,43 +449,3 @@ void ApplyMove(
 
 
 } // namespace digital_curling
-
-
-// json
-namespace {
-constexpr char kMoveTypeShot[] = "shot";
-constexpr char kMoveTypeConcede[] = "concede";
-} // unnamed namespace
-
-namespace nlohmann {
-
-void adl_serializer<digital_curling::Move>::to_json(json & j, digital_curling::Move const& m)
-{
-    std::visit(digital_curling::Overloaded{
-        [&j] (digital_curling::moves::Shot const& shot) {
-            j["type"] = kMoveTypeShot;
-            j["velocity"] = shot.velocity;
-            j["rotation"] = shot.rotation;
-        },
-        [&j] (digital_curling::moves::Concede const&) {
-            j["type"] = kMoveTypeConcede;
-        }},
-        m);
-}
-
-void adl_serializer<digital_curling::Move>::from_json(json const& j, digital_curling::Move & m)
-{
-    auto type = j.at("type").get<std::string>();
-    if (type == kMoveTypeShot) {
-        digital_curling::moves::Shot shot;
-        j.at("velocity").get_to(shot.velocity);
-        j.at("rotation").get_to(shot.rotation);
-        m = std::move(shot);
-    } else if (type == kMoveTypeConcede) {
-        m = digital_curling::moves::Concede();
-    } else {
-        throw std::runtime_error("Move type was not found.");
-    }
-}
-
-} // namespace nlohmann

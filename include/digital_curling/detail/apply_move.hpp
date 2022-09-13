@@ -1,10 +1,9 @@
 ﻿/// \file
-/// \brief Move, MoveResult, ApplyMove() を定義します
+/// \brief ApplyMove(), ApplyMoveResult を定義します
 
 #ifndef DIGITAL_CURLING_APPLY_MOVE_HPP
 #define DIGITAL_CURLING_APPLY_MOVE_HPP
 
-#include <variant>
 #include <functional>
 #include <chrono>
 #include "json/common.hpp"
@@ -12,17 +11,10 @@
 #include "i_simulator.hpp"
 #include "i_player.hpp"
 #include "game_state.hpp"
-#include "moves/shot.hpp"
-#include "moves/concede.hpp"
+#include "move.hpp"
+
 
 namespace digital_curling {
-
-
-
-/// \brief ターンごとにチームが採る行動
-///
-/// \sa moves::Shot, moves::Concede
-using Move = std::variant<moves::Shot, moves::Concede>;
 
 
 /// \brief ApplyMove() の返り値
@@ -74,16 +66,5 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
 
 } // namespace digital_curling
 
-
-/// \cond Doxygen_Suppress
-// json
-namespace nlohmann {
-template <>
-struct adl_serializer<digital_curling::Move> {
-    static void to_json(json & j, digital_curling::Move const& m);
-    static void from_json(json const& j, digital_curling::Move & m);
-};
-} // namespace nlohmann
-/// \endcond
 
 #endif // DIGITAL_CURLING_APPLY_MOVE_HPP

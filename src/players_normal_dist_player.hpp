@@ -22,7 +22,7 @@ public:
 
     virtual ~NormalDistPlayer() = default;
 
-    virtual Vector2 Play(Vector2 shot_velocity) override;
+    virtual moves::Shot Play(moves::Shot const& shot) override;
     virtual std::string GetPlayerId() const
     {
         return std::string(kNormalDistPlayerId);

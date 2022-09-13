@@ -11,7 +11,7 @@ class IdenticalPlayer : public IPlayer {
 public:
     IdenticalPlayer() = default;
     virtual ~IdenticalPlayer() = default;
-    virtual Vector2 Play(Vector2 shot_velocity) override;
+    virtual moves::Shot Play(moves::Shot const& shot) override;
     virtual std::string GetPlayerId() const override;
     virtual IPlayerFactory const& GetFactory() const override;
     virtual std::unique_ptr<IPlayerStorage> CreateStorage() const override;

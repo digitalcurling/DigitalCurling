@@ -6,7 +6,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/extern/box2d "${PROJECT_BINARY_DIR}/exter
 # nlohmann_json
 add_subdirectory(${PROJECT_SOURCE_DIR}/extern/nlohmann_json "${PROJECT_BINARY_DIR}/extern/nlohmann_json")
 
-set(DIGITAL_CURLING_INCLUDE_FILES 
+set(DIGITAL_CURLING_INCLUDE_FILES
     "../include/digital_curling/detail/json/common.hpp"
     "../include/digital_curling/detail/json/polymorphic_json.hpp"
     "../include/digital_curling/detail/moves/concede.hpp"
@@ -26,6 +26,7 @@ set(DIGITAL_CURLING_INCLUDE_FILES
     "../include/digital_curling/detail/i_simulator_factory.hpp"
     "../include/digital_curling/detail/i_simulator_storage.hpp"
     "../include/digital_curling/detail/i_simulator.hpp"
+    "../include/digital_curling/detail/move.hpp"
     "../include/digital_curling/detail/team.hpp"
     "../include/digital_curling/detail/transform.hpp"
     "../include/digital_curling/detail/vector2.hpp"
@@ -48,6 +49,7 @@ set(DIGITAL_CURLING_SOURCE_FILES
     "i_player_storage.cpp"
     "i_simulator_factory.cpp"
     "i_simulator_storage.cpp"
+    "move.cpp"
     "players_identical_player_factory.cpp"
     "players_identical_player_storage.cpp"
     "players_identical_player_storage.hpp"

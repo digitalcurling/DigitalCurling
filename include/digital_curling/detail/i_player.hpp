@@ -7,6 +7,7 @@
 #include <string>
 #include <memory>
 #include "vector2.hpp"
+#include "moves/shot.hpp"
 
 namespace digital_curling {
 
@@ -26,11 +27,11 @@ public:
     IPlayer & operator = (IPlayer const&) = delete;
     virtual ~IPlayer() = default;
 
-    /// \brief ショットの初速にブレを与える．
+    /// \brief ショットを行う．
     ///
-    /// \param[in] shot_velocity ブレを与えるショットの初速
-    /// \returns ブレを与えたショットの初速
-    virtual Vector2 Play(Vector2 shot_velocity) = 0;
+    /// \param[in] shot 理想的なショット
+    /// \returns プレイヤーによってプレイされたショット
+    virtual moves::Shot Play(moves::Shot const& shot) = 0;
 
     /// \brief プレイヤーIDを得る．
     ///

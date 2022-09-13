@@ -5,9 +5,9 @@
 
 namespace digital_curling::players {
 
-Vector2 IdenticalPlayer::Play(Vector2 shot_velocity)
+moves::Shot IdenticalPlayer::Play(moves::Shot const& shot)
 {
-    return shot_velocity;
+    return shot;
 }
 
 IPlayerFactory const& IdenticalPlayer::GetFactory() const
