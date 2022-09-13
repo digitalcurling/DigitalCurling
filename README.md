@@ -3,7 +3,7 @@
 - [README (English Version)](./README-en.md)
 - [公式サイト](http://minerva.cs.uec.ac.jp/cgi-bin/curling/wiki.cgi)
 
-デジタルカーリングはカーリングをシミュレートし，カーリングAI開発を行うためのプラットフォームです．
+デジタルカーリングはカーリングをシミュレートし，カーリングAI開発を行うためのシステムです．
 
 ## 概要
 
@@ -30,9 +30,9 @@
 1. このリポジトリをクローンします．
 1. サブモジュールをセットアップするために， `git submodule update --init --recursive` を実行します．
 1. [Boost](https://www.boost.org/)をインストールします．
-3. [CMake](https://cmake.org/)をインストールします．
-4. CMakeがユーザーの `PATH` に入っていることを確認します．
-5. 下記のビルドコマンドを実行します．
+1. [CMake](https://cmake.org/)をインストールします．
+1. CMakeがユーザーの `PATH` に入っていることを確認します．
+1. 下記のビルドコマンドを実行します．
 
 ```
 mkdir build
@@ -43,15 +43,12 @@ cmake --build . --config RelWithDebInfo
 
 :warning: CMakeがBoostを見つけられない場合は，環境変数`BOOST_ROOT`にBoostをインストールしたディレクトリを設定してください．
 
-### インストール
-
-インストールは現在サポートしていません．
+:warning: 現状 static ライブラリのみに対応しています．
+また，インストールはサポートしていません．
 
 ## AIを作る
 
-[カーリングAI作成例](https://github.com/digitalcurling/DigitalCurling-AI-example)を参照ください．
-
-詳細については現在工事中です．
+TODO
 
 ## 試合を行う
 
@@ -65,24 +62,23 @@ cmake --build . --config RelWithDebInfo
 
 ### サーバーのコンフィグファイル
 
-フォーマットはJSONです．
-
-```json
-{
-    "port": [10000, 10001]
-}
-```
-
-- `"port"`: チーム0，チーム1が接続するポートを設定します．
-
-詳細は工事中です．
-
-### 通信プロトコル
-
-- [プロトコル仕様書](https://github.com/digitalcurling/DigitalCurling/wiki/Protocol)
-
-⚠️  プロトコルのパースはライブラリで行うことができます．ライブラリを使う限りではプロトコル仕様書を読む必要はありません．
+TODO
 
 ## GUI
 
-開発中です．
+TODO
+
+## バージョニング
+
+セマンティックバージョニングに準拠します．
+
+- メジャーバージョン: ライブラリの互換性を切る更新の際にインクリメントされます．
+- マイナーバージョン: ライブラリの互換性を保ったまま機能を追加した際にインクリメントされます．
+- パッチバージョン: バグ修正でインクリメントされます．
+
+:warning: メジャーバージョンおよびマイナーバージョン更新ではバイナリ互換性(binary compatibility)は保証されません(開発コスト削減のため)．
+パッチバージョンが上がった際のバイナリ互換性は保証します．
+
+## ライセンス
+
+MITライセンス

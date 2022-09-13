@@ -17,3 +17,7 @@ _deps
 # Visual Studio with CMake
 /out/
 /.vs/
+/CMakeSettings.json
+
+# Visual Studio Code
+/.vscode/

@@ -13,7 +13,7 @@ macro(digital_curling_add_test TESTNAME)
     add_executable(${TESTNAME} ${ARGN})
     # link the Google test infrastructure, mocking library, and a default main fuction to
     # the test executable.  Remove g_test_main if writing your own main function.
-    target_link_libraries(${TESTNAME} gtest gmock gtest_main)
+    target_link_libraries(${TESTNAME} PRIVATE gtest gmock gtest_main)
     # gtest_discover_tests replaces gtest_add_tests,
     # see https://cmake.org/cmake/help/v3.10/module/GoogleTest.html for more options to pass to it
     gtest_discover_tests(${TESTNAME}
@@ -24,15 +24,18 @@ macro(digital_curling_add_test TESTNAME)
 endmacro()
 
 digital_curling_add_test(digital_curling__test
-    "test/util.hpp"
-    "test/util.cpp"
-    "test/test_simulator.cpp"
+    "test/common.cpp"
+    "test/common.hpp"
     "test/test_coordinate.cpp"
+    "test/test_json.cpp"
+    "test/test_player.cpp"
+    "test/test_simulator.cpp"
 )
 
 target_link_libraries(digital_curling__test
+  PRIVATE
     digital_curling::digital_curling
-    digital_curling::json
+    nlohmann_json::nlohmann_json
 )
 
 # TODO テストのカレントディレクトリを設定する
