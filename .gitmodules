@@ -1,0 +1,9 @@
+[submodule "extern/box2d"]
+	path = extern/box2d
+	url = https://github.com/erincatto/box2d.git
+[submodule "extern/googletest"]
+	path = extern/googletest
+	url = https://github.com/google/googletest.git
+[submodule "extern/nlohmann_json"]
+	path = extern/nlohmann_json
+	url = https://github.com/nlohmann/json.git
