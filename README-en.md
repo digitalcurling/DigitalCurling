@@ -1,7 +1,7 @@
 # Digital Curling :curling_stone: 3
 
 - [README (Japanese Version)](./README.md)
-- [Manual(TODO後でリンク貼る)]()
+- [Manual](https://github.com/digitalcurling/DigitalCurling3/wiki)
 - [Official site](http://minerva.cs.uec.ac.jp/cgi-bin/curling/wiki.cgi)
 
 Digital Curling is a curling simulation system for creating curling AI.
@@ -9,7 +9,7 @@ Digital Curling is a curling simulation system for creating curling AI.
 ## Overview
 
 This repository provides a library for curling AI development.
-See [manual(TODO後でリンク貼る)]() for details.
+See [manual](https://github.com/digitalcurling/DigitalCurling3/wiki) for details.
 
 ### Specifications
 

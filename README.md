@@ -1,7 +1,7 @@
 # Digital Curling :curling_stone: 3
 
 - [README (English Version)](./README-en.md)
-- [マニュアル(TODO後でリンク貼る)]()
+- [マニュアル](https://github.com/digitalcurling/DigitalCurling3/wiki)
 - [公式サイト](http://minerva.cs.uec.ac.jp/cgi-bin/curling/wiki.cgi)
 
 デジタルカーリングはカーリングをシミュレートし，カーリングAI開発を行うためのシステムです．
@@ -9,7 +9,7 @@
 ## 概要
 
 このリポジトリではカーリングAIを開発するためのライブラリを提供しています．
-詳細は[マニュアル(TODO後でリンク貼る)]()を参照ください．
+詳細は[マニュアル](https://github.com/digitalcurling/DigitalCurling3/wiki)を参照ください．
 
 ### 仕様
 
