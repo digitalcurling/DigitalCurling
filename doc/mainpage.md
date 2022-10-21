@@ -6,7 +6,7 @@
 
 # リンク
 
-- [マニュアル(TODOリンク貼る)]()
+- [マニュアル](https://github.com/digitalcurling/DigitalCurling3/wiki)
 - [公式サイト](http://minerva.cs.uec.ac.jp/cgi-bin/curling/wiki.cgi)
 - [GitHub](https://github.com/digitalcurling/DigitalCurling3)
 
