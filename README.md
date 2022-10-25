@@ -1,3 +1,5 @@
+:warning: [New Digital Curling System](https://github.com/digitalcurling/DigitalCurling3) is now available!
+
 # DigitalCurling
 
 ## OverView
