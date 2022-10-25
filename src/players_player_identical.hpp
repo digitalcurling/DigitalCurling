@@ -20,42 +20,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "players_identical_player.hpp"
+#ifndef DIGITALCURLING3_SRC_PLAYERS_PLAYER_IDENTICAL_HPP
+#define DIGITALCURLING3_SRC_PLAYERS_PLAYER_IDENTICAL_HPP
 
-#include "digitalcurling3/detail/players/identical_player_factory.hpp"
-#include "players_identical_player_storage.hpp"
+#include "digitalcurling3/detail/i_player.hpp"
 
 namespace digitalcurling3::players {
 
-moves::Shot IdenticalPlayer::Play(moves::Shot const& shot)
-{
-    return shot;
-}
 
-IPlayerFactory const& IdenticalPlayer::GetFactory() const
-{
-    static IdenticalPlayerFactory factory;
-    return factory;
-}
 
-std::string IdenticalPlayer::GetPlayerId() const
-{
-    return std::string(kIdenticalPlayerId);
-}
+class PlayerIdentical : public IPlayer {
+public:
+    PlayerIdentical() = default;
+    virtual ~PlayerIdentical() = default;
+    virtual moves::Shot Play(moves::Shot const& shot) override;
+    virtual std::string GetPlayerId() const override;
+    virtual IPlayerFactory const& GetFactory() const override;
+    virtual std::unique_ptr<IPlayerStorage> CreateStorage() const override;
+    virtual void Save(IPlayerStorage & storage) const override;
+    virtual void Load(IPlayerStorage const& storage) override;
+};
 
-std::unique_ptr<IPlayerStorage> IdenticalPlayer::CreateStorage() const
-{
-    return std::make_unique<IdenticalPlayerStorage>();
-}
 
-void IdenticalPlayer::Save(IPlayerStorage & storage) const
-{
-    // nothing to do
-}
-
-void IdenticalPlayer::Load(IPlayerStorage const& storage)
-{
-    // nothing to do
-}
 
 } // namespace digitalcurling3::players
+
+#endif // DIGITALCURLING3_SRC_PLAYERS_PLAYER_IDENTICAL_HPP

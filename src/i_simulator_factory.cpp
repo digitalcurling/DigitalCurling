@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "digitalcurling3/detail/i_simulator_factory.hpp"
-#include "digitalcurling3/detail/simulators/fcv1_simulator_factory.hpp"
+#include "digitalcurling3/detail/simulators/simulator_fcv1_factory.hpp"
 
 namespace digitalcurling3::polymorphic_json::detail {
 
@@ -29,7 +29,7 @@ template <>
 ToJsonRegistry<ISimulatorFactory> & GetToJsonRegistry<ISimulatorFactory>()
 {
     static ToJsonRegistry<ISimulatorFactory> registry{
-        { typeid(simulators::FCV1SimulatorFactory), ToJsonFuncTemplate<ISimulatorFactory, simulators::FCV1SimulatorFactory> },
+        { typeid(simulators::SimulatorFCV1Factory), ToJsonFuncTemplate<ISimulatorFactory, simulators::SimulatorFCV1Factory> },
     };
     return registry;
 }
@@ -38,7 +38,7 @@ template <>
 FromJsonRegistry<ISimulatorFactory> & GetFromJsonRegistry<ISimulatorFactory>()
 {
     static FromJsonRegistry<ISimulatorFactory> registry{
-        { std::string(simulators::kFCV1SimulatorId), FromJsonFuncTemplate<ISimulatorFactory, simulators::FCV1SimulatorFactory> },
+        { std::string(simulators::kSimulatorFCV1Id), FromJsonFuncTemplate<ISimulatorFactory, simulators::SimulatorFCV1Factory> },
     };
     return registry;
 }

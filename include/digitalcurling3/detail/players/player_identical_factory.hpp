@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 /// \file
-/// \brief IdenticalPlayerFactory を定義します
+/// \brief PlayerIdenticalFactory を定義します
 
-#ifndef DIGITALCURLING3_PLAYERS_IDENTICAL_PLAYER_FACTORY_HPP
-#define DIGITALCURLING3_PLAYERS_IDENTICAL_PLAYER_FACTORY_HPP
+#ifndef DIGITALCURLING3_PLAYERS_PLAYER_IDENTICAL_FACTORY_HPP
+#define DIGITALCURLING3_PLAYERS_PLAYER_IDENTICAL_FACTORY_HPP
 
 #include <memory>
 #include "../json/common.hpp"
@@ -32,33 +32,33 @@
 
 namespace digitalcurling3::players {
 
-/// \brief IdenticalプレイヤーのID
-constexpr std::string_view kIdenticalPlayerId = "identical";
+/// \brief プレイヤーIdenticalのID
+constexpr std::string_view kPlayerIdenticalId = "identical";
 
 
 /// \brief 乱数を加えないプレイヤー
-class IdenticalPlayerFactory : public IPlayerFactory {
+class PlayerIdenticalFactory : public IPlayerFactory {
 public:
-    IdenticalPlayerFactory() = default;  ///< デフォルトコンストラクタ
-    virtual ~IdenticalPlayerFactory() = default; 
-    IdenticalPlayerFactory(IdenticalPlayerFactory const&) = default;  ///< コピーコンストラクタ
-    IdenticalPlayerFactory & operator = (IdenticalPlayerFactory const&) = default;  ///< コピー代入演算子
+    PlayerIdenticalFactory() = default;  ///< デフォルトコンストラクタ
+    virtual ~PlayerIdenticalFactory() = default; 
+    PlayerIdenticalFactory(PlayerIdenticalFactory const&) = default;  ///< コピーコンストラクタ
+    PlayerIdenticalFactory & operator = (PlayerIdenticalFactory const&) = default;  ///< コピー代入演算子
 
     virtual std::unique_ptr<IPlayer> CreatePlayer() const override;
     virtual std::unique_ptr<IPlayerFactory> Clone() const override;
     virtual std::string GetPlayerId() const override
     {
-        return std::string(kIdenticalPlayerId);
+        return std::string(kPlayerIdenticalId);
     }
 };
 
 
 /// \cond Doxygen_Suppress
 // json
-void to_json(nlohmann::json &, IdenticalPlayerFactory const&);
-void from_json(nlohmann::json const&, IdenticalPlayerFactory &);
+void to_json(nlohmann::json &, PlayerIdenticalFactory const&);
+void from_json(nlohmann::json const&, PlayerIdenticalFactory &);
 /// \endcond
 
 } // namespace digitalcurling3::players
 
-#endif // DIGITALCURLING3_PLAYERS_IDENTICAL_PLAYER_FACTORY_HPP
+#endif // DIGITALCURLING3_PLAYERS_PLAYER_IDENTICAL_FACTORY_HPP

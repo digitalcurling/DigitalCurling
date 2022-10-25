@@ -98,7 +98,7 @@ public:
 
     /// \brief ストーンどうしの衝突の情報
     struct Collision {
-        /// \brief ストーン
+        /// \brief 衝突に関するストーンの情報
         struct Stone {
             std::uint8_t id; ///< ストーンのID
             Transform transform; ///< ストーンの位置と角度

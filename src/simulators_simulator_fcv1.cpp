@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "simulators_fcv1_simulator.hpp"
+#include "simulators_simulator_fcv1.hpp"
 
 #include <cmath>
 #include <limits>
@@ -71,11 +71,11 @@ inline float AngularAcceleration(float linearSpeed)
 
 
 
-FCV1Simulator::FCV1Simulator(FCV1SimulatorFactory const& factory)
-    : FCV1Simulator(FCV1SimulatorStorage(factory))
+SimulatorFCV1::SimulatorFCV1(SimulatorFCV1Factory const& factory)
+    : SimulatorFCV1(SimulatorFCV1Storage(factory))
 {}
 
-FCV1Simulator::FCV1Simulator(FCV1SimulatorStorage const& storage)
+SimulatorFCV1::SimulatorFCV1(SimulatorFCV1Storage const& storage)
     : storage_(storage)
     , world_(b2Vec2_zero)
     , stone_bodies_()
@@ -112,7 +112,7 @@ FCV1Simulator::FCV1Simulator(FCV1SimulatorStorage const& storage)
 }
 
 
-void FCV1Simulator::SetStones(AllStones const& stones)
+void SimulatorFCV1::SetStones(AllStones const& stones)
 {
     // update bodies
     for (size_t i = 0; i < kStoneMax; ++i) {
@@ -134,7 +134,7 @@ void FCV1Simulator::SetStones(AllStones const& stones)
 
 
 
-void FCV1Simulator::Step()
+void SimulatorFCV1::Step()
 {
     // simulate
     for (auto stone_body : stone_bodies_) {
@@ -186,7 +186,7 @@ void FCV1Simulator::Step()
 
 
 
-ISimulator::AllStones const& FCV1Simulator::GetStones() const
+ISimulator::AllStones const& SimulatorFCV1::GetStones() const
 {
     if (stones_dirty_) {
         // update stones_
@@ -209,14 +209,14 @@ ISimulator::AllStones const& FCV1Simulator::GetStones() const
 
 
 
-std::vector<ISimulator::Collision> const& FCV1Simulator::GetCollisions() const
+std::vector<ISimulator::Collision> const& SimulatorFCV1::GetCollisions() const
 {
     return storage_.collisions;
 }
 
 
 
-bool FCV1Simulator::AreAllStonesStopped() const
+bool SimulatorFCV1::AreAllStonesStopped() const
 {
     if (all_stones_stopped_dirty_) {
         all_stones_stopped_ = true;
@@ -235,45 +235,45 @@ bool FCV1Simulator::AreAllStonesStopped() const
 
 
 
-float FCV1Simulator::GetSecondsPerFrame() const
+float SimulatorFCV1::GetSecondsPerFrame() const
 {
     return storage_.factory.seconds_per_frame;
 }
 
 
 
-ISimulatorFactory const& FCV1Simulator::GetFactory() const
+ISimulatorFactory const& SimulatorFCV1::GetFactory() const
 {
     return storage_.factory;
 }
 
 
 
-std::unique_ptr<ISimulatorStorage> FCV1Simulator::CreateStorage() const
+std::unique_ptr<ISimulatorStorage> SimulatorFCV1::CreateStorage() const
 {
     GetStones(); // Box2D側のデータを AllStones に適用する
-    return std::make_unique<FCV1SimulatorStorage>(storage_);
+    return std::make_unique<SimulatorFCV1Storage>(storage_);
 }
 
 
 
-void FCV1Simulator::Save(ISimulatorStorage & storage) const
+void SimulatorFCV1::Save(ISimulatorStorage & storage) const
 {
     GetStones(); // Box2D側のデータを AllStones に適用する
-    dynamic_cast<FCV1SimulatorStorage &>(storage) = storage_;
+    dynamic_cast<SimulatorFCV1Storage &>(storage) = storage_;
 }
 
 
 
-void FCV1Simulator::Load(ISimulatorStorage const& storage)
+void SimulatorFCV1::Load(ISimulatorStorage const& storage)
 {
-    storage_ = dynamic_cast<FCV1SimulatorStorage const&>(storage);
+    storage_ = dynamic_cast<SimulatorFCV1Storage const&>(storage);
     UpdateWithStorage();
 }
 
 
 
-void FCV1Simulator::ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
+void SimulatorFCV1::ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
 {
     auto a_body = contact->GetFixtureA()->GetBody();
     auto b_body = contact->GetFixtureB()->GetBody();
@@ -297,7 +297,7 @@ void FCV1Simulator::ContactListener::PostSolve(b2Contact* contact, const b2Conta
 
 
 
-void FCV1Simulator::UpdateWithStorage()
+void SimulatorFCV1::UpdateWithStorage()
 {
     SetStones(storage_.stones);
     stones_dirty_ = false;  // storage_.stones と Box2D側のデータはすでに同期している．

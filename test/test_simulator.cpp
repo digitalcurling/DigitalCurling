@@ -51,16 +51,16 @@ void PrintSimulatorStones(dc::ISimulator::AllStones const& stones)
 
 } // unnamed namespace
 
-TEST(FCV1Simulator, InitialState)
+TEST(SimulatorFCV1, InitialState)
 {
-    dc::simulators::FCV1SimulatorFactory factory;
+    dc::simulators::SimulatorFCV1Factory factory;
     auto simulator = factory.CreateSimulator();
     EXPECT_TRUE(simulator->AreAllStonesStopped());
 }
 
-TEST(FCV1Simulator, SaveLoad)
+TEST(SimulatorFCV1, SaveLoad)
 {
-    dc::simulators::FCV1SimulatorFactory factory;
+    dc::simulators::SimulatorFCV1Factory factory;
     auto simulator = factory.CreateSimulator();
 
     {
@@ -83,9 +83,9 @@ TEST(FCV1Simulator, SaveLoad)
     EXPECT_TRUE(EqualsSimulatorStones(stones1, stones2));
 }
 
-TEST(FCV1Simulator, SaveLoad2)
+TEST(SimulatorFCV1, SaveLoad2)
 {
-    dc::simulators::FCV1SimulatorFactory factory;
+    dc::simulators::SimulatorFCV1Factory factory;
     auto simulator = factory.CreateSimulator();
     auto storage = simulator->CreateStorage();  // create & save
 
@@ -109,9 +109,9 @@ TEST(FCV1Simulator, SaveLoad2)
     EXPECT_TRUE(EqualsSimulatorStones(stones1, stones2));
 }
 
-TEST(FCV1Simulator, SaveLoad3)
+TEST(SimulatorFCV1, SaveLoad3)
 {
-    dc::simulators::FCV1SimulatorFactory factory;
+    dc::simulators::SimulatorFCV1Factory factory;
     auto simulator = factory.CreateSimulator();
 
     {
@@ -134,9 +134,9 @@ TEST(FCV1Simulator, SaveLoad3)
     EXPECT_TRUE(EqualsSimulatorStones(stones1, stones2));
 }
 
-TEST(FCV1Simulator, SaveLoad4)
+TEST(SimulatorFCV1, SaveLoad4)
 {
-    dc::simulators::FCV1SimulatorFactory factory;
+    dc::simulators::SimulatorFCV1Factory factory;
     auto simulator = factory.CreateSimulator();
 
     {

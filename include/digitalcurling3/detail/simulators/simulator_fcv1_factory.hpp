@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 /// \file
-/// \brief FCV1SimulatorFactory を定義します
+/// \brief SimulatorFCV1Factory を定義します
 
-#ifndef DIGITALCURLING3_SIMULATORS_FCV1_SIMULATOR_FACTORY_HPP
-#define DIGITALCURLING3_SIMULATORS_FCV1_SIMULATOR_FACTORY_HPP
+#ifndef DIGITALCURLING3_SIMULATORS_SIMULATOR_FCV1_FACTORY_HPP
+#define DIGITALCURLING3_SIMULATORS_SIMULATOR_FCV1_FACTORY_HPP
 
 #include <string_view>
 #include "../json/common.hpp"
@@ -32,13 +32,13 @@
 
 namespace digitalcurling3::simulators {
 
-/// \brief FCV1シミュレータのID
-constexpr std::string_view kFCV1SimulatorId = "fcv1";
+/// \brief シミュレータFCV1のID
+constexpr std::string_view kSimulatorFCV1Id = "fcv1";
 
-/// \brief FCV1(Friction-CurlVelocity 1)シミュレータを構築するためのクラスです
+/// \brief シミュレータFCV1(Friction-CurlVelocity 1)を構築するためのクラスです
 ///
-/// 生成されたFCV1シミュレータは ISimulator インターフェイスを介してのみ扱うことができます
-class FCV1SimulatorFactory : public ISimulatorFactory {
+/// 生成されたシミュレータFCV1は ISimulator インターフェイスを介してのみ扱うことができます
+class SimulatorFCV1Factory : public ISimulatorFactory {
 public:
     /// \brief フレームレート(フレーム毎秒)
     ///
@@ -48,26 +48,26 @@ public:
     /// ただし，フレームレートをデフォルトの値から変更した際の動作の保証はしません．
     float seconds_per_frame = 0.001f;
 
-    FCV1SimulatorFactory() = default;
-    FCV1SimulatorFactory(FCV1SimulatorFactory const&) = default; ///< コピーコンストラクタ
-    FCV1SimulatorFactory & operator = (FCV1SimulatorFactory const&) = default; ///< コピー代入演算子
-    virtual ~FCV1SimulatorFactory() = default;
+    SimulatorFCV1Factory() = default;
+    SimulatorFCV1Factory(SimulatorFCV1Factory const&) = default; ///< コピーコンストラクタ
+    SimulatorFCV1Factory & operator = (SimulatorFCV1Factory const&) = default; ///< コピー代入演算子
+    virtual ~SimulatorFCV1Factory() = default;
 
     virtual std::unique_ptr<ISimulator> CreateSimulator() const override;
     virtual std::unique_ptr<ISimulatorFactory> Clone() const override;
     virtual std::string GetSimulatorId() const override
     {
-        return std::string(kFCV1SimulatorId);
+        return std::string(kSimulatorFCV1Id);
     }
 };
 
 
 /// \cond Doxygen_Suppress
 // json
-void to_json(nlohmann::json &, FCV1SimulatorFactory const&);
-void from_json(nlohmann::json const&, FCV1SimulatorFactory &);
+void to_json(nlohmann::json &, SimulatorFCV1Factory const&);
+void from_json(nlohmann::json const&, SimulatorFCV1Factory &);
 /// \endcond
 
 } // namespace digitalcurling3::simulators
 
-#endif // DIGITALCURLING3_SIMULATORS_FCV1_SIMULATOR_FACTORY_HPP
+#endif // DIGITALCURLING3_SIMULATORS_SIMULATOR_FCV1_FACTORY_HPP

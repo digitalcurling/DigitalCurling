@@ -20,37 +20,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "players_normal_dist_player_storage.hpp"
-#include "players_normal_dist_player.hpp"
+#include "digitalcurling3/detail/players/player_normal_dist_factory.hpp"
+#include "players_player_normal_dist.hpp"
 
 namespace digitalcurling3::players {
 
-std::unique_ptr<IPlayer> NormalDistPlayerStorage::CreatePlayer() const
+std::unique_ptr<IPlayer> PlayerNormalDistFactory::CreatePlayer() const
 {
-    return std::make_unique<NormalDistPlayer>(*this);
+    return std::make_unique<PlayerNormalDist>(*this);
 }
 
-std::string NormalDistPlayerStorage::GetPlayerId() const
+std::unique_ptr<IPlayerFactory> PlayerNormalDistFactory::Clone() const
 {
-    return std::string(kNormalDistPlayerId);
+    return std::make_unique<PlayerNormalDistFactory>(*this);
 }
+
 
 // json
-void to_json(nlohmann::json & j, NormalDistPlayerStorage const& v)
+void to_json(nlohmann::json & j, PlayerNormalDistFactory const& v)
 {
-    j["type"] = kNormalDistPlayerId;
-    j["factory"] = v.factory;
-    j["engine_data"] = v.engine_data;
-    j["speed_dist_data"] = v.speed_dist_data;
-    j["angle_dist_data"] = v.angle_dist_data;
+    j["type"] = kPlayerNormalDistId;
+    j["max_speed"] = v.max_speed;
+    j["stddev_speed"] = v.stddev_speed;
+    j["stddev_angle"] = v.stddev_angle;
+    j["seed"] = v.seed;
 }
 
-void from_json(nlohmann::json const& j, NormalDistPlayerStorage & v)
+void from_json(nlohmann::json const& j, PlayerNormalDistFactory & v)
 {
-    j.at("factory").get_to(v.factory);
-    j.at("engine_data").get_to(v.engine_data);
-    j.at("speed_dist_data").get_to(v.speed_dist_data);
-    j.at("angle_dist_data").get_to(v.angle_dist_data);
+    j.at("max_speed").get_to(v.max_speed);
+    j.at("stddev_speed").get_to(v.stddev_speed);
+    j.at("stddev_angle").get_to(v.stddev_angle);
+    j.at("seed").get_to(v.seed);
 }
 
 } // namespace digitalcurling3::players

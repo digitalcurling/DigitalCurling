@@ -20,38 +20,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "digitalcurling3/detail/players/normal_dist_player_factory.hpp"
-#include "players_normal_dist_player.hpp"
+#include "simulators_simulator_fcv1_storage.hpp"
 
-namespace digitalcurling3::players {
+#include "simulators_simulator_fcv1.hpp"
 
-std::unique_ptr<IPlayer> NormalDistPlayerFactory::CreatePlayer() const
+namespace digitalcurling3::simulators {
+
+SimulatorFCV1Storage::SimulatorFCV1Storage(SimulatorFCV1Factory const& factory)
+    : factory(factory)
+    , stones()
+    , collisions()
+{}
+
+std::unique_ptr<ISimulator> SimulatorFCV1Storage::CreateSimulator() const
 {
-    return std::make_unique<NormalDistPlayer>(*this);
+    return std::make_unique<SimulatorFCV1>(*this);
 }
-
-std::unique_ptr<IPlayerFactory> NormalDistPlayerFactory::Clone() const
-{
-    return std::make_unique<NormalDistPlayerFactory>(*this);
-}
-
 
 // json
-void to_json(nlohmann::json & j, NormalDistPlayerFactory const& v)
+void to_json(nlohmann::json & j, SimulatorFCV1Storage const& v)
 {
-    j["type"] = kNormalDistPlayerId;
-    j["max_speed"] = v.max_speed;
-    j["stddev_speed"] = v.stddev_speed;
-    j["stddev_angle"] = v.stddev_angle;
-    j["seed"] = v.seed;
+    j["type"] = kSimulatorFCV1Id;
+    j["factory"] = v.factory;
+    j["stones"] = v.stones;
+    j["collisions"] = v.collisions;
 }
 
-void from_json(nlohmann::json const& j, NormalDistPlayerFactory & v)
+void from_json(nlohmann::json const& j, SimulatorFCV1Storage & v)
 {
-    j.at("max_speed").get_to(v.max_speed);
-    j.at("stddev_speed").get_to(v.stddev_speed);
-    j.at("stddev_angle").get_to(v.stddev_angle);
-    j.at("seed").get_to(v.seed);
+    j.at("factory").get_to(v.factory);
+    j.at("stones").get_to(v.stones);
+    j.at("collisions").get_to(v.collisions);
 }
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling3::simulators

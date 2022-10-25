@@ -21,33 +21,33 @@
 // SOFTWARE.
 
 /// \file
-/// \brief NormalDistShotRandomizer を定義します
+/// \brief PlayerNormalDist を定義します
 
-#ifndef DIGITALCURLING3_SRC_PLAYERS_NORMAL_DIST_PLAYER_HPP
-#define DIGITALCURLING3_SRC_PLAYERS_NORMAL_DIST_PLAYER_HPP
+#ifndef DIGITALCURLING3_SRC_PLAYERS_PLAYER_NORMAL_DIST_HPP
+#define DIGITALCURLING3_SRC_PLAYERS_PLAYER_NORMAL_DIST_HPP
 
 #include <random>
 #include <optional>
 #include "digitalcurling3/detail/i_player.hpp"
-#include "digitalcurling3/detail/players/normal_dist_player_factory.hpp"
+#include "digitalcurling3/detail/players/player_normal_dist_factory.hpp"
 
 namespace digitalcurling3::players {
 
-class NormalDistPlayerStorage;
+class PlayerNormalDistStorage;
 
 
-class NormalDistPlayer : public IPlayer {
+class PlayerNormalDist : public IPlayer {
 public:
 
-    NormalDistPlayer(NormalDistPlayerFactory const& factory);
-    NormalDistPlayer(NormalDistPlayerStorage const& storage);
+    PlayerNormalDist(PlayerNormalDistFactory const& factory);
+    PlayerNormalDist(PlayerNormalDistStorage const& storage);
 
-    virtual ~NormalDistPlayer() = default;
+    virtual ~PlayerNormalDist() = default;
 
     virtual moves::Shot Play(moves::Shot const& shot) override;
     virtual std::string GetPlayerId() const
     {
-        return std::string(kNormalDistPlayerId);
+        return std::string(kPlayerNormalDistId);
     }
     virtual IPlayerFactory const& GetFactory() const override
     {
@@ -58,7 +58,7 @@ public:
     virtual void Load(IPlayerStorage const& storage) override;
 
 private:
-    NormalDistPlayerFactory factory_;
+    PlayerNormalDistFactory factory_;
     std::optional<std::mt19937> engine_;
     std::normal_distribution<float> speed_dist_;
     std::normal_distribution<float> angle_dist_;
@@ -73,4 +73,4 @@ private:
 
 } // namespace digitalcurling3::players
 
-#endif // DIGITALCURLING3_SRC_PLAYERS_NORMAL_DIST_PLAYER_HPP
+#endif // DIGITALCURLING3_SRC_PLAYERS_PLAYER_NORMAL_DIST_HPP

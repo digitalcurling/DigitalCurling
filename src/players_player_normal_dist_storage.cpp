@@ -20,27 +20,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "digitalcurling3/detail/i_simulator_storage.hpp"
-#include "simulators_simulator_fcv1_storage.hpp"
+#include "players_player_normal_dist_storage.hpp"
+#include "players_player_normal_dist.hpp"
 
-namespace digitalcurling3::polymorphic_json::detail {
+namespace digitalcurling3::players {
 
-template <>
-ToJsonRegistry<ISimulatorStorage> & GetToJsonRegistry<ISimulatorStorage>()
+std::unique_ptr<IPlayer> PlayerNormalDistStorage::CreatePlayer() const
 {
-    static ToJsonRegistry<ISimulatorStorage> registry{
-        { typeid(simulators::SimulatorFCV1Storage), ToJsonFuncTemplate<ISimulatorStorage, simulators::SimulatorFCV1Storage> },
-    };
-    return registry;
+    return std::make_unique<PlayerNormalDist>(*this);
 }
 
-template <>
-FromJsonRegistry<ISimulatorStorage> & GetFromJsonRegistry<ISimulatorStorage>()
+std::string PlayerNormalDistStorage::GetPlayerId() const
 {
-    static FromJsonRegistry<ISimulatorStorage> registry{
-        { std::string(simulators::kSimulatorFCV1Id), FromJsonFuncTemplate<ISimulatorStorage, simulators::SimulatorFCV1Storage> },
-    };
-    return registry;
+    return std::string(kPlayerNormalDistId);
 }
 
-} // namespace digitalcurling3::polymorphic_json::detail
+// json
+void to_json(nlohmann::json & j, PlayerNormalDistStorage const& v)
+{
+    j["type"] = kPlayerNormalDistId;
+    j["factory"] = v.factory;
+    j["engine_data"] = v.engine_data;
+    j["speed_dist_data"] = v.speed_dist_data;
+    j["angle_dist_data"] = v.angle_dist_data;
+}
+
+void from_json(nlohmann::json const& j, PlayerNormalDistStorage & v)
+{
+    j.at("factory").get_to(v.factory);
+    j.at("engine_data").get_to(v.engine_data);
+    j.at("speed_dist_data").get_to(v.speed_dist_data);
+    j.at("angle_dist_data").get_to(v.angle_dist_data);
+}
+
+} // namespace digitalcurling3::players

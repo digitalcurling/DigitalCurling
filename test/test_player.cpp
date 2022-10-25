@@ -14,13 +14,13 @@ std::vector<std::unique_ptr<dc::IPlayer>> CreatePlayers()
 
     // identical
     {
-        dc::players::IdenticalPlayerFactory factory;
+        dc::players::PlayerIdenticalFactory factory;
         players.emplace_back(factory.CreatePlayer());
     }
 
     // normal_dist
     {
-        dc::players::NormalDistPlayerFactory factory;
+        dc::players::PlayerNormalDistFactory factory;
         players.emplace_back(factory.CreatePlayer());
     }
 

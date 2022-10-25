@@ -20,19 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef DIGITALCURLING3_SRC_PLAYERS_IDENTICAL_PLAYER_STORAGE_HPP
-#define DIGITALCURLING3_SRC_PLAYERS_IDENTICAL_PLAYER_STORAGE_HPP
+#ifndef DIGITALCURLING3_SRC_PLAYERS_PLAYER_NORMAL_DIST_STORAGE_HPP
+#define DIGITALCURLING3_SRC_PLAYERS_PLAYER_NORMAL_DIST_STORAGE_HPP
 
 #include "digitalcurling3/detail/i_player_storage.hpp"
+#include "digitalcurling3/detail/players/player_normal_dist_factory.hpp"
 
 namespace digitalcurling3::players {
 
-class IdenticalPlayerStorage : public IPlayerStorage {
+class PlayerNormalDistStorage : public IPlayerStorage {
 public:
-    IdenticalPlayerStorage() = default;
-    IdenticalPlayerStorage(IdenticalPlayerStorage const&) = default;
-    IdenticalPlayerStorage& operator = (IdenticalPlayerStorage const&) = default;
-    virtual ~IdenticalPlayerStorage() = default;
+    PlayerNormalDistStorage() = default;
+    PlayerNormalDistStorage(PlayerNormalDistStorage const&) = default;
+    PlayerNormalDistStorage & operator = (PlayerNormalDistStorage const&) = default;
+    virtual ~PlayerNormalDistStorage() = default;
 
     /// \brief このストレージが持つ状態と同じ状態を持つプレイヤーを生成する
     ///
@@ -45,14 +46,19 @@ public:
     ///
     /// \returns プレイヤーID
     virtual std::string GetPlayerId() const override;
+
+    PlayerNormalDistFactory factory;
+    std::string engine_data;
+    std::string speed_dist_data;
+    std::string angle_dist_data;
 };
 
 
 // json
-void to_json(nlohmann::json &, IdenticalPlayerStorage const&);
-void from_json(nlohmann::json const&, IdenticalPlayerStorage &);
+void to_json(nlohmann::json &, PlayerNormalDistStorage const&);
+void from_json(nlohmann::json const&, PlayerNormalDistStorage &);
 
 } // namespace digitalcurling3::players
 
 
-#endif // DIGITALCURLING3_SRC_PLAYERS_IDENTICAL_PLAYER_STORAGE_HPP
+#endif // DIGITALCURLING3_SRC_PLAYERS_PLAYER_NORMAL_DIST_STORAGE_HPP

@@ -157,7 +157,7 @@ TEST(Json, MoveResultFromJson)
 TEST(Json, IPlayerFactoryToJson)
 {
     // normal_dist
-    auto v_normal_dist = std::make_unique<dc::players::NormalDistPlayerFactory>();
+    auto v_normal_dist = std::make_unique<dc::players::PlayerNormalDistFactory>();
     v_normal_dist->max_speed = 5.0f;
     v_normal_dist->stddev_speed = 0.1f;
     v_normal_dist->stddev_angle = 0.2f;
@@ -170,7 +170,7 @@ TEST(Json, IPlayerFactoryToJson)
     EXPECT_EQ(j_normal_dist.at("seed").get<std::random_device::result_type>(), v_normal_dist->seed.value());
 
     // identical
-    auto v_identical = std::make_unique<dc::players::IdenticalPlayerFactory>();
+    auto v_identical = std::make_unique<dc::players::PlayerIdenticalFactory>();
     json const j_identical = static_cast<dc::IPlayerFactory&>(*v_identical.get());
     EXPECT_EQ(j_identical.at("type").get<std::string>(), "identical");
 }
@@ -187,7 +187,7 @@ TEST(Json, IPlayerFactoryFromJson)
     };
 
     auto v_normal_dist_tmp = j_normal_dist.get<std::unique_ptr<dc::IPlayerFactory>>();
-    auto v_normal_dist = dynamic_cast<dc::players::NormalDistPlayerFactory*>(v_normal_dist_tmp.get());
+    auto v_normal_dist = dynamic_cast<dc::players::PlayerNormalDistFactory*>(v_normal_dist_tmp.get());
     if (v_normal_dist) {
         EXPECT_EQ(j_normal_dist["max_speed"].get<float>(), v_normal_dist->max_speed);
         EXPECT_EQ(j_normal_dist["stddev_speed"].get<float>(), v_normal_dist->stddev_speed);
@@ -202,7 +202,7 @@ TEST(Json, IPlayerFactoryFromJson)
         { "type", "identical" }
     };
     auto v_nonrandom_tmp = j_nonrandom.get<std::unique_ptr<dc::IPlayerFactory>>();
-    auto v_nonrandom = dynamic_cast<dc::players::IdenticalPlayerFactory*>(v_nonrandom_tmp.get());
+    auto v_nonrandom = dynamic_cast<dc::players::PlayerIdenticalFactory*>(v_nonrandom_tmp.get());
     EXPECT_NE(v_nonrandom, nullptr);
 }
 
@@ -465,7 +465,7 @@ TEST(Json, GameStateFromJson)
 TEST(Json, ISimulatorFactoryToJson)
 {
     // fcv1
-    auto v_fcv1 = std::make_unique<dc::simulators::FCV1SimulatorFactory>();
+    auto v_fcv1 = std::make_unique<dc::simulators::SimulatorFCV1Factory>();
     v_fcv1->seconds_per_frame = 0.24f;
 
     json const j_fcv1 = static_cast<dc::ISimulatorFactory&>(*v_fcv1.get());
@@ -482,7 +482,7 @@ TEST(Json, ISimulatorFactoryFromJson)
         { "seconds_per_frame", 0.25f }
     };
     auto v_fcv1_tmp = j_fcv1.get<std::unique_ptr<dc::ISimulatorFactory>>();
-    auto v_fcv1 = dynamic_cast<dc::simulators::FCV1SimulatorFactory*>(v_fcv1_tmp.get());
+    auto v_fcv1 = dynamic_cast<dc::simulators::SimulatorFCV1Factory*>(v_fcv1_tmp.get());
     if (v_fcv1) {
         EXPECT_EQ(j_fcv1["seconds_per_frame"].get<float>(), v_fcv1->seconds_per_frame);
     } else {

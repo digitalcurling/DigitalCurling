@@ -21,10 +21,10 @@
 // SOFTWARE.
 
 /// \file
-/// \brief NormalDistPlayerFactory を定義します
+/// \brief PlayerNormalDistFactory を定義します
 
-#ifndef DIGITALCURLING3_PLAYERS_NORMAL_DIST_PLAYER_FACTORY_HPP
-#define DIGITALCURLING3_PLAYERS_NORMAL_DIST_PLAYER_FACTORY_HPP
+#ifndef DIGITALCURLING3_PLAYERS_PLAYER_NORMAL_DIST_FACTORY_HPP
+#define DIGITALCURLING3_PLAYERS_PLAYER_NORMAL_DIST_FACTORY_HPP
 
 #include <random>
 #include <memory>
@@ -34,12 +34,12 @@
 
 namespace digitalcurling3::players {
 
-/// \brief Normal DistプレイヤーのID
-constexpr std::string_view kNormalDistPlayerId = "normal_dist";
+/// \brief プレイヤーNormal DistのID
+constexpr std::string_view kPlayerNormalDistId = "normal_dist";
 
 
-/// \brief ショットの初速と角度に正規分布の乱数を加えるプレイヤー
-class NormalDistPlayerFactory : public IPlayerFactory {
+/// \brief ショットの初速に速度上限を適用したのち，初速と角度に正規分布の乱数を加えるプレイヤー
+class PlayerNormalDistFactory : public IPlayerFactory {
 public:
     /// \brief ショットの最大速度
     float max_speed = 4.f;
@@ -55,26 +55,26 @@ public:
     /// \c std::nullopt の場合シード値を自動でランダムに選択する．
     std::optional<std::random_device::result_type> seed = std::nullopt;
 
-    NormalDistPlayerFactory() = default;  ///< デフォルトコンストラクタ
-    virtual ~NormalDistPlayerFactory() = default;
-    NormalDistPlayerFactory(NormalDistPlayerFactory const&) = default;  ///< コピーコンストラクタ
-    NormalDistPlayerFactory & operator = (NormalDistPlayerFactory const&) = default;  ///< コピー代入演算子
+    PlayerNormalDistFactory() = default;  ///< デフォルトコンストラクタ
+    virtual ~PlayerNormalDistFactory() = default;
+    PlayerNormalDistFactory(PlayerNormalDistFactory const&) = default;  ///< コピーコンストラクタ
+    PlayerNormalDistFactory & operator = (PlayerNormalDistFactory const&) = default;  ///< コピー代入演算子
 
     virtual std::unique_ptr<IPlayer> CreatePlayer() const override;
     virtual std::unique_ptr<IPlayerFactory> Clone() const override;
     virtual std::string GetPlayerId() const override
     {
-        return std::string(kNormalDistPlayerId);
+        return std::string(kPlayerNormalDistId);
     }
 };
 
 
 /// \cond Doxygen_Suppress
 // json
-void to_json(nlohmann::json &, NormalDistPlayerFactory const&);
-void from_json(nlohmann::json const&, NormalDistPlayerFactory &);
+void to_json(nlohmann::json &, PlayerNormalDistFactory const&);
+void from_json(nlohmann::json const&, PlayerNormalDistFactory &);
 /// \endcond
 
 } // namespace digitalcurling3::players
 
-#endif // DIGITALCURLING3_PLAYERS_NORMAL_DIST_PLAYER_FACTORY_HPP
+#endif // DIGITALCURLING3_PLAYERS_PLAYER_NORMAL_DIST_FACTORY_HPP

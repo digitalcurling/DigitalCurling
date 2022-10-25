@@ -25,4 +25,4 @@
 ## プレイヤーの追加
 
 シミュレータの追加方法と根本的に違いはありません．
-物理シミュレータの追加方法の `ISimulator` を `IPlayer` に， `ISimulatorFactory` を `IPlayerFactory` に， `ISimulatorStorage` を `IPlayerStorage` に読み替えてください．
+物理シミュレータの追加方法の`ISimulator`，`ISimulatorFactory`，`ISimulatorStorage`をそれぞれ`IPlayer`，`IPlayerFactory`，`IPlayerStorage`に読み替えてください．

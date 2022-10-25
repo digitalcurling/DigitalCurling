@@ -20,15 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "players_normal_dist_player.hpp"
+#include "players_player_normal_dist.hpp"
 
 #include <sstream>
 #include <algorithm>
-#include "players_normal_dist_player_storage.hpp"
+#include "players_player_normal_dist_storage.hpp"
 
 namespace digitalcurling3::players {
 
-NormalDistPlayer::NormalDistPlayer(NormalDistPlayerFactory const& factory)
+PlayerNormalDist::PlayerNormalDist(PlayerNormalDistFactory const& factory)
     : factory_(factory)
     , engine_(std::nullopt)
     , speed_dist_(0.f, factory.stddev_speed)
@@ -40,7 +40,7 @@ NormalDistPlayer::NormalDistPlayer(NormalDistPlayerFactory const& factory)
     engine_.emplace(factory_.seed.value());
 }
 
-NormalDistPlayer::NormalDistPlayer(NormalDistPlayerStorage const& storage)
+PlayerNormalDist::PlayerNormalDist(PlayerNormalDistStorage const& storage)
     : factory_(storage.factory)
     , engine_(std::mt19937())
     , speed_dist_()
@@ -49,7 +49,7 @@ NormalDistPlayer::NormalDistPlayer(NormalDistPlayerStorage const& storage)
     LoadEngine(storage.engine_data, storage.speed_dist_data, storage.angle_dist_data);
 }
 
-moves::Shot NormalDistPlayer::Play(moves::Shot const& shot)
+moves::Shot PlayerNormalDist::Play(moves::Shot const& shot)
 {
     moves::Shot played_shot = shot;
 
@@ -60,16 +60,16 @@ moves::Shot NormalDistPlayer::Play(moves::Shot const& shot)
     return played_shot;
 }
 
-std::unique_ptr<IPlayerStorage> NormalDistPlayer::CreateStorage() const
+std::unique_ptr<IPlayerStorage> PlayerNormalDist::CreateStorage() const
 {
-    auto storage = std::make_unique<NormalDistPlayerStorage>();
+    auto storage = std::make_unique<PlayerNormalDistStorage>();
     Save(*storage);
     return storage;
 }
 
-void NormalDistPlayer::Save(IPlayerStorage & storage) const
+void PlayerNormalDist::Save(IPlayerStorage & storage) const
 {
-    auto & s = dynamic_cast<NormalDistPlayerStorage &>(storage);
+    auto & s = dynamic_cast<PlayerNormalDistStorage &>(storage);
     s.factory = factory_;
 
     std::ostringstream s_engine;
@@ -85,14 +85,14 @@ void NormalDistPlayer::Save(IPlayerStorage & storage) const
     s.angle_dist_data = s_angle_dist.str();
 }
 
-void NormalDistPlayer::Load(IPlayerStorage const& storage)
+void PlayerNormalDist::Load(IPlayerStorage const& storage)
 {
-    auto const& s = dynamic_cast<NormalDistPlayerStorage const&>(storage);
+    auto const& s = dynamic_cast<PlayerNormalDistStorage const&>(storage);
     factory_ = s.factory;
     LoadEngine(s.engine_data, s.speed_dist_data, s.angle_dist_data);
 }
 
-void NormalDistPlayer::LoadEngine(
+void PlayerNormalDist::LoadEngine(
     std::string const& engine_data,
     std::string const& speed_dist_data,
     std::string const& angle_dist_data)

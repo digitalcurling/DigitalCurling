@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 #include "digitalcurling3/detail/i_player_factory.hpp"
-#include "digitalcurling3/detail/players/identical_player_factory.hpp"
-#include "digitalcurling3/detail/players/normal_dist_player_factory.hpp"
+#include "digitalcurling3/detail/players/player_identical_factory.hpp"
+#include "digitalcurling3/detail/players/player_normal_dist_factory.hpp"
 
 namespace digitalcurling3::polymorphic_json::detail {
 
@@ -30,8 +30,8 @@ template <>
 ToJsonRegistry<IPlayerFactory> & GetToJsonRegistry<IPlayerFactory>()
 {
     static ToJsonRegistry<IPlayerFactory> registry{
-        { typeid(players::IdenticalPlayerFactory), ToJsonFuncTemplate<IPlayerFactory, players::IdenticalPlayerFactory> },
-        { typeid(players::NormalDistPlayerFactory), ToJsonFuncTemplate<IPlayerFactory, players::NormalDistPlayerFactory> },
+        { typeid(players::PlayerIdenticalFactory), ToJsonFuncTemplate<IPlayerFactory, players::PlayerIdenticalFactory> },
+        { typeid(players::PlayerNormalDistFactory), ToJsonFuncTemplate<IPlayerFactory, players::PlayerNormalDistFactory> },
     };
     return registry;
 }
@@ -40,8 +40,8 @@ template <>
 FromJsonRegistry<IPlayerFactory> & GetFromJsonRegistry<IPlayerFactory>()
 {
     static FromJsonRegistry<IPlayerFactory> registry{
-        { std::string(players::kIdenticalPlayerId), FromJsonFuncTemplate<IPlayerFactory, players::IdenticalPlayerFactory> },
-        { std::string(players::kNormalDistPlayerId), FromJsonFuncTemplate<IPlayerFactory, players::NormalDistPlayerFactory> },
+        { std::string(players::kPlayerIdenticalId), FromJsonFuncTemplate<IPlayerFactory, players::PlayerIdenticalFactory> },
+        { std::string(players::kPlayerNormalDistId), FromJsonFuncTemplate<IPlayerFactory, players::PlayerNormalDistFactory> },
     };
     return registry;
 }

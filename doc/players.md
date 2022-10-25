@@ -6,7 +6,7 @@
 
 乱数を加えたり，速度上限を適用したりせず，入力そのままのショットを行うプレイヤーです．
 
-[IdenticalPlayerFactory](@ref digitalcurling3::players::IdenticalPlayerFactory)に対応します．
+[PlayerIdenticalFactory](@ref digitalcurling3::players::PlayerIdenticalFactory)に対応します．
 
 Key | Type | Description
 ----|------|-------------------
@@ -23,7 +23,7 @@ Key | Type | Description
 速度上限を適用した後に，
 初速度の大きさと初期角度にそれぞれ正規分布の乱数を加えるプレイヤーです．
 
-[NormalDistPlayerFactory](@ref digitalcurling3::players::NormalDistPlayerFactory)に対応します．
+[PlayerNormalDistFactory](@ref digitalcurling3::players::PlayerNormalDistFactory)に対応します．
 
 Key | Type | Description
 ----|------|-------------------

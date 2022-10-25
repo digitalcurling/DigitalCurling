@@ -20,30 +20,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "players_identical_player_storage.hpp"
+#include "players_player_identical_storage.hpp"
 
-#include "digitalcurling3/detail/players/identical_player_factory.hpp"
-#include "players_identical_player.hpp"
+#include "digitalcurling3/detail/players/player_identical_factory.hpp"
+#include "players_player_identical.hpp"
 
 namespace digitalcurling3::players {
 
-std::unique_ptr<IPlayer> IdenticalPlayerStorage::CreatePlayer() const
+std::unique_ptr<IPlayer> PlayerIdenticalStorage::CreatePlayer() const
 {
-    return std::make_unique<IdenticalPlayer>();
+    return std::make_unique<PlayerIdentical>();
 }
 
-std::string IdenticalPlayerStorage::GetPlayerId() const
+std::string PlayerIdenticalStorage::GetPlayerId() const
 {
-    return std::string(kIdenticalPlayerId);
+    return std::string(kPlayerIdenticalId);
 }
 
 // json
-void to_json(nlohmann::json & j, IdenticalPlayerStorage const& v)
+void to_json(nlohmann::json & j, PlayerIdenticalStorage const& v)
 {
-    j["type"] = kIdenticalPlayerId;
+    j["type"] = kPlayerIdenticalId;
 }
 
-void from_json(nlohmann::json const& j, IdenticalPlayerStorage & v)
+void from_json(nlohmann::json const& j, PlayerIdenticalStorage & v)
 {
     // nothing to do
 }

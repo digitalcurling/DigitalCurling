@@ -29,7 +29,7 @@ j_in.get_to(game_setting_from_json);  // JSONオブジェクトから復元
 namespace dc = digitalcurling3;
 
 // 変換元のインスタンス
-std::unique_ptr<dc::ISimulatorFactory> simulator_factory = std::make_unique<dc::FCV1SimulatorFactory>();
+std::unique_ptr<dc::ISimulatorFactory> simulator_factory = std::make_unique<dc::SimulatorFCV1Factory>();
 
 // to json
 nlohmann::json j_out = simulator_factory; // JSONオブジェクトに変換

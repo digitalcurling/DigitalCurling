@@ -20,32 +20,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "digitalcurling3/detail/simulators/fcv1_simulator_factory.hpp"
-#include "simulators_fcv1_simulator.hpp"
+#include "digitalcurling3/detail/players/player_identical_factory.hpp"
+#include "players_player_identical.hpp"
 
-namespace digitalcurling3::simulators {
+namespace digitalcurling3::players {
 
-std::unique_ptr<ISimulator> FCV1SimulatorFactory::CreateSimulator() const
+std::unique_ptr<IPlayer> PlayerIdenticalFactory::CreatePlayer() const
 {
-    return std::make_unique<FCV1Simulator>(*this);
+    return std::make_unique<PlayerIdentical>();
 }
 
-std::unique_ptr<ISimulatorFactory> FCV1SimulatorFactory::Clone() const
+std::unique_ptr<IPlayerFactory> PlayerIdenticalFactory::Clone() const
 {
-    return std::make_unique<FCV1SimulatorFactory>(*this);
+    return std::make_unique<PlayerIdenticalFactory>(*this);
 }
 
 
 // json
-void to_json(nlohmann::json & j, FCV1SimulatorFactory const& v)
+
+void to_json(nlohmann::json & j, PlayerIdenticalFactory const& v)
 {
-    j["type"] = kFCV1SimulatorId;
-    j["seconds_per_frame"] = v.seconds_per_frame;
+    j["type"] = kPlayerIdenticalId;
 }
 
-void from_json(nlohmann::json const& j, FCV1SimulatorFactory & v)
+void from_json(nlohmann::json const&, PlayerIdenticalFactory &)
 {
-    j.at("seconds_per_frame").get_to(v.seconds_per_frame);
+    // nothing to do
 }
 
-} // namespace digitalcurling3::simulators
+} // namespace digitalcurling3::players

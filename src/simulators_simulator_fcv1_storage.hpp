@@ -20,37 +20,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "simulators_fcv1_simulator_storage.hpp"
+#ifndef DIGITALCURLING3_SRC_SIMULATORS_SIMULATOR_FCV1_STORAGE_HPP
+#define DIGITALCURLING3_SRC_SIMULATORS_SIMULATOR_FCV1_STORAGE_HPP
 
-#include "simulators_fcv1_simulator.hpp"
+#include "digitalcurling3/detail/i_simulator.hpp"
+#include "digitalcurling3/detail/i_simulator_storage.hpp"
+#include "digitalcurling3/detail/simulators/simulator_fcv1_factory.hpp"
 
 namespace digitalcurling3::simulators {
 
-FCV1SimulatorStorage::FCV1SimulatorStorage(FCV1SimulatorFactory const& factory)
-    : factory(factory)
-    , stones()
-    , collisions()
-{}
+/// \brief FCV1シミュレータ用ストレージ
+class SimulatorFCV1Storage : public ISimulatorStorage {
+public:
+    SimulatorFCV1Storage() = default;
+    SimulatorFCV1Storage(SimulatorFCV1Storage const&) = default;
+    SimulatorFCV1Storage & operator = (SimulatorFCV1Storage const&) = default;
+    SimulatorFCV1Storage(SimulatorFCV1Factory const& factory);
 
-std::unique_ptr<ISimulator> FCV1SimulatorStorage::CreateSimulator() const
-{
-    return std::make_unique<FCV1Simulator>(*this);
-}
+    virtual ~SimulatorFCV1Storage() = default;
+
+    virtual std::unique_ptr<ISimulator> CreateSimulator() const override;
+    virtual std::string GetSimulatorId() const override
+    {
+        return std::string(kSimulatorFCV1Id);
+    }
+
+    SimulatorFCV1Factory factory;
+    ISimulator::AllStones stones;
+    std::vector<ISimulator::Collision> collisions;
+};
+
 
 // json
-void to_json(nlohmann::json & j, FCV1SimulatorStorage const& v)
-{
-    j["type"] = kFCV1SimulatorId;
-    j["factory"] = v.factory;
-    j["stones"] = v.stones;
-    j["collisions"] = v.collisions;
-}
-
-void from_json(nlohmann::json const& j, FCV1SimulatorStorage & v)
-{
-    j.at("factory").get_to(v.factory);
-    j.at("stones").get_to(v.stones);
-    j.at("collisions").get_to(v.collisions);
-}
+void to_json(nlohmann::json &, SimulatorFCV1Storage const&);
+void from_json(nlohmann::json const&, SimulatorFCV1Storage &);
 
 } // namespace digitalcurling3::simulators
+
+#endif // DIGITALCURLING3_SRC_SIMULATORS_SIMULATOR_FCV1_STORAGE_HPP

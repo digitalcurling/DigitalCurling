@@ -20,30 +20,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "digitalcurling3/detail/players/identical_player_factory.hpp"
-#include "players_identical_player.hpp"
+#include "players_player_identical.hpp"
+
+#include "digitalcurling3/detail/players/player_identical_factory.hpp"
+#include "players_player_identical_storage.hpp"
 
 namespace digitalcurling3::players {
 
-std::unique_ptr<IPlayer> IdenticalPlayerFactory::CreatePlayer() const
+moves::Shot PlayerIdentical::Play(moves::Shot const& shot)
 {
-    return std::make_unique<IdenticalPlayer>();
+    return shot;
 }
 
-std::unique_ptr<IPlayerFactory> IdenticalPlayerFactory::Clone() const
+IPlayerFactory const& PlayerIdentical::GetFactory() const
 {
-    return std::make_unique<IdenticalPlayerFactory>(*this);
+    static PlayerIdenticalFactory factory;
+    return factory;
 }
 
-
-// json
-
-void to_json(nlohmann::json & j, IdenticalPlayerFactory const& v)
+std::string PlayerIdentical::GetPlayerId() const
 {
-    j["type"] = kIdenticalPlayerId;
+    return std::string(kPlayerIdenticalId);
 }
 
-void from_json(nlohmann::json const&, IdenticalPlayerFactory &)
+std::unique_ptr<IPlayerStorage> PlayerIdentical::CreateStorage() const
+{
+    return std::make_unique<PlayerIdenticalStorage>();
+}
+
+void PlayerIdentical::Save(IPlayerStorage & storage) const
+{
+    // nothing to do
+}
+
+void PlayerIdentical::Load(IPlayerStorage const& storage)
 {
     // nothing to do
 }

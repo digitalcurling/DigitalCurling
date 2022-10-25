@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 #include "digitalcurling3/detail/i_player_storage.hpp"
-#include "players_identical_player_storage.hpp"
-#include "digitalcurling3/detail/players/identical_player_factory.hpp"  // for kIdenticalPlayerId
-#include "players_normal_dist_player_storage.hpp"
+#include "players_player_identical_storage.hpp"
+#include "digitalcurling3/detail/players/player_identical_factory.hpp"  // for kPlayerIdenticalId
+#include "players_player_normal_dist_storage.hpp"
 
 namespace digitalcurling3::polymorphic_json::detail {
 
@@ -31,8 +31,8 @@ template <>
 ToJsonRegistry<IPlayerStorage> & GetToJsonRegistry<IPlayerStorage>()
 {
     static ToJsonRegistry<IPlayerStorage> registry{
-        { typeid(players::IdenticalPlayerStorage), ToJsonFuncTemplate<IPlayerStorage, players::IdenticalPlayerStorage> },
-        { typeid(players::NormalDistPlayerStorage), ToJsonFuncTemplate<IPlayerStorage, players::NormalDistPlayerStorage> },
+        { typeid(players::PlayerIdenticalStorage), ToJsonFuncTemplate<IPlayerStorage, players::PlayerIdenticalStorage> },
+        { typeid(players::PlayerNormalDistStorage), ToJsonFuncTemplate<IPlayerStorage, players::PlayerNormalDistStorage> },
     };
     return registry;
 }
@@ -41,8 +41,8 @@ template <>
 FromJsonRegistry<IPlayerStorage> & GetFromJsonRegistry<IPlayerStorage>()
 {
     static FromJsonRegistry<IPlayerStorage> registry{
-        { std::string(players::kIdenticalPlayerId), FromJsonFuncTemplate<IPlayerStorage, players::IdenticalPlayerStorage> },
-        { std::string(players::kNormalDistPlayerId), FromJsonFuncTemplate<IPlayerStorage, players::NormalDistPlayerStorage> },
+        { std::string(players::kPlayerIdenticalId), FromJsonFuncTemplate<IPlayerStorage, players::PlayerIdenticalStorage> },
+        { std::string(players::kPlayerNormalDistId), FromJsonFuncTemplate<IPlayerStorage, players::PlayerNormalDistStorage> },
     };
     return registry;
 }
