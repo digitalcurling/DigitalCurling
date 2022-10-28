@@ -19,16 +19,16 @@
 - 使用言語: C++17
 - ビルドツール: CMake
 - マルチプラットフォーム対応
-  - Windows，Ubuntu-18.04 LTS(WSL2)にて動作確認済みです．
+  - Windows11，Ubuntu-18.04 LTS(WSL2)にて動作確認済みです．
   - Macでの動作確認は未実施ですが，対応予定です．
 
 ## ビルド
 
+1. Gitをインストールします．
+1. [CMake](https://cmake.org/)をインストールします．
+1. CMakeが `PATH` に入っていることを確認してください．
 1. このリポジトリをクローンします．
 1. サブモジュールをセットアップするために， `git submodule update --init --recursive` を実行します．
-1. [Boost](https://www.boost.org/)をインストールします．
-1. [CMake](https://cmake.org/)をインストールします．
-1. CMakeがユーザーの `PATH` に入っていることを確認します．
 1. 下記のビルドコマンドを実行します．
 
 ```
@@ -38,10 +38,8 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build . --config Release
 ```
 
-:warning: CMakeがBoostを見つけられない場合は，環境変数`BOOST_ROOT`にBoostをインストールしたディレクトリを設定してください．
-
 :warning: 現状 static ライブラリのみに対応しています．
-また，インストールはサポートしていません．
+また，インストールも現状ではサポートしていません．
 
 ## ライセンス
 
