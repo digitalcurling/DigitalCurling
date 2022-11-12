@@ -1,4 +1,4 @@
-# Digital Curling :curling_stone: 3
+# DigitalCurling3
 
 - [README (Japanese Version)](./README.md)
 - [Manual](https://github.com/digitalcurling/DigitalCurling3/wiki)
@@ -24,12 +24,12 @@ See [manual](https://github.com/digitalcurling/DigitalCurling3/wiki) for details
 
 ## Building
 
-1. Clone this repository
-1. To set up submodules, execute `git submodule update --init --recursive`
-1. Install [Boost](https://www.boost.org/)
+1. Install Git
 1. Install [CMake](https://cmake.org/)
 1. Ensure CMake is in the user `PATH`
-1. Execute the following commands
+1. Clone this repository
+1. To set up submodules, execute `git submodule update --init --recursive`
+1. Execute the following commands for building
 
 ```
 mkdir build
@@ -38,10 +38,23 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build . --config Release
 ```
 
-:warning: If CMake could not find Boost, set the environment variable `BOOST_ROOT` to the directory in which Boost installed.
+:warning: Only the static library is supported.
 
-:warning: Currently, only the static library is supported. Also, installation is not supported.
+:warning: Installation is not supported now.
 
-# License
+## Versioning
+
+Compliant with [Semantic Versioning 2.0.0](https://semver.org/) about API compatibility.
+
+- Major version is incremented if incompatible API changes occur.
+- Minor version is incremented if functionality is added in a API backwards compatible manner.
+- Patch version is incremented if API backwards compatible bug fix is done.
+
+The API backwards compatible update guarantees the operation of software (applications and libraries) linked to the library.
+This means not only that there will be no compile errors when updating the library, but also that the linked software will not behave improperly or the execution speed of library functions will not be degraded.
+
+:warning: ABI compatibility is not considered due to development costs. Therefore, this library is provided as a static library only.
+
+## License
 
 MIT License
