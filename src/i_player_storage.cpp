@@ -24,6 +24,8 @@
 #include "players_player_identical_storage.hpp"
 #include "digitalcurling3/detail/players/player_identical_factory.hpp"  // for kPlayerIdenticalId
 #include "players_player_normal_dist_storage.hpp"
+#include "players_player_original1_storage.hpp"
+#include "digitalcurling3/detail/players/player_original1_factory.hpp"
 
 namespace digitalcurling3::polymorphic_json::detail {
 
@@ -33,6 +35,7 @@ ToJsonRegistry<IPlayerStorage> & GetToJsonRegistry<IPlayerStorage>()
     static ToJsonRegistry<IPlayerStorage> registry{
         { typeid(players::PlayerIdenticalStorage), ToJsonFuncTemplate<IPlayerStorage, players::PlayerIdenticalStorage> },
         { typeid(players::PlayerNormalDistStorage), ToJsonFuncTemplate<IPlayerStorage, players::PlayerNormalDistStorage> },
+        { typeid(players::PlayerOriginal1Storage), ToJsonFuncTemplate<IPlayerStorage, players::PlayerOriginal1Storage> },
     };
     return registry;
 }
@@ -43,6 +46,7 @@ FromJsonRegistry<IPlayerStorage> & GetFromJsonRegistry<IPlayerStorage>()
     static FromJsonRegistry<IPlayerStorage> registry{
         { std::string(players::kPlayerIdenticalId), FromJsonFuncTemplate<IPlayerStorage, players::PlayerIdenticalStorage> },
         { std::string(players::kPlayerNormalDistId), FromJsonFuncTemplate<IPlayerStorage, players::PlayerNormalDistStorage> },
+        { std::string(players::kPlayerOriginal1Id), FromJsonFuncTemplate<IPlayerStorage, players::PlayerOriginal1Storage> },
     };
     return registry;
 }

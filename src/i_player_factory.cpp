@@ -23,6 +23,7 @@
 #include "digitalcurling3/detail/i_player_factory.hpp"
 #include "digitalcurling3/detail/players/player_identical_factory.hpp"
 #include "digitalcurling3/detail/players/player_normal_dist_factory.hpp"
+#include "digitalcurling3/detail/players/player_original1_factory.hpp"
 
 namespace digitalcurling3::polymorphic_json::detail {
 
@@ -32,6 +33,7 @@ ToJsonRegistry<IPlayerFactory> & GetToJsonRegistry<IPlayerFactory>()
     static ToJsonRegistry<IPlayerFactory> registry{
         { typeid(players::PlayerIdenticalFactory), ToJsonFuncTemplate<IPlayerFactory, players::PlayerIdenticalFactory> },
         { typeid(players::PlayerNormalDistFactory), ToJsonFuncTemplate<IPlayerFactory, players::PlayerNormalDistFactory> },
+        { typeid(players::PlayerOriginal1Factory), ToJsonFuncTemplate<IPlayerFactory, players::PlayerOriginal1Factory> },
     };
     return registry;
 }
@@ -42,6 +44,7 @@ FromJsonRegistry<IPlayerFactory> & GetFromJsonRegistry<IPlayerFactory>()
     static FromJsonRegistry<IPlayerFactory> registry{
         { std::string(players::kPlayerIdenticalId), FromJsonFuncTemplate<IPlayerFactory, players::PlayerIdenticalFactory> },
         { std::string(players::kPlayerNormalDistId), FromJsonFuncTemplate<IPlayerFactory, players::PlayerNormalDistFactory> },
+        { std::string(players::kPlayerOriginal1Id), FromJsonFuncTemplate<IPlayerFactory, players::PlayerOriginal1Factory> },
     };
     return registry;
 }
