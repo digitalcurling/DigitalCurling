@@ -37,7 +37,6 @@ add_library(digitalcurling3_core INTERFACE
     ${DIGITALCURLING3_VERSION_INFO_HPP_OUT}
 )
 add_library(digitalcurling3::core ALIAS digitalcurling3_core)
-add_library(digitalcurling3:: digitalcurlingALIAS digitalcurling3_core)
 
 target_include_directories(digitalcurling3_core INTERFACE
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
@@ -49,3 +48,14 @@ target_link_libraries(digitalcurling3_core INTERFACE
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${DIGITALCURLING3_INCLUDE_FILES})
 source_group("Generated Files" FILES ${DIGITALCURLING3_VERSION_INFO_HPP_OUT})
+
+
+# test
+if(DIGITALCURLING3_BUILD_TEST AND TARGET digitalcurling3_test)
+    target_sources(digitalcurling3_test PRIVATE
+        "${CMAKE_CURRENT_SOURCE_DIR}/test/test_coordinate.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/test/test_json.cpp"
+    )
+    target_link_libraries(digitalcurling3_test PRIVATE digitalcurling3::core)
+    target_include_directories(digitalcurling3_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/test)
+endif()
