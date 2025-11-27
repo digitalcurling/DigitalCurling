@@ -1,8 +1,3 @@
-# box2d
-option(BOX2D_BUILD_UNIT_TESTS "Build the Box2D unit tests" OFF)
-option(BOX2D_BUILD_TESTBED "Build the Box2D testbed" OFF)
-add_subdirectory(${PROJECT_SOURCE_DIR}/extern/box2d "${PROJECT_BINARY_DIR}/extern/box2d")
-
 # nlohmann_json
 add_subdirectory(${PROJECT_SOURCE_DIR}/extern/nlohmann_json "${PROJECT_BINARY_DIR}/extern/nlohmann_json")
 
@@ -13,7 +8,6 @@ set(DIGITALCURLING3_INCLUDE_FILES
     "include/digitalcurling3/detail/moves/shot.hpp"
     "include/digitalcurling3/detail/players/player_identical_factory.hpp"
     "include/digitalcurling3/detail/players/player_normal_dist_factory.hpp"
-    "include/digitalcurling3/detail/simulators/simulator_fcv1_factory.hpp"
     "include/digitalcurling3/detail/apply_move.hpp"
     "include/digitalcurling3/detail/constants.hpp"
     "include/digitalcurling3/detail/coordinate.hpp"
@@ -42,13 +36,10 @@ set(DIGITALCURLING3_INCLUDE_FILES
 
 set(DIGITALCURLING3_SOURCE_FILES
     "src/apply_move.cpp"
-    "src/box2d_util.hpp"
     "src/game_setting.cpp"
     "src/game_state.cpp"
     "src/i_player_factory.cpp"
     "src/i_player_storage.cpp"
-    "src/i_simulator_factory.cpp"
-    "src/i_simulator_storage.cpp"
     "src/move.cpp"
     "src/players_player_identical_factory.cpp"
     "src/players_player_identical_storage.cpp"
@@ -60,11 +51,6 @@ set(DIGITALCURLING3_SOURCE_FILES
     "src/players_player_normal_dist_storage.hpp"
     "src/players_player_normal_dist.cpp"
     "src/players_player_normal_dist.hpp"
-    "src/simulators_simulator_fcv1_factory.cpp"
-    "src/simulators_simulator_fcv1_storage.cpp"
-    "src/simulators_simulator_fcv1_storage.hpp"
-    "src/simulators_simulator_fcv1.cpp"
-    "src/simulators_simulator_fcv1.hpp"
     "${CMAKE_CURRENT_BINARY_DIR}/src/version.cpp"  # generated from version.cpp.in
 )
 
@@ -82,8 +68,7 @@ target_include_directories(digitalcurling3_core
 )
 
 target_link_libraries(digitalcurling3_core
-    PUBLIC  nlohmann_json::nlohmann_json
-    PRIVATE box2d
+    PUBLIC nlohmann_json::nlohmann_json
 )
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${DIGITALCURLING3_INCLUDE_FILES})

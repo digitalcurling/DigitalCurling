@@ -67,31 +67,4 @@ public:
 
 } // namespace digitalcurling3
 
-
-/// \cond Doxygen_Suppress
-namespace digitalcurling3::polymorphic_json::detail {
-
-template <>
-ToJsonRegistry<ISimulatorStorage> & GetToJsonRegistry<ISimulatorStorage>();
-
-template <>
-FromJsonRegistry<ISimulatorStorage> & GetFromJsonRegistry<ISimulatorStorage>();
-
-} // namespace digitalcurling3::polymorphic_json::detail
-/// \endcond
-
-/// \cond Doxygen_Suppress
-namespace nlohmann {
-
-template <>
-struct adl_serializer<digitalcurling3::ISimulatorStorage> :
-    digitalcurling3::polymorphic_json::detail::Serializer<digitalcurling3::ISimulatorStorage> {};
-
-template <>
-struct adl_serializer<std::unique_ptr<digitalcurling3::ISimulatorStorage>> :
-    digitalcurling3::polymorphic_json::detail::Serializer<std::unique_ptr<digitalcurling3::ISimulatorStorage>> {};
-
-} // namespace nlohmann
-/// \endcond
-
 #endif // DIGITALCURLING3_I_SIMULATOR_STORAGE_HPP
