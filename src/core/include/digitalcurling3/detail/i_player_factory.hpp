@@ -68,35 +68,4 @@ public:
 
 } // namespace digitalcurling3
 
-
-
-/// \cond Doxygen_Suppress
-namespace digitalcurling3::polymorphic_json::detail {
-
-template <>
-ToJsonRegistry<IPlayerFactory> & GetToJsonRegistry<IPlayerFactory>();
-
-template <>
-FromJsonRegistry<IPlayerFactory> & GetFromJsonRegistry<IPlayerFactory>();
-
-} // namespace digitalcurling3::polymorphic_json::detail
-/// \endcond
-
-
-
-/// \cond Doxygen_Suppress
-namespace nlohmann {
-
-template <>
-struct adl_serializer<digitalcurling3::IPlayerFactory> :
-    digitalcurling3::polymorphic_json::detail::Serializer<digitalcurling3::IPlayerFactory> {};
-
-template <>
-struct adl_serializer<std::unique_ptr<digitalcurling3::IPlayerFactory>> :
-    digitalcurling3::polymorphic_json::detail::Serializer<std::unique_ptr<digitalcurling3::IPlayerFactory>> {};
-
-/// \endcond
-
-} // namespace nlohmann
-
 #endif // DIGITALCURLING3_I_PLAYER_FACTORY_HPP

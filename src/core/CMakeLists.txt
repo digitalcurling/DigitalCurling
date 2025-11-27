@@ -6,8 +6,6 @@ set(DIGITALCURLING3_INCLUDE_FILES
     "include/digitalcurling3/detail/json/polymorphic_json.hpp"
     "include/digitalcurling3/detail/moves/concede.hpp"
     "include/digitalcurling3/detail/moves/shot.hpp"
-    "include/digitalcurling3/detail/players/player_identical_factory.hpp"
-    "include/digitalcurling3/detail/players/player_normal_dist_factory.hpp"
     "include/digitalcurling3/detail/apply_move.hpp"
     "include/digitalcurling3/detail/constants.hpp"
     "include/digitalcurling3/detail/coordinate.hpp"
@@ -38,19 +36,7 @@ set(DIGITALCURLING3_SOURCE_FILES
     "src/apply_move.cpp"
     "src/game_setting.cpp"
     "src/game_state.cpp"
-    "src/i_player_factory.cpp"
-    "src/i_player_storage.cpp"
     "src/move.cpp"
-    "src/players_player_identical_factory.cpp"
-    "src/players_player_identical_storage.cpp"
-    "src/players_player_identical_storage.hpp"
-    "src/players_player_identical.cpp"
-    "src/players_player_identical.hpp"
-    "src/players_player_normal_dist_factory.cpp"
-    "src/players_player_normal_dist_storage.cpp"
-    "src/players_player_normal_dist_storage.hpp"
-    "src/players_player_normal_dist.cpp"
-    "src/players_player_normal_dist.hpp"
     "${CMAKE_CURRENT_BINARY_DIR}/src/version.cpp"  # generated from version.cpp.in
 )
 

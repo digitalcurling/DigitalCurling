@@ -67,36 +67,4 @@ public:
 
 } // namespace digitalcurling3
 
-
-
-/// \cond Doxygen_Suppress
-namespace digitalcurling3::polymorphic_json::detail {
-
-template <>
-ToJsonRegistry<IPlayerStorage> & GetToJsonRegistry<IPlayerStorage>();
-
-template <>
-FromJsonRegistry<IPlayerStorage> & GetFromJsonRegistry<IPlayerStorage>();
-
-} // namespace digitalcurling3::polymorphic_json::detail
-/// \endcond
-
-
-
-/// \cond Doxygen_Suppress
-// json
-namespace nlohmann {
-
-template <>
-struct adl_serializer<digitalcurling3::IPlayerStorage> :
-    digitalcurling3::polymorphic_json::detail::Serializer<digitalcurling3::IPlayerStorage> {};
-
-template <>
-struct adl_serializer<std::unique_ptr<digitalcurling3::IPlayerStorage>> :
-    digitalcurling3::polymorphic_json::detail::Serializer<std::unique_ptr<digitalcurling3::IPlayerStorage>> {};
-
-
-} // namespace nlohmann
-/// \endcond
-
 #endif // DIGITALCURLING3_I_SIMULATOR_STORAGE_HPP

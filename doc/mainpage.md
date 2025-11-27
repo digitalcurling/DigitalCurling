@@ -34,7 +34,7 @@
 
 
 \namespace digitalcurling3::players
-\brief IPlayerFactory を継承したクラスを定義する名前空間
+\brief 選手(プレイヤー)を定義する名前空間
 
 
 \namespace digitalcurling3::simulators
