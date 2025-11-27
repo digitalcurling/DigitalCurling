@@ -30,8 +30,6 @@
 #include "detail/json/polymorphic_json.hpp"
 #include "detail/moves/concede.hpp"
 #include "detail/moves/shot.hpp"
-#include "detail/players/player_identical_factory.hpp"
-#include "detail/players/player_normal_dist_factory.hpp"
 #include "detail/apply_move.hpp"
 #include "detail/constants.hpp"
 #include "detail/coordinate.hpp"
