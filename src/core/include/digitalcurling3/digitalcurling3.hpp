@@ -32,7 +32,6 @@
 #include "detail/moves/shot.hpp"
 #include "detail/players/player_identical_factory.hpp"
 #include "detail/players/player_normal_dist_factory.hpp"
-#include "detail/simulators/simulator_fcv1_factory.hpp"
 #include "detail/apply_move.hpp"
 #include "detail/constants.hpp"
 #include "detail/coordinate.hpp"

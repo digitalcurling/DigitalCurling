@@ -1,7 +1,5 @@
 # 物理シミュレータ設定
 
-新規物理シミュレータの追加については[ライブラリの拡張](extend_library.md)を参照ください．
-
 # fcv1
 
 シミュレータ Friction-CurlVelocity v1．[SimulatorFCV1Factory](@ref digitalcurling3::simulators::SimulatorFCV1Factory)に対応します．

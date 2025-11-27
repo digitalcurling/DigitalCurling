@@ -38,7 +38,7 @@
 
 
 \namespace digitalcurling3::simulators
-\brief ISimulatorFactory を継承したクラスを定義する名前空間
+\brief 物理シミュレーターを定義する名前空間
 
 
 \namespace digitalcurling3::polymorphic_json

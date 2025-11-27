@@ -33,5 +33,4 @@ digitalcurling3_add_test(digitalcurling3__test
     test_coordinate.cpp
     test_json.cpp
     test_player.cpp
-    test_simulator.cpp
 )
