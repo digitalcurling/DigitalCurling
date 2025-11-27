@@ -15,7 +15,7 @@ set(CMAKE_CXX_VISIBLIRY_PRESET hidden)
 set(CMAKE_VISIBLITY_INLINES_HIDDEN TRUE)
 
 # main source
-add_subdirectory(src/core/src)
+add_subdirectory(src/core)
 
 # tests
 option(DIGITALCURLING3_BUILD_TEST "Build digital curling test" OFF)
