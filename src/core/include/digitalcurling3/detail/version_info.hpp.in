@@ -1,4 +1,4 @@
-﻿// MIT License
+// MIT License
 // 
 // Copyright (c) 2022 UEC Takeshi Ito Laboratory
 // 
@@ -22,26 +22,19 @@
 
 #include "digitalcurling3/detail/version.hpp"
 
-namespace digitalcurling3 {
-
-std::string GetVersion()
+std::string digitalcurling3::GetVersion()
 {
     return "@digitalcurling3_VERSION@";
 }
-
-std::uint32_t GetVersionMajor()
+std::uint32_t digitalcurling3::GetVersionMajor()
 {
     return @digitalcurling3_VERSION_MAJOR@;
 }
-
-std::uint32_t GetVersionMinor()
+std::uint32_t digitalcurling3::GetVersionMinor()
 {
     return @digitalcurling3_VERSION_MINOR@;
 }
-
-std::uint32_t GetVersionPatch()
+std::uint32_t digitalcurling3::GetVersionPatch()
 {
     return @digitalcurling3_VERSION_PATCH@;
 }
-
-} // namespace digitalcurling3
