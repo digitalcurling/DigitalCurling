@@ -29,7 +29,6 @@
 #include "detail/json/common.hpp"
 #include "detail/moves/concede.hpp"
 #include "detail/moves/shot.hpp"
-#include "detail/apply_move.hpp"
 #include "detail/constants.hpp"
 #include "detail/coordinate.hpp"
 #include "detail/game_result.hpp"

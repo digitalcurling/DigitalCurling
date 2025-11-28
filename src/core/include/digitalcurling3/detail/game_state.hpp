@@ -67,7 +67,6 @@ struct GameState {
     /// \brief デフォルトコンストラクタ．
     ///
     /// \note このコンストラクタは便宜上用意されたものです．
-    /// このコンストラクタで生成されたインスタンスをそのまま ApplyMove() に渡さないようにしてください．
     /// 試合の初期盤面を構築する場合は代わりに GameState(GameSetting const&) を用いてください．
     ///
     /// \sa GameState(GameSetting const&) 試合設定に対する初期盤面を構築する

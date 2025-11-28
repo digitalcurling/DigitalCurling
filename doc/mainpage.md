@@ -30,7 +30,7 @@
 
 
 \namespace digitalcurling3::moves
-\brief ApplyMove() に渡す行動を定義する名前空間
+\brief 試合での行動を定義する名前空間
 
 
 \namespace digitalcurling3::players

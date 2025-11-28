@@ -133,27 +133,6 @@ TEST(Json, MoveFromJson)
     EXPECT_TRUE(std::holds_alternative<dc::moves::Concede>(v_concede));
 }
 
-TEST(Json, MoveResultToJson)
-{
-    dc::ApplyMoveResult v;
-    v.free_guard_zone_foul = false;
-
-    json const j = v;
-    EXPECT_FALSE(j["free_guard_zone_foul"].get<bool>());
-}
-
-TEST(Json, MoveResultFromJson)
-{
-    json const j{
-        { "free_guard_zone_foul", true }
-    };
-
-    dc::ApplyMoveResult v;
-    j.get_to(v);
-
-    EXPECT_TRUE(v.free_guard_zone_foul);
-}
-
 TEST(Json, TeamToJson)
 {
     json const j_team0 = dc::Team::k0;
