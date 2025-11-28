@@ -31,8 +31,19 @@
 #include "nlohmann/json.hpp"
 
 /// \cond Doxygen_Suppress
-// std::optional
+namespace {
+
+// overloadedトリック用ヘルパークラス
+// 参考: https://dev.to/tmr232/that-overloaded-trick-overloading-lambdas-in-c17
+template<class... Ts> struct Overloaded : Ts... { using Ts::operator()...; };
+template<class... Ts> Overloaded(Ts...)->Overloaded<Ts...>;
+
+} // unnamed namespace
+
+
 namespace nlohmann {
+
+// std::optional
 template <typename T>
 struct adl_serializer<std::optional<T>> {
     static void to_json(json & j, std::optional<T> const& opt)
@@ -53,13 +64,8 @@ struct adl_serializer<std::optional<T>> {
         }
     }
 };
-} // namespace nlohmann
-/// \endcond
 
-
-/// \cond Doxygen_Suppress
 // std::chrono::milliseconds
-namespace nlohmann {
 template <>
 struct adl_serializer<std::chrono::milliseconds> {
     static void to_json(json & j, std::chrono::milliseconds const& ms)
@@ -75,6 +81,7 @@ struct adl_serializer<std::chrono::milliseconds> {
                     j.get<double>() * 1000.0)));
     }
 };
+
 } // namespace nlohmann
 /// \endcond
 

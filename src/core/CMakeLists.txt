@@ -31,7 +31,6 @@ set(DIGITALCURLING3_INCLUDE_FILES
 )
 
 set(DIGITALCURLING3_SOURCE_FILES
-    "src/move.cpp"
     "${CMAKE_CURRENT_BINARY_DIR}/src/version.cpp"  # generated from version.cpp.in
 )
 
