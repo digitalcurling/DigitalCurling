@@ -26,16 +26,17 @@
 #ifndef DIGITALCURLING3_MOVES_CONCEDE_HPP
 #define DIGITALCURLING3_MOVES_CONCEDE_HPP
 
-namespace digitalcurling3::moves {
+#include <string_view>
 
+namespace digitalcurling3::moves {
 
 
 /// \brief 行動：コンシード
 ///
-/// \sa Move
-struct Concede {};
-
-
+struct Concede {
+    /// \brief `Move` の識別用タイプ名
+    static constexpr std::string_view kTypeName = "concede";
+};
 
 } // namespace digitalcurling3::moves
 

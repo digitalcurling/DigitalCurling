@@ -27,11 +27,11 @@
 #define DIGITALCURLING3_MOVES_SHOT_HPP
 
 #include <cstdint>
+#include <string_view>
 #include "../common.hpp"
 #include "../vector2.hpp"
 
 namespace digitalcurling3::moves {
-
 
 
 /// \brief 行動：ショット
@@ -44,6 +44,9 @@ struct Shot {
         kCW   ///< 時計回り
     };
 
+    /// \brief `Move` の識別用タイプ名
+    static constexpr std::string_view kTypeName = "shot";
+
     Vector2 velocity; ///< ショットの初速度
 
     Rotation rotation = Rotation::kCCW; ///< ショットの初期回転方向
@@ -55,6 +58,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(Shot::Rotation, {
     {Shot::Rotation::kCCW, "ccw"},
     {Shot::Rotation::kCW, "cw"},
 })
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Shot, velocity, rotation)
 
 } // namespace digitalcurling3::moves
 
