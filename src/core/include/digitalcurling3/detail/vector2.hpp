@@ -27,7 +27,7 @@
 #define DIGITALCURLING3_VECTOR2_HPP
 
 #include <cmath>
-#include "json/common.hpp"
+#include "common.hpp"
 
 namespace digitalcurling3 {
 
