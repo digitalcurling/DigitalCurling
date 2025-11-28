@@ -46,14 +46,13 @@ class ISimulatorStorage;
 /// ISimulatorFactory::CreateInstance() でのみ生成されます．
 ///
 /// このシミュレータではカーリングのルールやアイスシートの大きさ制限は記述されません．
-/// それらについては ApplyMove() で記述されます．
 ///
 /// ISimulatorStorage を用いてシミュレーション中の状態を保存/復元することができます．
 /// この機能は木探索などで使用されることが想定されます．
 /// 状態の保存には ISimulator::CreateStorage() または ISimulator::Save() を，
 /// 状態の復元には ISimulatorStorage::CreateSimulator() または ISimulator::Load() を使用します．
 ///
-/// \sa ISimulatorFactory, ApplyMove()
+/// \sa ISimulatorFactory
 class ISimulator {
 public:
 
