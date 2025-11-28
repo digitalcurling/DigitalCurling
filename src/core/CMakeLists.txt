@@ -31,8 +31,6 @@ set(DIGITALCURLING3_INCLUDE_FILES
 )
 
 set(DIGITALCURLING3_SOURCE_FILES
-    "src/apply_move.cpp"
-    "src/game_setting.cpp"
     "src/game_state.cpp"
     "src/move.cpp"
     "${CMAKE_CURRENT_BINARY_DIR}/src/version.cpp"  # generated from version.cpp.in
