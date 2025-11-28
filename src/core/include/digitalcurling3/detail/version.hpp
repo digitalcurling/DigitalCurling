@@ -1,4 +1,4 @@
-﻿// MIT License
+// MIT License
 // 
 // Copyright (c) 2022 UEC Takeshi Ito Laboratory
 // 
@@ -34,29 +34,31 @@ namespace digitalcurling3 {
 /// \brief バージョンを得る
 ///
 /// \returns バージョン文字列(例: "1.0.0")
-std::string GetVersion();
+inline std::string GetVersion();
 
 
 
 /// \brief メジャーバージョンを得る
 ///
 /// \returns メジャーバージョン
-std::uint32_t GetVersionMajor();
+inline std::uint32_t GetVersionMajor();
 
 
 
 /// \brief マイナーバージョンを得る
 ///
 /// \returns マイナーバージョン
-std::uint32_t GetVersionMinor();
+inline std::uint32_t GetVersionMinor();
 
 
 
 /// \brief パッチバージョンを得る
 ///
 /// \returns パッチバージョン
-std::uint32_t GetVersionPatch();
+inline std::uint32_t GetVersionPatch();
 
 } // namespace digitalcurling3
+
+#include "digitalcurling3/detail/version_info.hpp"
 
 #endif // DIGITALCURLING3_VERSION_HPP
