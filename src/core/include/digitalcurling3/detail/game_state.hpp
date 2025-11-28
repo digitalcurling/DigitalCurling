@@ -32,9 +32,9 @@
 #include <vector>
 #include <chrono>
 #include "common.hpp"
+#include "coordinate.hpp"
 #include "vector2.hpp"
 #include "transform.hpp"
-#include "constants.hpp"
 #include "game_result.hpp"
 #include "game_setting.hpp"
 #include "i_simulator.hpp"
@@ -70,12 +70,31 @@ struct GameState {
     /// 試合の初期盤面を構築する場合は代わりに GameState(GameSetting const&) を用いてください．
     ///
     /// \sa GameState(GameSetting const&) 試合設定に対する初期盤面を構築する
-    GameState();
+    GameState()
+        : end(0)
+        , shot(0)
+        , hammer(Team::k1)
+        , stones{{ {}, {} }}
+        , scores{{ {}, {} }}
+        , extra_end_score{{}}
+        , thinking_time_remaining{{}}
+        , game_result()
+    {}
 
     /// \brief 引数で指定された試合設定に対する初期盤面を構築する
     ///
     /// \param[in] setting 試合設定
-    GameState(GameSetting const& setting);
+    GameState(GameSetting const& setting)
+        : end(0)
+        , shot(0)
+        , hammer(Team::k1)
+        , stones{{ {}, {} }}
+        , scores{{ std::vector<std::optional<std::uint8_t>>(setting.max_end),
+                std::vector<std::optional<std::uint8_t>>(setting.max_end) }}
+        , extra_end_score{{}}
+        , thinking_time_remaining{{ setting.thinking_time[0], setting.thinking_time[1] }}
+        , game_result()
+    {}
 
     /// \brief コピーする
     GameState(GameState const&) = default;
@@ -162,14 +181,59 @@ struct GameState {
     /// \param[in] team チーム． Team::kInvalid は渡さないでください．
     /// \returns 引数で指定したプレイヤーの合計スコア
     /// \exception std::invalid_argument 引数が不正な場合
-    std::uint32_t GetTotalScore(Team team) const;
+    std::uint32_t GetTotalScore(Team team) const {
+        if (team == Team::kInvalid) {
+            throw std::invalid_argument("team");
+        }
+
+        std::uint32_t score_sum = 0;
+
+        for (auto const& score : scores[size_t(team)]) {
+            if (score) {
+                score_sum += *score;
+            }
+        }
+
+        if (auto const& exscore = extra_end_score[size_t(team)]; exscore) {
+            score_sum += *exscore;
+        }
+
+        return score_sum;
+    }
 
     /// \brief 次に行動するチームを得る．
     ///
     /// ゲームがすでに終了している場合 Team::kInvalid を返す．
     /// \returns 次に行動するチーム
     /// \exception std::logic_error 構造体の内容が不正な場合
-    Team GetNextTeam() const;
+    Team GetNextTeam() const {
+        if (IsGameOver()) {
+            return Team::kInvalid;
+        }
+
+        switch (hammer) {
+            case Team::k0:
+                if (shot % 2 == 0) {
+                    return Team::k1;
+                } else {
+                    return Team::k0;
+                }
+                break;  // 到達しない
+
+            case Team::k1:
+                if (shot % 2 == 0) {
+                    return Team::k0;
+                } else {
+                    return Team::k1;
+                }
+                break;  // 到達しない
+
+            default:
+                throw std::logic_error("invalid state");
+        }
+
+        return Team::k0;  // 到達しない
+    }
 
     /// \brief ゲームが終了しているかを調べる
     ///
@@ -183,35 +247,117 @@ struct GameState {
     ///
     /// \param all_stones_index ISimulator::AllStones のインデックス
     /// \return first: チーム, second: チーム内のストーンのインデックス
-    static std::pair<Team, size_t> StonesIndexFromAllStonesIndex(size_t all_stones_index);
+    static inline std::pair<Team, size_t> StonesIndexFromAllStonesIndex(size_t all_stones_index);
 
     /// \brief GameState::Stones のインデックスから ISimulator::AllStones のインデックスに変換する．
     ///
     /// \param team チーム
     /// \param team_stone_index チーム内のストーンのインデックス
     /// \return ISimulator::AllStones のインデックス
-    static size_t StonesIndexToAllStonesIndex(Team team, size_t team_stone_index);
+    static inline size_t StonesIndexToAllStonesIndex(Team team, size_t team_stone_index);
 
     /// \brief ISimulator::AllStones から GameState::Stones へ変換する．
     ///
     /// \param all_stones ストーン
     /// \param end 現在のエンド
     /// \return \p all_stones を GameState::Stones に変換したもの 
-    static Stones StonesFromAllStones(ISimulator::AllStones const& all_stones, std::uint8_t end);
+    static inline Stones StonesFromAllStones(ISimulator::AllStones const& all_stones, std::uint8_t end);
 
     /// \brief GameState::Stones から ISimulator::AllStones へ変換する．
     ///
     /// \param stones ストーン
     /// \param end 現在のエンド
     /// \return \ref stones を ISimulator::AllStones に変換したもの
-    static ISimulator::AllStones StonesToAllStones(Stones const& stones, std::uint8_t end);
+    static inline ISimulator::AllStones StonesToAllStones(Stones const& stones, std::uint8_t end);
 };
 
 
 /// \cond Doxygen_Suppress
+std::pair<Team, size_t> GameState::StonesIndexFromAllStonesIndex(size_t all_stones_index) {
+    assert(all_stones_index < kShotPerEnd);
+
+    return {
+        (all_stones_index < kShotPerEnd / 2) ? Team::k0 : Team::k1,
+        all_stones_index % (kShotPerEnd / 2)
+    };
+}
+
+size_t GameState::StonesIndexToAllStonesIndex(Team team, size_t team_stone_index) {
+    return static_cast<size_t>(team) * GameState::kShotPerEnd / 2 + team_stone_index;
+}
+
+GameState::Stones GameState::StonesFromAllStones(ISimulator::AllStones const& all_stones, std::uint8_t end) {
+    auto const shot_side = coordinate::GetShotSide(end);
+
+    GameState::Stones state_stones;
+    for (std::uint8_t i = 0; i < GameState::kShotPerEnd; ++i) {
+        auto const [team, team_stone_idx] = StonesIndexFromAllStonesIndex(i);
+        auto& state_stone = state_stones[static_cast<size_t>(team)][team_stone_idx];
+
+        if (all_stones[i]) {
+            state_stone.emplace(
+                coordinate::TransformPosition(all_stones[i]->position, coordinate::Id::kSimulation, shot_side),
+                coordinate::TransformAngle(all_stones[i]->angle, coordinate::Id::kSimulation, shot_side));
+        } else {
+            state_stone = std::nullopt;
+        }
+    }
+    return state_stones;
+}
+
+ISimulator::AllStones GameState::StonesToAllStones(GameState::Stones const& stones, std::uint8_t end) {
+    auto const shot_side = coordinate::GetShotSide(end);
+
+    constexpr std::array<Team, 2> kTeams{{ Team::k0, Team::k1 }};
+    ISimulator::AllStones all_stones;
+    for (Team team : kTeams) {
+        for (size_t team_stone_idx = 0; team_stone_idx < GameState::kShotPerEnd / 2; ++team_stone_idx) {
+            auto const& stone = stones[static_cast<size_t>(team)][team_stone_idx];
+            auto const idx = StonesIndexToAllStonesIndex(team, team_stone_idx);
+            if (stone) {
+                all_stones[idx].emplace(
+                    coordinate::TransformPosition(stone->position, shot_side, coordinate::Id::kSimulation),
+                    coordinate::TransformAngle(stone->angle, shot_side, coordinate::Id::kSimulation),
+                    Vector2(0.f, 0.f),
+                    0.f);
+            } else {
+                all_stones[idx] = std::nullopt;
+            }
+        }
+    }
+    return all_stones;
+}
+
 // json
-void to_json(nlohmann::json &, GameState const&);
-void from_json(nlohmann::json const&, GameState &);
+inline void to_json(nlohmann::json& j, GameState const& v) {
+    j["end"] = v.end;
+    j["shot"] = v.shot;
+    j["hammer"] = v.hammer;
+    j["stones"]["team0"] = v.stones[0];
+    j["stones"]["team1"] = v.stones[1];
+    j["scores"]["team0"] = v.scores[0];
+    j["scores"]["team1"] = v.scores[1];
+    j["extra_end_score"]["team0"] = v.extra_end_score[0];
+    j["extra_end_score"]["team1"] = v.extra_end_score[1];
+    j["thinking_time_remaining"]["team0"] = v.thinking_time_remaining[0];
+    j["thinking_time_remaining"]["team1"] = v.thinking_time_remaining[1];
+    j["game_result"] = v.game_result;
+}
+
+inline void from_json(nlohmann::json const& j, GameState& v) {
+    j.at("end").get_to(v.end);
+    j.at("shot").get_to(v.shot);
+    j.at("hammer").get_to(v.hammer);
+    j.at("stones").at("team0").get_to(v.stones[0]);
+    j.at("stones").at("team1").get_to(v.stones[1]);
+    j.at("scores").at("team0").get_to(v.scores[0]);
+    j.at("scores").at("team1").get_to(v.scores[1]);
+    j.at("extra_end_score").at("team0").get_to(v.extra_end_score[0]);
+    j.at("extra_end_score").at("team1").get_to(v.extra_end_score[1]);
+    j.at("thinking_time_remaining").at("team0").get_to(v.thinking_time_remaining[0]);
+    j.at("thinking_time_remaining").at("team1").get_to(v.thinking_time_remaining[1]);
+    j.at("game_result").get_to(v.game_result);
+}
 /// \endcond
 
 } // namespace digitalcurling3
