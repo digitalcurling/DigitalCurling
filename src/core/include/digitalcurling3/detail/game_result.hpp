@@ -27,7 +27,7 @@
 #define DIGITALCURLING3_GAME_RESULT_HPP
 
 #include <cstdint>
-#include "json/common.hpp"
+#include "common.hpp"
 #include "team.hpp"
 
 namespace digitalcurling3 {

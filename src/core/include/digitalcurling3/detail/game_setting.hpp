@@ -29,7 +29,7 @@
 #include <cstdint>
 #include <chrono>
 #include <array>
-#include "json/common.hpp"
+#include "common.hpp"
 
 namespace digitalcurling3 {
 

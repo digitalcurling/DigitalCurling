@@ -26,9 +26,9 @@
 #ifndef DIGITALCURLING3_DIGITALCURLING3_HPP
 #define DIGITALCURLING3_DIGITALCURLING3_HPP
 
-#include "detail/json/common.hpp"
 #include "detail/moves/concede.hpp"
 #include "detail/moves/shot.hpp"
+#include "detail/common.hpp"
 #include "detail/constants.hpp"
 #include "detail/coordinate.hpp"
 #include "detail/game_result.hpp"

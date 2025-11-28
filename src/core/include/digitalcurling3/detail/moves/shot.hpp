@@ -27,7 +27,7 @@
 #define DIGITALCURLING3_MOVES_SHOT_HPP
 
 #include <cstdint>
-#include "../json/common.hpp"
+#include "../common.hpp"
 #include "../vector2.hpp"
 
 namespace digitalcurling3::moves {

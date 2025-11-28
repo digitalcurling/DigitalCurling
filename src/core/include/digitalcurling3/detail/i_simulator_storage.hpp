@@ -28,7 +28,7 @@
 
 #include <memory>
 #include <string>
-#include "json/common.hpp"
+#include "common.hpp"
 
 namespace digitalcurling3 {
 
