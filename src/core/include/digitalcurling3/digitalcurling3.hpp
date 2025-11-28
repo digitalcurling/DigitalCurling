@@ -27,7 +27,6 @@
 #define DIGITALCURLING3_DIGITALCURLING3_HPP
 
 #include "detail/json/common.hpp"
-#include "detail/json/polymorphic_json.hpp"
 #include "detail/moves/concede.hpp"
 #include "detail/moves/shot.hpp"
 #include "detail/apply_move.hpp"

@@ -3,7 +3,6 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/extern/nlohmann_json "${PROJECT_BINARY_DI
 
 set(DIGITALCURLING3_INCLUDE_FILES
     "include/digitalcurling3/detail/json/common.hpp"
-    "include/digitalcurling3/detail/json/polymorphic_json.hpp"
     "include/digitalcurling3/detail/moves/concede.hpp"
     "include/digitalcurling3/detail/moves/shot.hpp"
     "include/digitalcurling3/detail/apply_move.hpp"

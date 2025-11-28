@@ -39,7 +39,3 @@
 
 \namespace digitalcurling3::simulators
 \brief 物理シミュレーターを定義する名前空間
-
-
-\namespace digitalcurling3::polymorphic_json
-\brief インターフェースを介したJSON変換を行うためのものを定義する名前空間

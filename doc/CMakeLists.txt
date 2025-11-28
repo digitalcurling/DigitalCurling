@@ -20,7 +20,6 @@ if(DOXYGEN_FOUND)
     simulators.md
     coordinate.md
     json.md
-    extend_library.md
   )
 
   # copy logo.svg

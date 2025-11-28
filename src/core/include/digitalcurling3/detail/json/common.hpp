@@ -29,7 +29,6 @@
 #include <optional>
 #include <chrono>
 #include "nlohmann/json.hpp"
-#include "polymorphic_json.hpp"
 
 /// \cond Doxygen_Suppress
 // std::optional
