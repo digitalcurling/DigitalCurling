@@ -24,12 +24,6 @@ set(DIGITALCURLING3_INCLUDE_FILES
     "include/digitalcurling3/digitalcurling3.hpp"
 )
 
-# for refering to this variable from doc/CMakeLists.txt
-set(DIGITALCURLING3_INCLUDE_FILES
-    ${DIGITALCURLING3_INCLUDE_FILES}
-    PARENT_SCOPE
-)
-
 set(DIGITALCURLING3_VERSION_INFO_HPP "include/digitalcurling3/detail/version_info.hpp")
 set(DIGITALCURLING3_VERSION_INFO_HPP_OUT "${CMAKE_CURRENT_BINARY_DIR}/${DIGITALCURLING3_VERSION_INFO_HPP}")
 configure_file(
