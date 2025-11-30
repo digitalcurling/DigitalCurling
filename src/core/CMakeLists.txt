@@ -1,5 +1,14 @@
 # --- nlohmann_json ---
-add_subdirectory(${PROJECT_SOURCE_DIR}/extern/nlohmann_json "${PROJECT_BINARY_DIR}/extern/nlohmann_json")
+include(FetchContent)
+set(DIGITALCURLING3_JSONLIB_VERSION "3.12.0")
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG        v${DIGITALCURLING3_JSONLIB_VERSION}
+    SYSTEM
+    FIND_PACKAGE_ARGS ${DIGITALCURLING3_JSONLIB_VERSION} QUIET
+)
+FetchContent_MakeAvailable(nlohmann_json)
 
 # --- Header files ---
 file(GLOB_RECURSE DIGITALCURLING3_INCLUDE_FILES

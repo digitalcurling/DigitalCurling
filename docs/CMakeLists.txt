@@ -5,6 +5,15 @@ if(NOT DOXYGEN_FOUND)
     return()
 endif()
 
+# --- doxygen-awesome.css ---
+include(FetchContent)
+FetchContent_Declare(
+	doxygen-awesome-css
+	URL https://github.com/jothepro/doxygen-awesome-css/archive/refs/heads/main.zip
+	SYSTEM
+)
+FetchContent_MakeAvailable(doxygen-awesome-css)
+
 # --- Doxyfile configuration ---
 set(DOXYGEN_PROJECT_NAME "DigitalCurling3")
 set(DOXYGEN_PROJECT_NUMBER ${PROJECT_VERSION})
@@ -14,7 +23,7 @@ set(DOXYGEN_PROJECT_LOGO "logo.svg")
 set(DOXYGEN_GENERATE_TREEVIEW YES)
 set(DOXYGEN_DISABLE_INDEX NO)
 set(DOXYGEN_FULL_SIDEBAR NO)
-set(DOXYGEN_HTML_EXTRA_STYLESHEET doxygen-awesome.css)
+set(DOXYGEN_HTML_EXTRA_STYLESHEET "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome.css")
 
 set(DOXYGEN_RECURSIVE YES)
 set(DOXYGEN_STRIP_FROM_PATH "${CMAKE_SOURCE_DIR}/src")
