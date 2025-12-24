@@ -1,8 +1,8 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-/// \file
-/// \brief 必要なJSON変換関数を定義します
+/// @file
+/// @brief JSON変換関数を定義
 
 #pragma once
 
@@ -10,7 +10,7 @@
 #include <chrono>
 #include "nlohmann/json.hpp"
 
-/// \cond Doxygen_Suppress
+/// @cond Doxygen_Suppress
 namespace {
 
 // overloadedトリック用ヘルパークラス
@@ -63,4 +63,4 @@ struct adl_serializer<std::chrono::milliseconds> {
 };
 
 } // namespace nlohmann
-/// \endcond
+/// @endcond

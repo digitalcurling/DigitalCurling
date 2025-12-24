@@ -1,8 +1,8 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-/// \file
-/// \brief ISimulatorFactory を定義します
+/// @file
+/// @brief ISimulatorFactory を定義
 
 #pragma once
 
@@ -14,35 +14,33 @@ namespace digitalcurling3 {
 
 class ISimulator;
 
-
-
-/// \brief ISimulator を構築するためのクラスです
+/// @brief ISimulator を構築するためのファクトリーインターフェース
 ///
-/// ISimulator のインスタンスはこのクラスの派生クラスの CreateSimulator() で生成されます．
+/// `ISimulator` のインスタンスはこのクラスの派生クラスの `CreateSimulator()` で生成されます。
 class ISimulatorFactory {
 protected:
     ISimulatorFactory() = default;
-    ISimulatorFactory(ISimulatorFactory const&) = default; ///< コピーコンストラクタ．何もコピーしません．サブクラスでのdefault実装をサポートするためのものです．
-    ISimulatorFactory& operator = (ISimulatorFactory const&) = default; ///< コピー代入演算子．何もコピーしません．サブクラスでのdefault実装をサポートするためのものです．
+    /// @brief コピーコンストラクタ
+    ISimulatorFactory(ISimulatorFactory const&) = default;
+    /// @brief コピー代入演算子
+    ISimulatorFactory& operator = (ISimulatorFactory const&) = default;
 
 public:
     virtual ~ISimulatorFactory() = default;
 
-    /// \brief シミュレータを生成する
-    ///
-    /// \returns 生成されたシミュレータ
+    /// @brief シミュレータを生成する
+    /// @returns 生成されたシミュレータ
     virtual std::unique_ptr<ISimulator> CreateSimulator() const = 0;
 
-    /// \brief このインスタンスを複製する
-    ///
-    /// \returns 複製されたインスタンス
+    /// @brief このインスタンスを複製する
+    /// @returns 複製されたインスタンス
     virtual std::unique_ptr<ISimulatorFactory> Clone() const = 0;
 
-    /// \brief 対応するシミュレータのシミュレータIDを得る．
+    /// @brief 対応するシミュレータのシミュレータIDを得る
     ///
-    /// シミュレータIDはシミュレータの種類ごとに異なる．
+    /// シミュレータIDはシミュレータの種類ごとに異なります。
     ///
-    /// \returns シミュレータID
+    /// @returns シミュレータID
     virtual std::string GetSimulatorId() const = 0;
 };
 

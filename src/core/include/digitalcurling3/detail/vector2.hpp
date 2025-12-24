@@ -1,8 +1,8 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-/// \file
-/// \brief Vector2 を定義します
+/// @file
+/// @brief Vector2 を定義
 
 #pragma once
 
@@ -12,25 +12,24 @@
 namespace digitalcurling3 {
 
 
-
-/// \brief 2次元ベクトル
+/// @brief 2次元ベクトル
 struct Vector2 {
-    float x;  ///< x座標
-    float y;  ///< y座標
+    /// @brief x座標
+    float x;
+    /// @brief y座標
+    float y;
 
-    /// \brief (0, 0)で初期化します
+    /// @brief (0, 0)で初期化する
     constexpr Vector2() : x(0.f), y(0.f) {}
 
-    /// \brief 指定された座標で初期化します
-    ///
-    /// \param[in] x x座標
-    /// \param[in] y y座標
+    /// @brief 指定された座標で初期化する
+    /// @param[in] x x座標
+    /// @param[in] y y座標
     constexpr Vector2(float x, float y) : x(x), y(y) {}
 
-    /// \brief ベクトルの加算を行います
-    ///
-    /// \param[in] v ベクトル
-    /// \returns このベクトル自身
+    /// @brief ベクトルの加算を行う
+    /// @param[in] v ベクトル
+    /// @returns このベクトル自身
     constexpr Vector2 & operator += (Vector2 v)
     {
         x += v.x;
@@ -38,10 +37,9 @@ struct Vector2 {
         return *this;
     }
 
-    /// \brief ベクトルの減算を行います
-    ///
-    /// \param[in] v ベクトル
-    /// \returns このベクトル自身
+    /// @brief ベクトルの減算を行う
+    /// @param[in] v ベクトル
+    /// @returns このベクトル自身
     constexpr Vector2 & operator -= (Vector2 v)
     {
         x -= v.x;
@@ -49,10 +47,9 @@ struct Vector2 {
         return *this;
     }
 
-    /// \brief ベクトルにスカラー値を乗算します
-    ///
-    /// \param[in] f スカラー値
-    /// \returns このベクトル自身
+    /// @brief ベクトルにスカラー値を乗算する
+    /// @param[in] f スカラー値
+    /// @returns このベクトル自身
     constexpr Vector2 & operator *= (float f)
     {
         x *= f;
@@ -60,10 +57,9 @@ struct Vector2 {
         return *this;
     }
 
-    /// \brief ベクトルをスカラー値で除算します
-    ///
-    /// \param[in] f スカラー値
-    /// \returns このベクトル自身
+    /// @brief ベクトルをスカラー値で除算する
+    /// @param[in] f スカラー値
+    /// @returns このベクトル自身
     constexpr Vector2 & operator /= (float f)
     {
         x /= f;
@@ -71,80 +67,77 @@ struct Vector2 {
         return *this;
     }
 
-    /// \brief ベクトルの長さを得ます
-    ///
-    /// \returns \code std::hypot(x, y) \endcode
+    /// @brief ベクトルの長さを得る
+    /// @returns ベクトルの長さ (`std::hypot(x, y)`)
     float Length() const
     {
         return std::hypot(x, y);
     }
 };
 
-/// \brief ベクトルを反転します
-///
-/// \param[in] v ベクトル
-/// \returns \a -v
+/// @brief ベクトルを反転する
+/// @param[in] v ベクトル
+/// @returns @a -v
+/// @memberof Vector2
 constexpr Vector2 operator - (Vector2 v)
 {
     return { -v.x, -v.y };
 }
 
-/// \brief ベクトル同士の加算を行います
-///
-/// \param[in] v1 ベクトル1
-/// \param[in] v2 ベクトル2
-/// \returns \a v1+v2
+/// @brief ベクトル同士の加算を行う
+/// @param[in] v1 ベクトル1
+/// @param[in] v2 ベクトル2
+/// @returns @a v1+v2
+/// @memberof Vector2
 constexpr Vector2 operator + (Vector2 v1, Vector2 v2)
 {
     return { v1.x + v2.x, v1.y + v2.y };
 }
 
-/// \brief ベクトル同士の減算を行います
-///
-/// \param[in] v1 ベクトル1
-/// \param[in] v2 ベクトル2
-/// \returns \a v1-v2
+/// @brief ベクトル同士の減算を行う
+/// @param[in] v1 ベクトル1
+/// @param[in] v2 ベクトル2
+/// @returns @a v1-v2
+/// @memberof Vector2
 constexpr Vector2 operator - (Vector2 v1, Vector2 v2)
 {
     return { v1.x - v2.x, v1.y - v2.y };
 }
 
-/// \brief ベクトルとスカラー値の乗算を行います
-///
-/// \param[in] f スカラー値
-/// \param[in] v ベクトル
-/// \returns \a f*v
+/// @brief ベクトルとスカラー値の乗算を行う
+/// @param[in] f スカラー値
+/// @param[in] v ベクトル
+/// @returns @a f*v
+/// @memberof Vector2
 constexpr Vector2 operator * (float f, Vector2 v)
 {
     return { f * v.x, f * v.y };
 }
 
-/// \brief ベクトルとスカラー値の乗算を行います
-///
-/// \param[in] v ベクトル
-/// \param[in] f スカラー値
-/// \returns \a v*f
+/// @brief ベクトルとスカラー値の乗算を行う
+/// @param[in] v ベクトル
+/// @param[in] f スカラー値
+/// @returns @a v*f
+/// @memberof Vector2
 constexpr Vector2 operator * (Vector2 v, float f)
 {
     return f * v;
 }
 
-/// \brief ベクトルとスカラー値の除算を行います
-///
-/// \param[in] v ベクトル
-/// \param[in] f スカラー値
-/// \returns \a v*(1/f)
+/// @brief ベクトルとスカラー値の除算を行う
+/// @param[in] v ベクトル
+/// @param[in] f スカラー値
+/// @returns @a v*(1/f)
+/// @memberof Vector2
 constexpr Vector2 operator / (Vector2 v, float f)
 {
     return { v.x / f, v.y / f };
 }
 
 
+/// @cond Doxygen_Suppress
 // json
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
-    Vector2,
-    x,
-    y
-)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Vector2, x, y)
+/// @endcond
 
 } // namespace digitalcurling3
