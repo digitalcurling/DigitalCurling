@@ -1,8 +1,8 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-/// \file
-/// \brief Move を定義します
+/// @file
+/// @brief Move を定義
 
 #pragma once
 
@@ -13,18 +13,14 @@
 namespace digitalcurling3 {
 
 
-
-/// \brief ターンごとにチームが採る行動
-///
-/// \sa moves::Shot, moves::Concede
+/// @brief ターンごとにチームが採る行動
+/// @sa moves::Shot, moves::Concede
 using Move = std::variant<moves::Shot, moves::Concede>;
-
-
 
 } // namespace digitalcurling3
 
 
-/// \cond Doxygen_Suppress
+/// @cond Doxygen_Suppress
 // json
 namespace nlohmann {
 
@@ -59,4 +55,4 @@ struct adl_serializer<digitalcurling3::Move> {
 };
 
 } // namespace nlohmann
-/// \endcond
+/// @endcond

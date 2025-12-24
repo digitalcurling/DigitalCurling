@@ -1,8 +1,8 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-/// \file
-/// \brief ユーザーがインクルードするヘッダーファイルです
+/// @file
+/// @brief ユーザーがインクルードするヘッダーファイル
 
 #pragma once
 

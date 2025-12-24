@@ -1,8 +1,8 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-/// \file
-/// \brief Team を定義します
+/// @file
+/// @brief Team を定義
 
 #pragma once
 
@@ -14,18 +14,22 @@
 namespace digitalcurling3 {
 
 
+/// @name Teams
+/// @{
 
-/// \brief チームを識別するために用いる列挙体です．
+/// @brief チーム
 enum class Team : std::int8_t {
-    k0 = 0, ///< チーム0．最初のエンドで先攻のチーム．
-    k1 = 1, ///< チーム1．最初のエンドで後攻のチーム．
-    kInvalid ///< 無効な値
+    /// @brief チーム0 (最初のエンドで先攻のチーム)
+    k0 = 0,
+    /// @brief チーム1 (最初のエンドで後攻のチーム)
+    k1 = 1,
+    /// @brief 無効な値
+    kInvalid
 };
 
-/// \brief 相手チームを得る
-/// 
-/// \param[in] team チーム
-/// \return 引数のチームの相手のチーム
+/// @brief 相手チームを得る
+/// @param[in] team チーム
+/// @return 引数のチームの相手のチーム
 inline Team GetOpponentTeam(Team team)
 {
     switch (team) {
@@ -38,10 +42,9 @@ inline Team GetOpponentTeam(Team team)
     }
 }
 
-/// \brief チームを文字列に変換する
-/// 
-/// \param[in] team チーム
-/// \return k0: \c "team0" , k1: \c "team1" , kInvalid: \c "invalid"
+/// @brief チームを文字列に変換する
+/// @param[in] team チーム
+/// @return チーム文字列
 inline std::string ToString(Team team)
 {
     switch (team) {
@@ -54,22 +57,25 @@ inline std::string ToString(Team team)
     }
 }
 
-/// \brief enum class を \c std::underlying_type_t に変換する
-/// 
-/// \param[in] value enum class
-/// \return \c static_cast<std::underlying_type_t<T>>(value)
+/// @brief enum class を `std::underlying_type_t` に変換する
+/// @param[in] value enum class
+/// @return `static_cast<std::underlying_type_t<T>>(value)`
 template <class T>
 inline std::underlying_type_t<T> ToUType(T value)
 {
     return static_cast<std::underlying_type_t<T>>(value);
 }
 
+/// @}
 
+
+/// @cond Doxygen_Suppress
 // json
 NLOHMANN_JSON_SERIALIZE_ENUM(Team, {
     {Team::k0, "team0"},
     {Team::k1, "team1"},
     {Team::kInvalid, nullptr},
 })
+/// @endcond
 
 } // namespace digitalcurling3
