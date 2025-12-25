@@ -16,6 +16,16 @@ namespace digitalcurling::players {
 class IPlayerFactory;
 class IPlayerStorage;
 
+/// @brief プレイヤーの性別
+enum class Gender : int8_t {
+    /// @brief 男性
+    kMale,
+    /// @brief 女性
+    kFemale,
+    /// @brief 性別不明
+    kUnknown = -1,
+};
+
 /// @brief 選手によるショットのブレを表現するためのインターフェース
 ///
 /// 乱数などによって選手のショットにブレを付与します。
@@ -46,6 +56,10 @@ public:
     /// @returns プレイヤーID
     virtual std::string GetPlayerId() const = 0;
 
+    /// @brief プレイヤーの性別を得る
+    /// @returns 性別
+    virtual Gender GetGender() const = 0;
+
     /// @brief ファクトリーを得る
     ///
     /// 得られたファクトリーはこの `IPlayer` インスタンスを生成した `IPlayerFactory` インスタンスよりも
@@ -68,6 +82,16 @@ public:
     /// @brief ストレージから状態を復元する
     /// @param[in] storage ストレージ
     virtual void Load(IPlayerStorage const& storage) = 0;
+
 };
+
+/// @cond Doxygen_Suppress
+//json
+NLOHMANN_JSON_SERIALIZE_ENUM(Gender, {
+    {Gender::kMale, "male"},
+    {Gender::kFemale, "female"},
+    {Gender::kUnknown, "unknown"},
+})
+/// @endcond
 
 } // namespace digitalcurling::players
