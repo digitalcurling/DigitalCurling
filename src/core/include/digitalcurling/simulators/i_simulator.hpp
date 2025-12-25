@@ -12,8 +12,8 @@
 #include <optional>
 #include <memory>
 #include <string>
+#include "digitalcurling/stone.hpp"
 #include "digitalcurling/vector2.hpp"
-#include "digitalcurling/transform.hpp"
 
 namespace digitalcurling::simulators {
 
@@ -38,59 +38,55 @@ public:
     /// @brief シミュレータ上に配置可能なストーンの最大数
     static constexpr std::uint8_t kStoneMax = 16;
 
-    /// @brief ストーンの半径(m)
-    static constexpr float kStoneRadius = 0.145f;
-
 
     // types ---
 
-    /// @brief ストーンの位置、角度、速度、角速度を格納
-    struct Stone : public Transform {
+    /// @brief ストーンの位置，角度，速度，角速度を格納します
+    struct StoneState : public Stone {
         /// @brief 速度(m/s)
-        Vector2 linear_velocity;
+        Vector2 translational_velocity;
         /// @brief 角速度(rad/s)
         float angular_velocity;
 
-        /// @brief 全データを0で初期化
-        Stone()
-            : Transform()
-            , linear_velocity()
+        /// @brief 全データを0で初期化します
+        StoneState()
+            : Stone()
+            , translational_velocity()
             , angular_velocity(0.f) {}
 
         /// @brief 与えられたデータで初期化
-        ///
         /// @param[in] position 位置(m)
         /// @param[in] angle 角度(radian)
-        /// @param[in] linear_velocity 速度(m/s)
-        /// @param[in] angular_velocity 角速度(rad/s)
-        Stone(Vector2 position, float angle, Vector2 linear_velocity, float angular_velocity)
-            : Transform(position, angle)
-            , linear_velocity(linear_velocity)
+        /// @param[in] translational_velocity 速度(m/s)
+        /// @param[in] angular_velocity 角速度(radian/s)
+        StoneState(Vector2 position, float angle, Vector2 translational_velocity, float angular_velocity)
+            : Stone(position, angle)
+            , translational_velocity(translational_velocity)
             , angular_velocity(angular_velocity) {}
     };
 
     /// @brief 全ストーンの位置と速度
     ///
     /// 盤面に存在しないストーンは `std::nullopt` として表されます。
-    using AllStones = std::array<std::optional<Stone>, kStoneMax>;
+    using AllStones = std::array<std::optional<StoneState>, kStoneMax>;
 
     /// @brief ストーンどうしの衝突の情報
     struct Collision {
         /// @brief 衝突に関するストーンの情報
-        struct Stone {
+        struct CollisionStone {
             std::uint8_t id; ///< ストーンのID
-            Transform transform; ///< ストーンの位置と角度
+            StoneState stone; ///< ストーンの位置と角度
 
             /// @brief デフォルトコンストラクタ
-            Stone() : id(0), transform() {}
+            CollisionStone() : id(0), stone() {}
 
             /// @brief 与えられたデータで初期化する
             /// @param[in] id ストーンのID
-            /// @param[in] transform ストーンの位置と角度
-            Stone(std::uint8_t id, Transform const& transform) : id(id), transform(transform) {}
+            /// @param[in] stone ストーンの位置と角度
+            CollisionStone(std::uint8_t id, StoneState const& stone) : id(id), stone(stone) {}
         };
-        Stone a; ///< 衝突したストーン
-        Stone b; ///< 衝突したストーン
+        CollisionStone a; ///< 衝突したストーン
+        CollisionStone b; ///< 衝突したストーン
         float normal_impulse; ///< 法線方向の撃力
         float tangent_impulse; ///< 接線方向の撃力
 
@@ -102,15 +98,13 @@ public:
             , tangent_impulse(0.f) {}
 
         /// @brief 与えられたパラメータで初期化する
-        /// @param[in] a_id ストーンAのID
-        /// @param[in] b_id ストーンBのID
-        /// @param[in] a_transform ストーンAの位置
-        /// @param[in] b_transform ストーンBの位置
+        /// @param[in] a ストーンAのIDと位置
+        /// @param[in] b ストーンBのIDと位置
         /// @param[in] normal_impulse 法線方向の撃力
         /// @param[in] tangent_impulse 接線方向の撃力
-        Collision(std::uint8_t a_id, std::uint8_t b_id, Transform const& a_transform, Transform const& b_transform, float normal_impulse, float tangent_impulse)
-            : a(a_id, a_transform)
-            , b(b_id, b_transform)
+        Collision(CollisionStone a, CollisionStone b, float normal_impulse, float tangent_impulse)
+            : a(a)
+            , b(b)
             , normal_impulse(normal_impulse)
             , tangent_impulse(tangent_impulse) {}
 
@@ -119,7 +113,7 @@ public:
         /// @returns ストーンどうしが接した座標
         Vector2 GetContactPoint() const
         {
-            return (a.transform.position + b.transform.position) * 0.5f;
+            return (a.stone.position + b.stone.position) * 0.5f;
         }
     };
 
@@ -210,8 +204,8 @@ public:
 
 /// @cond Doxygen_Suppress
 // json
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ISimulator::Stone, position, angle, linear_velocity, angular_velocity)
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ISimulator::Collision::Stone, id, transform)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ISimulator::StoneState, position, angle, translational_velocity, angular_velocity)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ISimulator::Collision::CollisionStone, id, stone)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ISimulator::Collision, a, b, normal_impulse, tangent_impulse)
 /// @endcond
 

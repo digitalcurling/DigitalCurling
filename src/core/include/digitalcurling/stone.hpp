@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 /// @file
-/// @brief Transform を定義
+/// @brief Stone を定義
 
 #pragma once
 
@@ -12,26 +12,30 @@
 namespace digitalcurling {
 
 
-/// @brief 位置と角度を格納する構造体
-struct Transform {
-    /// @brief 位置
+/// @brief ストーンの位置と角度
+struct Stone {
+
+    /// @brief ストーンの半径(m)
+    static constexpr float kRadius = 0.145f;
+
+    /// @brief ストーンの位置
     Vector2 position;
-    /// @brief 角度
+    /// @brief ストーンの角度
     float angle;
 
     /// @brief 位置(0, 0)、角度0で初期化する
-    constexpr Transform() : position(), angle(0.f) {}
+    constexpr Stone() : position(), angle(0.f) {}
 
     /// @brief 指定された値で初期化する
     /// @param[in] position 位置
     /// @param[in] angle 角度
-    constexpr Transform(Vector2 position, float angle) : position(position), angle(angle) {}
+    constexpr Stone(Vector2 position, float angle) : position(position), angle(angle) {}
 };
 
 
 /// @cond Doxygen_Suppress
 // json
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Transform, position, angle)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Stone, position, angle)
 /// @endcond
 
 } // namespace digitalcurling

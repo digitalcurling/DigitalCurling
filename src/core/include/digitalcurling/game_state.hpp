@@ -12,10 +12,10 @@
 #include <vector>
 #include <chrono>
 #include "digitalcurling/common.hpp"
-#include "digitalcurling/vector2.hpp"
-#include "digitalcurling/transform.hpp"
 #include "digitalcurling/game_result.hpp"
 #include "digitalcurling/game_setting.hpp"
+#include "digitalcurling/stone.hpp"
+#include "digitalcurling/vector2.hpp"
 
 namespace digitalcurling {
 
@@ -37,7 +37,7 @@ struct GameState {
     /// @brief 各チームのストーンの位置と角度を格納します
     /// @sa GameState::stones
     using Stones = std::array<
-        std::array<std::optional<Transform>, kShotPerEnd / 2>,
+        std::array<std::optional<Stone>, kShotPerEnd / 2>,
         2>;
 
     /// @brief デフォルトコンストラクタ
