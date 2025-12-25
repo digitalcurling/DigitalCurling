@@ -16,7 +16,6 @@
 #include "digitalcurling/simulators/i_simulator_factory.hpp"
 #include "digitalcurling/simulators/i_simulator_storage.hpp"
 #include "digitalcurling/common.hpp"
-#include "digitalcurling/constants.hpp"
 #include "digitalcurling/coordinate.hpp"
 #include "digitalcurling/game_result.hpp"
 #include "digitalcurling/game_setting.hpp"

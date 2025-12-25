@@ -12,12 +12,10 @@
 #include <vector>
 #include <chrono>
 #include "digitalcurling/common.hpp"
-#include "digitalcurling/coordinate.hpp"
 #include "digitalcurling/vector2.hpp"
 #include "digitalcurling/transform.hpp"
 #include "digitalcurling/game_result.hpp"
 #include "digitalcurling/game_setting.hpp"
-#include "digitalcurling/simulators/i_simulator.hpp"
 
 namespace digitalcurling {
 
@@ -211,88 +209,10 @@ struct GameState {
     {
         return game_result.has_value();
     }
-
-    /// @brief ISimulator::AllStones のインデックスから GameState::Stones のインデックスに変換する
-    /// @param all_stones_index ISimulator::AllStones のインデックス
-    /// @return first: チーム, second: チーム内のストーンのインデックス
-    static inline std::pair<Team, size_t> StonesIndexFromAllStonesIndex(size_t all_stones_index);
-
-    /// @brief GameState::Stones のインデックスから ISimulator::AllStones のインデックスに変換する
-    /// @param team チーム
-    /// @param team_stone_index チーム内のストーンのインデックス
-    /// @return ISimulator::AllStones のインデックス
-    static inline size_t StonesIndexToAllStonesIndex(Team team, size_t team_stone_index);
-
-    /// @brief ISimulator::AllStones から GameState::Stones へ変換する
-    /// @param all_stones ストーン
-    /// @param end 現在のエンド
-    /// @return @p all_stones を GameState::Stones に変換したもの
-    static inline Stones StonesFromAllStones(simulators::ISimulator::AllStones const& all_stones, std::uint8_t end);
-
-    /// @brief GameState::Stones から ISimulator::AllStones へ変換する
-    /// @param stones ストーン
-    /// @param end 現在のエンド
-    /// @return @ref stones を ISimulator::AllStones に変換したもの
-    static inline simulators::ISimulator::AllStones StonesToAllStones(Stones const& stones, std::uint8_t end);
 };
 
 
 /// @cond Doxygen_Suppress
-std::pair<Team, size_t> GameState::StonesIndexFromAllStonesIndex(size_t all_stones_index) {
-    assert(all_stones_index < kShotPerEnd);
-
-    return {
-        (all_stones_index < kShotPerEnd / 2) ? Team::k0 : Team::k1,
-        all_stones_index % (kShotPerEnd / 2)
-    };
-}
-
-size_t GameState::StonesIndexToAllStonesIndex(Team team, size_t team_stone_index) {
-    return static_cast<size_t>(team) * GameState::kShotPerEnd / 2 + team_stone_index;
-}
-
-GameState::Stones GameState::StonesFromAllStones(simulators::ISimulator::AllStones const& all_stones, std::uint8_t end) {
-    auto const shot_side = coordinate::GetShotSide(end);
-
-    GameState::Stones state_stones;
-    for (std::uint8_t i = 0; i < GameState::kShotPerEnd; ++i) {
-        auto const [team, team_stone_idx] = StonesIndexFromAllStonesIndex(i);
-        auto& state_stone = state_stones[static_cast<size_t>(team)][team_stone_idx];
-
-        if (all_stones[i]) {
-            state_stone.emplace(
-                coordinate::TransformPosition(all_stones[i]->position, coordinate::Id::kSimulation, shot_side),
-                coordinate::TransformAngle(all_stones[i]->angle, coordinate::Id::kSimulation, shot_side));
-        } else {
-            state_stone = std::nullopt;
-        }
-    }
-    return state_stones;
-}
-
-simulators::ISimulator::AllStones GameState::StonesToAllStones(GameState::Stones const& stones, std::uint8_t end) {
-    auto const shot_side = coordinate::GetShotSide(end);
-
-    constexpr std::array<Team, 2> kTeams{{ Team::k0, Team::k1 }};
-    simulators::ISimulator::AllStones all_stones;
-    for (Team team : kTeams) {
-        for (size_t team_stone_idx = 0; team_stone_idx < GameState::kShotPerEnd / 2; ++team_stone_idx) {
-            auto const& stone = stones[static_cast<size_t>(team)][team_stone_idx];
-            auto const idx = StonesIndexToAllStonesIndex(team, team_stone_idx);
-            if (stone) {
-                all_stones[idx].emplace(
-                    coordinate::TransformPosition(stone->position, shot_side, coordinate::Id::kSimulation),
-                    coordinate::TransformAngle(stone->angle, shot_side, coordinate::Id::kSimulation),
-                    Vector2(0.f, 0.f),
-                    0.f);
-            } else {
-                all_stones[idx] = std::nullopt;
-            }
-        }
-    }
-    return all_stones;
-}
-
 // json
 inline void to_json(nlohmann::json& j, GameState const& v) {
     j["end"] = v.end;
