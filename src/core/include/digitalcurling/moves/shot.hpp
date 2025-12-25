@@ -17,32 +17,39 @@ namespace digitalcurling::moves {
 /// @brief 行動：ショット
 /// @sa Move
 struct Shot {
-    /// @brief ショットの回転方向
-    enum class Rotation : std::uint8_t {
-        /// @brief 反時計回り
-        kCCW,
-        /// @brief 時計回り
-        kCW
-    };
-
     /// @brief `Move` の識別用タイプ名
     static constexpr std::string_view kTypeName = "shot";
 
-    /// @brief ショットの初速度
-    Vector2 velocity;
+    /// @brief ショットの並進速度
+    float translational_velocity;
+    /// @brief ショットの角速度
+    float angular_velocity;
+    /// @brief ショットの角度 (rad)
+    float release_angle;
 
-    /// @brief ショットの初期回転方向
-    Rotation rotation = Rotation::kCCW;
+    /// @brief デフォルトコンストラクタ
+    Shot() : translational_velocity(0.f), angular_velocity(0.f), release_angle(0.f) {}
+
+    /// @brief コンストラクタ
+    Shot(float translational_velocity, float angular_velocity, float release_angle)
+        : translational_velocity(translational_velocity),
+          angular_velocity(angular_velocity),
+          release_angle(release_angle) {}
+
+    /// @brief ショットの速度ベクトルを得る
+    /// @returns ベクトル
+    Vector2 ToVector2() const {
+        return Vector2(
+            translational_velocity * std::cos(release_angle),
+            translational_velocity * std::sin(release_angle)
+        );
+    }
 };
 
 
 /// @cond Doxygen_Suppress
 // json
-NLOHMANN_JSON_SERIALIZE_ENUM(Shot::Rotation, {
-    {Shot::Rotation::kCCW, "ccw"},
-    {Shot::Rotation::kCW, "cw"},
-})
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Shot, velocity, rotation)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Shot, translational_velocity, angular_velocity, release_angle);
 /// @endcond
 
 } // namespace digitalcurling::moves

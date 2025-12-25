@@ -68,36 +68,16 @@ TEST(Json, TransformFromJson)
     EXPECT_EQ(j.at("angle").get<float>(), v.angle);
 }
 
-TEST(Json, ShotRotationToJson)
-{
-    json const j_ccw = dc::moves::Shot::Rotation::kCCW;
-    json const j_cw = dc::moves::Shot::Rotation::kCW;
-    EXPECT_EQ(j_ccw, "ccw");
-    EXPECT_EQ(j_cw, "cw");
-}
-
-TEST(Json, ShotRotationFromJson)
-{
-    json const j_ccw = "ccw";
-    json const j_cw = "cw";
-    dc::moves::Shot::Rotation v_ccw;
-    dc::moves::Shot::Rotation v_cw;
-    j_ccw.get_to(v_ccw);
-    j_cw.get_to(v_cw);
-    EXPECT_EQ(v_ccw, dc::moves::Shot::Rotation::kCCW);
-    EXPECT_EQ(v_cw, dc::moves::Shot::Rotation::kCW);
-}
-
 TEST(Json, MoveToJson)
 {
     // shot
-    dc::moves::Shot v_shot{ dc::Vector2(0.1f, 0.2f), dc::moves::Shot::Rotation::kCW };
+    dc::moves::Shot v_shot(1.2f, 1.0f, 1.5f);
     dc::moves::Move v_shot_move = v_shot;
     json const j_shot = v_shot_move;
     EXPECT_EQ(j_shot.at("type").get<std::string>(), "shot");
-    EXPECT_EQ(j_shot.at("velocity").at("x").get<float>(), v_shot.velocity.x);
-    EXPECT_EQ(j_shot.at("velocity").at("y").get<float>(), v_shot.velocity.y);
-    EXPECT_EQ(j_shot.at("rotation").get<dc::moves::Shot::Rotation>(), v_shot.rotation);
+    EXPECT_EQ(j_shot.at("translational_velocity").get<float>(), v_shot.translational_velocity);
+    EXPECT_EQ(j_shot.at("angular_velocity").get<float>(), v_shot.angular_velocity);
+    EXPECT_EQ(j_shot.at("release_angle").get<float>(), v_shot.release_angle);
 
     // concede
     dc::moves::Move const v_concede = dc::moves::Concede();
@@ -110,19 +90,17 @@ TEST(Json, MoveFromJson)
     // shot
     json const j_shot{
         { "type", "shot" },
-        { "velocity", {
-            { "x", 0.2f },
-            { "y", 1.2f }
-        }},
-        { "rotation", "ccw" }
+        { "translational_velocity", 1.2f },
+        { "angular_velocity", 1.0f },
+        { "release_angle", 1.5f }
     };
     dc::moves::Move v_shot;
     j_shot.get_to(v_shot);
     if (std::holds_alternative<dc::moves::Shot>(v_shot)) {
         auto const& v_shot2 = std::get<dc::moves::Shot>(v_shot);
-        EXPECT_EQ(j_shot.at("velocity").at("x").get<float>(), v_shot2.velocity.x);
-        EXPECT_EQ(j_shot.at("velocity").at("y").get<float>(), v_shot2.velocity.y);
-        EXPECT_EQ(j_shot.at("rotation").get<dc::moves::Shot::Rotation>(), v_shot2.rotation);
+        EXPECT_EQ(j_shot.at("translational_velocity").get<float>(), v_shot2.translational_velocity);
+        EXPECT_EQ(j_shot.at("angular_velocity").get<float>(), v_shot2.angular_velocity);
+        EXPECT_EQ(j_shot.at("release_angle").get<float>(), v_shot2.release_angle);
     } else {
         FAIL();
     }
