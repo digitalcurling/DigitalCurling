@@ -26,7 +26,7 @@
 
 
 \namespace digitalcurling::coordinate
-\brief 座標変換に関連するものを定義する名前空間
+\brief 座標系を定義する名前空間
 
 
 \namespace digitalcurling::moves

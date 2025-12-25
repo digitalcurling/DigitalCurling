@@ -48,7 +48,6 @@ digitalcurling_apply_standard_settings(digitalcurling_core)
 # --- Tests ---
 if(DIGITALCURLING_BUILD_TEST AND TARGET digitalcurling_test)
     target_sources(digitalcurling_test PRIVATE
-        "${CMAKE_CURRENT_SOURCE_DIR}/test/test_coordinate.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/test/test_json.cpp"
     )
     target_link_libraries(digitalcurling_test PRIVATE digitalcurling::core)
