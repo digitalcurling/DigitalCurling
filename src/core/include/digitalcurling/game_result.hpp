@@ -7,7 +7,7 @@
 #pragma once
 
 #include <cstdint>
-#include "digitalcurling/common.hpp"
+#include <nlohmann/json.hpp>
 #include "digitalcurling/team.hpp"
 
 namespace digitalcurling {
@@ -38,7 +38,6 @@ struct GameResult {
 
 
 /// @cond Doxygen_Suppress
-// json
 NLOHMANN_JSON_SERIALIZE_ENUM(GameResult::Reason, {
     {GameResult::Reason::kScore, "score"},
     {GameResult::Reason::kConcede, "concede"},

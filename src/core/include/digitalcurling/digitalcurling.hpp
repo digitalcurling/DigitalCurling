@@ -9,6 +9,7 @@
 #include "digitalcurling/moves/move.hpp"
 #include "digitalcurling/moves/concede.hpp"
 #include "digitalcurling/moves/shot.hpp"
+#include "digitalcurling/players/gender.hpp"
 #include "digitalcurling/players/i_player.hpp"
 #include "digitalcurling/players/i_player_factory.hpp"
 #include "digitalcurling/players/i_player_storage.hpp"
