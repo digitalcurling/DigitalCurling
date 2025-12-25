@@ -15,7 +15,7 @@
 #include "digitalcurling/vector2.hpp"
 #include "digitalcurling/transform.hpp"
 
-namespace digitalcurling {
+namespace digitalcurling::simulators {
 
 class ISimulatorFactory;
 class ISimulatorStorage;
@@ -215,4 +215,4 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ISimulator::Collision::Stone, id, transform)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ISimulator::Collision, a, b, normal_impulse, tangent_impulse)
 /// @endcond
 
-} // namespace digitalcurling
+} // namespace digitalcurling::simulators

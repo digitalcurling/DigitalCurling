@@ -10,14 +10,14 @@
 #include "digitalcurling/moves/shot.hpp"
 #include "digitalcurling/moves/concede.hpp"
 
-namespace digitalcurling {
+namespace digitalcurling::moves {
 
 
 /// @brief ターンごとにチームが採る行動
-/// @sa moves::Shot, moves::Concede
-using Move = std::variant<moves::Shot, moves::Concede>;
+/// @sa Shot, Concede
+using Move = std::variant<Shot, Concede>;
 
-} // namespace digitalcurling
+} // namespace digitalcurling::moves
 
 
 /// @cond Doxygen_Suppress
@@ -25,8 +25,8 @@ using Move = std::variant<moves::Shot, moves::Concede>;
 namespace nlohmann {
 
 template <>
-struct adl_serializer<digitalcurling::Move> {
-    static void to_json(json & j, digitalcurling::Move const& m) {
+struct adl_serializer<digitalcurling::moves::Move> {
+    static void to_json(json & j, digitalcurling::moves::Move const& m) {
         std::visit(Overloaded{
             [&j] (digitalcurling::moves::Shot const& shot) {
                 nlohmann::json temp;
@@ -42,7 +42,7 @@ struct adl_serializer<digitalcurling::Move> {
         );
     }
 
-    static void from_json(json const& j, digitalcurling::Move & m) {
+    static void from_json(json const& j, digitalcurling::moves::Move & m) {
         auto type = j.at("type").get<std::string>();
         if (type == digitalcurling::moves::Shot::kTypeName) {
             m = j.get<digitalcurling::moves::Shot>();

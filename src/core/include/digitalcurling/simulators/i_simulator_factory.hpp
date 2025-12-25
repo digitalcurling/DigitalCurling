@@ -10,7 +10,7 @@
 #include <string>
 #include "digitalcurling/common.hpp"
 
-namespace digitalcurling {
+namespace digitalcurling::simulators {
 
 class ISimulator;
 
@@ -44,4 +44,4 @@ public:
     virtual std::string GetSimulatorId() const = 0;
 };
 
-} // namespace digitalcurling
+} // namespace digitalcurling::simulators

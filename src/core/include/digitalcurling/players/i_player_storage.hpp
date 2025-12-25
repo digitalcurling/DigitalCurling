@@ -10,7 +10,7 @@
 #include <string>
 #include "digitalcurling/common.hpp"
 
-namespace digitalcurling {
+namespace digitalcurling::players {
 
 class IPlayer;
 
@@ -44,4 +44,4 @@ public:
     virtual std::string GetPlayerId() const = 0;
 };
 
-} // namespace digitalcurling
+} // namespace digitalcurling::players

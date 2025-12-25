@@ -17,7 +17,7 @@
 #include "digitalcurling/transform.hpp"
 #include "digitalcurling/game_result.hpp"
 #include "digitalcurling/game_setting.hpp"
-#include "digitalcurling/i_simulator.hpp"
+#include "digitalcurling/simulators/i_simulator.hpp"
 
 namespace digitalcurling {
 
@@ -227,13 +227,13 @@ struct GameState {
     /// @param all_stones ストーン
     /// @param end 現在のエンド
     /// @return @p all_stones を GameState::Stones に変換したもの
-    static inline Stones StonesFromAllStones(ISimulator::AllStones const& all_stones, std::uint8_t end);
+    static inline Stones StonesFromAllStones(simulators::ISimulator::AllStones const& all_stones, std::uint8_t end);
 
     /// @brief GameState::Stones から ISimulator::AllStones へ変換する
     /// @param stones ストーン
     /// @param end 現在のエンド
     /// @return @ref stones を ISimulator::AllStones に変換したもの
-    static inline ISimulator::AllStones StonesToAllStones(Stones const& stones, std::uint8_t end);
+    static inline simulators::ISimulator::AllStones StonesToAllStones(Stones const& stones, std::uint8_t end);
 };
 
 
@@ -251,7 +251,7 @@ size_t GameState::StonesIndexToAllStonesIndex(Team team, size_t team_stone_index
     return static_cast<size_t>(team) * GameState::kShotPerEnd / 2 + team_stone_index;
 }
 
-GameState::Stones GameState::StonesFromAllStones(ISimulator::AllStones const& all_stones, std::uint8_t end) {
+GameState::Stones GameState::StonesFromAllStones(simulators::ISimulator::AllStones const& all_stones, std::uint8_t end) {
     auto const shot_side = coordinate::GetShotSide(end);
 
     GameState::Stones state_stones;
@@ -270,11 +270,11 @@ GameState::Stones GameState::StonesFromAllStones(ISimulator::AllStones const& al
     return state_stones;
 }
 
-ISimulator::AllStones GameState::StonesToAllStones(GameState::Stones const& stones, std::uint8_t end) {
+simulators::ISimulator::AllStones GameState::StonesToAllStones(GameState::Stones const& stones, std::uint8_t end) {
     auto const shot_side = coordinate::GetShotSide(end);
 
     constexpr std::array<Team, 2> kTeams{{ Team::k0, Team::k1 }};
-    ISimulator::AllStones all_stones;
+    simulators::ISimulator::AllStones all_stones;
     for (Team team : kTeams) {
         for (size_t team_stone_idx = 0; team_stone_idx < GameState::kShotPerEnd / 2; ++team_stone_idx) {
             auto const& stone = stones[static_cast<size_t>(team)][team_stone_idx];
