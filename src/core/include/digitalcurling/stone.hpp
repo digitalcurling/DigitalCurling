@@ -7,6 +7,7 @@
 #pragma once
 
 #include "digitalcurling/common.hpp"
+#include "digitalcurling/coordinate.hpp"
 #include "digitalcurling/vector2.hpp"
 
 namespace digitalcurling {
@@ -30,6 +31,18 @@ struct Stone {
     /// @param[in] position 位置
     /// @param[in] angle 角度
     constexpr Stone(Vector2 position, float angle) : position(position), angle(angle) {}
+
+    /// @brief ストーンの中心からハウスの中心までの距離を取得する
+    /// @return ハウス-ストーン間の距離
+    float GetDistanceFromTee() const {
+        return (position - coordinate::kTee).Length();
+    }
+
+    /// @brief ストーンがハウスの中にあるかを判定する
+    /// @return ストーンがハウスの中にあれば `true`
+    bool IsInHouse() const {
+        return GetDistanceFromTee() < coordinate::kHouseRadius + kRadius;
+    }
 };
 
 
