@@ -92,7 +92,7 @@ TEST(Json, MoveToJson)
 {
     // shot
     dc::moves::Shot v_shot{ dc::Vector2(0.1f, 0.2f), dc::moves::Shot::Rotation::kCW };
-    dc::Move v_shot_move = v_shot;
+    dc::moves::Move v_shot_move = v_shot;
     json const j_shot = v_shot_move;
     EXPECT_EQ(j_shot.at("type").get<std::string>(), "shot");
     EXPECT_EQ(j_shot.at("velocity").at("x").get<float>(), v_shot.velocity.x);
@@ -100,7 +100,7 @@ TEST(Json, MoveToJson)
     EXPECT_EQ(j_shot.at("rotation").get<dc::moves::Shot::Rotation>(), v_shot.rotation);
 
     // concede
-    dc::Move const v_concede = dc::moves::Concede();
+    dc::moves::Move const v_concede = dc::moves::Concede();
     json const j_concede = v_concede;
     EXPECT_EQ(j_concede.at("type"), "concede");
 }
@@ -116,7 +116,7 @@ TEST(Json, MoveFromJson)
         }},
         { "rotation", "ccw" }
     };
-    dc::Move v_shot;
+    dc::moves::Move v_shot;
     j_shot.get_to(v_shot);
     if (std::holds_alternative<dc::moves::Shot>(v_shot)) {
         auto const& v_shot2 = std::get<dc::moves::Shot>(v_shot);
@@ -131,7 +131,7 @@ TEST(Json, MoveFromJson)
     json const j_concede{
         { "type", "concede" }
     };
-    dc::Move v_concede;
+    dc::moves::Move v_concede;
     j_concede.get_to(v_concede);
     EXPECT_TRUE(std::holds_alternative<dc::moves::Concede>(v_concede));
 }
