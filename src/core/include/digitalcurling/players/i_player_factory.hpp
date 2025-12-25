@@ -9,10 +9,11 @@
 #include <memory>
 #include <string>
 #include "digitalcurling/common.hpp"
+#include "digitalcurling/players/gender.hpp"
+#include "digitalcurling/players/i_player.hpp"
 
 namespace digitalcurling::players {
 
-class IPlayer;
 
 /// @brief IPlayer を構築するためのファクトリーインターフェース
 ///
@@ -42,6 +43,10 @@ public:
     ///
     /// @returns プレイヤーID
     virtual std::string GetPlayerId() const = 0;
+
+    /// @brief プレイヤーの性別を得る
+    /// @returns プレイヤーの性別
+    virtual Gender GetGender() const = 0;
 };
 
 } // namespace digitalcurling::players

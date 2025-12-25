@@ -10,6 +10,7 @@
 #include <memory>
 #include "digitalcurling/vector2.hpp"
 #include "digitalcurling/moves/shot.hpp"
+#include "digitalcurling/players/gender.hpp"
 
 namespace digitalcurling::players {
 
@@ -46,6 +47,10 @@ public:
     /// @returns プレイヤーID
     virtual std::string GetPlayerId() const = 0;
 
+    /// @brief プレイヤーの性別を得る
+    /// @returns 性別
+    virtual Gender GetGender() const = 0;
+
     /// @brief ファクトリーを得る
     ///
     /// 得られたファクトリーはこの `IPlayer` インスタンスを生成した `IPlayerFactory` インスタンスよりも
@@ -68,6 +73,7 @@ public:
     /// @brief ストレージから状態を復元する
     /// @param[in] storage ストレージ
     virtual void Load(IPlayerStorage const& storage) = 0;
+
 };
 
 } // namespace digitalcurling::players
