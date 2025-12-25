@@ -21,6 +21,6 @@
 #include "digitalcurling/game_setting.hpp"
 #include "digitalcurling/game_state.hpp"
 #include "digitalcurling/team.hpp"
-#include "digitalcurling/transform.hpp"
+#include "digitalcurling/stone.hpp"
 #include "digitalcurling/vector2.hpp"
 #include "digitalcurling/version.hpp"

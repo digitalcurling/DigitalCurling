@@ -41,18 +41,16 @@ TEST(Json, Vector2FromJson)
     EXPECT_EQ(j.at("y").get<float>(), v.y);
 }
 
-TEST(Json, TransformToJson)
+TEST(Json, StoneToJson)
 {
-    dc::Transform const v(
-        dc::Vector2(0.5f, 1.5f),
-        2.4f);
+    dc::Stone const v(dc::Vector2(0.5f, 1.5f), 2.4f);
     json const j = v;
     EXPECT_EQ(j.at("position").at("x").get<float>(), v.position.x);
     EXPECT_EQ(j.at("position").at("y").get<float>(), v.position.y);
     EXPECT_EQ(j.at("angle").get<float>(), v.angle);
 }
 
-TEST(Json, TransformFromJson)
+TEST(Json, StoneFromJson)
 {
     json const j{
         { "position", {
@@ -61,7 +59,7 @@ TEST(Json, TransformFromJson)
         }},
         { "angle", 3.5f }
     };
-    dc::Transform v;
+    dc::Stone v;
     j.get_to(v);
     EXPECT_EQ(j.at("position").at("x").get<float>(), v.position.x);
     EXPECT_EQ(j.at("position").at("y").get<float>(), v.position.y);
