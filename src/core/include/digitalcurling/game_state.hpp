@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <optional>
 #include <chrono>
+#include <stdexcept>
 #include "digitalcurling/common.hpp"
 #include "digitalcurling/game_scores.hpp"
 #include "digitalcurling/game_setting.hpp"
@@ -122,32 +123,10 @@ struct GameState {
     /// @returns 次に行動するチーム (ゲームがすでに終了している場合 `Team::kInvalid`)
     /// @exception std::logic_error 構造体の内容が不正な場合
     Team GetNextTeam() const {
-        if (IsGameOver()) {
-            return Team::kInvalid;
-        }
+        if (IsGameOver()) return Team::kInvalid;
 
-        switch (hammer) {
-            case Team::k0:
-                if (shot % 2 == 0) {
-                    return Team::k1;
-                } else {
-                    return Team::k0;
-                }
-                break;  // 到達しない
-
-            case Team::k1:
-                if (shot % 2 == 0) {
-                    return Team::k0;
-                } else {
-                    return Team::k1;
-                }
-                break;  // 到達しない
-
-            default:
-                throw std::logic_error("invalid state");
-        }
-
-        return Team::k0;  // 到達しない
+        auto res = GetOpponentTeam(hammer);
+        return res != Team::kInvalid ? res : throw std::logic_error("invalid state");
     }
 
     /// @brief ゲームが終了しているかを調べる
