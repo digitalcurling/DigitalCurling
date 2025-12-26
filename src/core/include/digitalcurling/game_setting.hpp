@@ -23,11 +23,6 @@ struct GameSetting {
     /// @brief アイスシートの横幅
     float sheet_width = 4.75f;
 
-    /// @brief ファイブロックルールを適用するか
-    ///
-    /// ファイブロックルールを適用する場合 `true` を指定します。
-    bool five_rock_rule = true;
-
     /// @brief 各チームの全エンド(延長エンドを除く)の思考時間
     /// @sa extra_end_thinking_time 延長エンドの思考時間
     TeamValue<std::chrono::milliseconds> thinking_time;
@@ -43,7 +38,7 @@ struct GameSetting {
 
 /// @cond Doxygen_Suppress
 // json
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GameSetting, max_end, sheet_width, five_rock_rule, thinking_time, extra_end_thinking_time)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GameSetting, max_end, sheet_width, thinking_time, extra_end_thinking_time)
 /// @endcond
 
 } // namespace digitalcurling

@@ -136,12 +136,125 @@ TEST(Json, TeamFromJson)
     EXPECT_EQ(v_invalid, dc::Team::kInvalid);
 }
 
+TEST(Json, GameRuleTypeToJson)
+{
+    json const j_standard = dc::GameRuleType::kStandard;
+    json const j_mixed = dc::GameRuleType::kMixed;
+    json const j_mixed_doubles = dc::GameRuleType::kMixedDoubles;
+    EXPECT_EQ(j_standard.get<std::string>(), "standard");
+    EXPECT_EQ(j_mixed.get<std::string>(), "mixed");
+    EXPECT_EQ(j_mixed_doubles.get<std::string>(), "mixed_doubles");
+}
+
+TEST(Json, GameRuleTypeFromJson)
+{
+    json const j_standard = "standard";
+    json const j_mixed = "mixed";
+    json const j_mixed_doubles = "mixed_doubles";
+    dc::GameRuleType v_standard, v_mixed, v_mixed_doubles;
+    j_standard.get_to(v_standard);
+    j_mixed.get_to(v_mixed);
+    j_mixed_doubles.get_to(v_mixed_doubles);
+    EXPECT_EQ(v_standard, dc::GameRuleType::kStandard);
+    EXPECT_EQ(v_mixed, dc::GameRuleType::kMixed);
+    EXPECT_EQ(v_mixed_doubles, dc::GameRuleType::kMixedDoubles);
+}
+
+TEST(Json, AdditionalRuleTypesToJson)
+{
+    json const j_fgz = dc::rules::AdditionalRuleTypes::kFreeGuardZone;
+    json const j_nts = dc::rules::AdditionalRuleTypes::kNoTickShot;
+    EXPECT_EQ(j_fgz, "free_guard_zone");
+    EXPECT_EQ(j_nts, "no_tick_shot");
+}
+
+TEST(Json, AdditionalRuleTypesFromJson)
+{
+    json const j_fgz = "free_guard_zone";
+    json const j_nts = "no_tick_shot";
+    dc::rules::AdditionalRuleTypes v_fgz;
+    dc::rules::AdditionalRuleTypes v_nts;
+    j_fgz.get_to(v_fgz);
+    j_nts.get_to(v_nts);
+    EXPECT_EQ(v_fgz, dc::rules::AdditionalRuleTypes::kFreeGuardZone);
+    EXPECT_EQ(v_nts, dc::rules::AdditionalRuleTypes::kNoTickShot);
+}
+
+TEST(Json, AdditionalRuleToJson)
+{
+    dc::rules::FreeGuardZoneRule v_fgz;
+    v_fgz.is_enabled = true;
+    v_fgz.applied_shot_count = 5;
+    json const j = v_fgz;
+    EXPECT_EQ(j.at("is_enabled").get<bool>(), v_fgz.is_enabled);
+    EXPECT_EQ(j.at("applied_shot_count").get<std::uint8_t>(), v_fgz.applied_shot_count);
+
+    dc::rules::NoTickShotRule v_nts;
+    v_nts.is_enabled = false;
+    v_nts.applied_shot_count = 5;
+    json const j2 = v_nts;
+    EXPECT_EQ(j2.at("is_enabled").get<bool>(), v_nts.is_enabled);
+    EXPECT_EQ(j2.at("applied_shot_count").get<std::uint8_t>(), v_nts.applied_shot_count);
+}
+
+TEST(Json, AdditionalRuleFromJson)
+{
+    json const j_fgz{
+        { "is_enabled", false },
+        { "applied_shot_count", 5 }
+    };
+    dc::rules::FreeGuardZoneRule v_fgz;
+    j_fgz.get_to(v_fgz);
+    EXPECT_FALSE(v_fgz.is_enabled);
+    EXPECT_EQ(v_fgz.applied_shot_count, 5);
+
+    json const j_nts{
+        { "is_enabled", true },
+        { "applied_shot_count", 5 }
+    };
+    dc::rules::NoTickShotRule v_nts;
+    j_nts.get_to(v_nts);
+    EXPECT_TRUE(v_nts.is_enabled);
+    EXPECT_EQ(v_nts.applied_shot_count, 5);
+}
+
+TEST(Json, GameRuleToJson)
+{
+    dc::GameRule v;
+    v.type = dc::GameRuleType::kStandard;
+    v.is_wheelchair = false;
+    v.free_guard_zone = dc::rules::FreeGuardZoneRule(true);
+    v.no_tick_shot = dc::rules::NoTickShotRule(false);
+
+    json const j = v;
+    EXPECT_EQ(j.at("type").get<std::string>(), "standard");
+    EXPECT_EQ(j.at("is_wheelchair").get<bool>(), v.is_wheelchair);
+    EXPECT_EQ(j.at("free_guard_zone").at("is_enabled").get<bool>(), v.free_guard_zone->is_enabled);
+    EXPECT_EQ(j.at("free_guard_zone").at("applied_shot_count").get<std::uint8_t>(), v.free_guard_zone->applied_shot_count);
+    EXPECT_EQ(j.at("no_tick_shot").at("is_enabled").get<bool>(), v.no_tick_shot->is_enabled);
+    EXPECT_EQ(j.at("no_tick_shot").at("applied_shot_count").get<std::uint8_t>(), v.no_tick_shot->applied_shot_count);
+}
+
+TEST(Json, GameRuleFromJson)
+{
+    json const j{
+        { "type", "mixed_doubles" },
+        { "is_wheelchair", false }
+    };
+
+    dc::GameRule v;
+    j.get_to(v);
+    EXPECT_EQ(v.type, dc::GameRuleType::kMixedDoubles);
+    EXPECT_FALSE(v.is_wheelchair);
+    EXPECT_FALSE(v.free_guard_zone.has_value());
+    EXPECT_FALSE(v.no_tick_shot.has_value());
+}
+
 TEST(Json, GameSettingToJson)
 {
     dc::GameSetting v;
     v.max_end = 6;
     v.sheet_width = 5.f;
-    v.five_rock_rule = true;
     v.thinking_time = dc::TeamValue<std::chrono::milliseconds>(
         std::chrono::milliseconds(1'525), std::chrono::milliseconds(23'456)
     );
@@ -150,9 +263,8 @@ TEST(Json, GameSettingToJson)
     );
 
     json const j = v;
-    EXPECT_EQ(j.at("max_end").get<decltype(dc::GameSetting::max_end)>(), v.max_end);
-    EXPECT_EQ(j.at("sheet_width").get<decltype(dc::GameSetting::sheet_width)>(), v.sheet_width);
-    EXPECT_EQ(j.at("five_rock_rule").get<decltype(dc::GameSetting::five_rock_rule)>(), v.five_rock_rule);
+    EXPECT_EQ(j.at("max_end").get<std::uint8_t>(), v.max_end);
+    EXPECT_EQ(j.at("sheet_width").get<float>(), v.sheet_width);
     EXPECT_EQ(j.at("thinking_time").at("team0").get<std::chrono::milliseconds>(), v.thinking_time[dc::Team::k0]);
     EXPECT_EQ(j.at("thinking_time").at("team1").get<std::chrono::milliseconds>(), v.thinking_time[dc::Team::k1]);
     EXPECT_EQ(j.at("extra_end_thinking_time").at("team0").get<std::chrono::milliseconds>(), v.extra_end_thinking_time[dc::Team::k0]);
@@ -164,7 +276,6 @@ TEST(Json, GameSettingFromJson)
     json const j{
         { "max_end", 10 },
         { "sheet_width", 4.5 },
-        { "five_rock_rule", false },
         { "thinking_time", {
             { "team0", 1.234 },
             { "team1", 5.678 },
@@ -174,11 +285,11 @@ TEST(Json, GameSettingFromJson)
             { "team1", 0.678 },
         }}
     };
+
     dc::GameSetting v;
     j.get_to(v);
     EXPECT_EQ(v.max_end, 10);
     EXPECT_EQ(v.sheet_width, 4.5f);
-    EXPECT_FALSE(v.five_rock_rule);
     EXPECT_EQ(v.thinking_time[dc::Team::k0], std::chrono::milliseconds(1234));
     EXPECT_EQ(v.thinking_time[dc::Team::k1], std::chrono::milliseconds(5678));
     EXPECT_EQ(v.extra_end_thinking_time[dc::Team::k0], std::chrono::milliseconds(234));
@@ -243,7 +354,6 @@ TEST(Json, GameStateToJson)
     dc::GameSetting setting;
     setting.max_end = 10;
     setting.sheet_width = 4.75f;
-    setting.five_rock_rule = true;
     setting.thinking_time = dc::TeamValue<std::chrono::milliseconds>(
         std::chrono::milliseconds(1'525), std::chrono::milliseconds(23'456)
     );
