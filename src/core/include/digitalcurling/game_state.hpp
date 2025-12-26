@@ -15,6 +15,7 @@
 #include "digitalcurling/game_result.hpp"
 #include "digitalcurling/game_setting.hpp"
 #include "digitalcurling/stone.hpp"
+#include "digitalcurling/stone_coordinate.hpp"
 #include "digitalcurling/team.hpp"
 #include "digitalcurling/vector2.hpp"
 
@@ -32,15 +33,6 @@ struct GameState {
     /// @brief 延長戦を含めたエンド数の最大値 ( GameState::end >= kExtraEndMax のときは無効なエンドを表します)
     static constexpr std::uint8_t kExtraEndMax = 255;
 
-    /// @brief エンド毎のショット数
-    static constexpr size_t kShotPerEnd = 16;
-
-    /// @brief 各チームのストーンの位置と角度を格納します
-    /// @sa GameState::stones
-    using Stones = std::array<
-        std::array<std::optional<Stone>, kShotPerEnd / 2>,
-        2>;
-
     /// @brief デフォルトコンストラクタ
     /// @note このコンストラクタは便宜上用意されたものです。
     /// 試合の初期盤面を構築する場合は代わりに `GameState(GameSetting const&)` を使用してください。
@@ -49,7 +41,7 @@ struct GameState {
         : end(0)
         , shot(0)
         , hammer(Team::k1)
-        , stones{{ {}, {} }}
+        , stones()
         , scores{{ {}, {} }}
         , extra_end_score{{}}
         , thinking_time_remaining()
@@ -62,7 +54,7 @@ struct GameState {
         : end(0)
         , shot(0)
         , hammer(Team::k1)
-        , stones{{ {}, {} }}
+        , stones()
         , scores{{ std::vector<std::optional<std::uint8_t>>(setting.max_end),
                 std::vector<std::optional<std::uint8_t>>(setting.max_end) }}
         , extra_end_score{{}}
@@ -99,16 +91,14 @@ struct GameState {
 
     /// @brief 各チームのストーンの位置と角度
     ///
-    /// 1つ目のインデックスはチーム、2つ目のインデックスはストーンのインデックスを表します。
-    /// ```cpp
-    /// stones[0][0]  // チーム0の0番目のストーン
-    /// stones[1][7] // チーム1の7番目のストーン
-    /// ```
-    ///
     /// ストーンが盤面に存在しない場合は `std::nullopt` になります。
     ///
-    /// 座標系はストーンの発射地点(ハックの位置)を原点、ショットする方向(反対側のハウスがある向き)をy軸正方向としています。
-    Stones stones;
+    /// Ex.)
+    /// ```cpp
+    /// stones[Team::k0][0] // チーム0の1番目のストーン
+    /// stones[Team::k1][7] // チーム1の8番目のストーン
+    /// ```
+    StoneCoordinate stones;
 
     /// @brief 各エンドのスコアを格納
     ///
@@ -219,8 +209,7 @@ inline void to_json(nlohmann::json& j, GameState const& v) {
     j["end"] = v.end;
     j["shot"] = v.shot;
     j["hammer"] = v.hammer;
-    j["stones"]["team0"] = v.stones[0];
-    j["stones"]["team1"] = v.stones[1];
+    j["stones"] = v.stones;
     j["scores"]["team0"] = v.scores[0];
     j["scores"]["team1"] = v.scores[1];
     j["extra_end_score"]["team0"] = v.extra_end_score[0];
@@ -233,8 +222,7 @@ inline void from_json(nlohmann::json const& j, GameState& v) {
     j.at("end").get_to(v.end);
     j.at("shot").get_to(v.shot);
     j.at("hammer").get_to(v.hammer);
-    j.at("stones").at("team0").get_to(v.stones[0]);
-    j.at("stones").at("team1").get_to(v.stones[1]);
+    j.at("stones").get_to(v.stones);
     j.at("scores").at("team0").get_to(v.scores[0]);
     j.at("scores").at("team1").get_to(v.scores[1]);
     j.at("extra_end_score").at("team0").get_to(v.extra_end_score[0]);

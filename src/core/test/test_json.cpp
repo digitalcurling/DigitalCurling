@@ -255,18 +255,24 @@ TEST(Json, GameStateToJson)
     state.end = 1;
     state.shot = 10;
     state.hammer = dc::Team::k0;
-    state.stones[0][0].emplace(dc::Vector2(0.5f, 0.1f), 0.2f);
     state.scores[0][0].emplace(2);
     state.scores[1][0].emplace(0);
     state.extra_end_score[0].reset();
     state.extra_end_score[1].reset();
     state.game_result.reset();
 
+    auto stones0 = std::array<std::optional<dc::Stone>, 8>{};
+    auto stones1 = std::array<std::optional<dc::Stone>, 8>{};
+    stones0[0] = std::make_optional<dc::Stone>(dc::Vector2(1.5f, 2.5f), 3.5f);
+    state.stones = dc::StoneCoordinate(std::array<std::array<std::optional<dc::Stone>, 8>, 2>{ stones0, stones1 });
+
     json const j = state;
     EXPECT_EQ(j.at("end").get<std::uint8_t>(), state.end);
     EXPECT_EQ(j.at("shot").get<std::uint8_t>(), state.shot);
     EXPECT_EQ(j.at("hammer").get<std::string>(), "team0");
-    EXPECT_EQ(j.at("stones").at("team0")[0].at("position").at("x").get<float>(), 0.5f);
+    EXPECT_EQ(j.at("stones").at("team0")[0].at("position").at("x").get<float>(), 1.5f);
+    EXPECT_EQ(j.at("stones").at("team0")[0].at("position").at("y").get<float>(), 2.5f);
+    EXPECT_EQ(j.at("stones").at("team0")[0].at("angle").get<float>(), 3.5f);
     EXPECT_TRUE(j.at("stones").at("team1")[0].is_null());
     EXPECT_EQ(j.at("scores").at("team0").size(), setting.max_end);
     EXPECT_EQ(j.at("scores").at("team1").size(), setting.max_end);
@@ -350,14 +356,16 @@ TEST(Json, GameStateFromJson)
     EXPECT_EQ(state.end, 1);
     EXPECT_EQ(state.shot, 3);
     EXPECT_EQ(state.hammer, dc::Team::k0);
-    EXPECT_EQ(state.stones[0][0]->position.x, 1.1f);
-    EXPECT_EQ(state.stones[0][0]->position.y, 1.2f);
-    EXPECT_EQ(state.stones[0][0]->angle, 1.3f);
-    EXPECT_FALSE(state.stones[0][1].has_value());
-    EXPECT_EQ(state.stones[1][0]->position.x, 2.1f);
-    EXPECT_EQ(state.stones[1][0]->position.y, 2.2f);
-    EXPECT_EQ(state.stones[1][0]->angle, 2.3f);
-    EXPECT_FALSE(state.stones[1][1].has_value());
+
+    EXPECT_EQ(state.stones[dc::Team::k0][0]->position.x, 1.1f);
+    EXPECT_EQ(state.stones[dc::Team::k0][0]->position.y, 1.2f);
+    EXPECT_EQ(state.stones[dc::Team::k0][0]->angle, 1.3f);
+    EXPECT_FALSE(state.stones[dc::Team::k0][1].has_value());
+    EXPECT_EQ(state.stones[dc::Team::k1][0]->position.x, 2.1f);
+    EXPECT_EQ(state.stones[dc::Team::k1][0]->position.y, 2.2f);
+    EXPECT_EQ(state.stones[dc::Team::k1][0]->angle, 2.3f);
+    EXPECT_FALSE(state.stones[dc::Team::k1][1].has_value());
+
     EXPECT_EQ(state.scores[0].size(), 8);
     EXPECT_EQ(state.scores[1].size(), 8);
     EXPECT_EQ(state.scores[0][0].value(), 0);

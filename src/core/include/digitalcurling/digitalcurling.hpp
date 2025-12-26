@@ -23,5 +23,7 @@
 #include "digitalcurling/game_state.hpp"
 #include "digitalcurling/team.hpp"
 #include "digitalcurling/stone.hpp"
+#include "digitalcurling/stone_coordinate.hpp"
+#include "digitalcurling/stone_index.hpp"
 #include "digitalcurling/vector2.hpp"
 #include "digitalcurling/version.hpp"

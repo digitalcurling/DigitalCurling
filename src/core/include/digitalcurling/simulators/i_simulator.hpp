@@ -13,6 +13,7 @@
 #include <memory>
 #include <string>
 #include "digitalcurling/stone.hpp"
+#include "digitalcurling/stone_coordinate.hpp"
 #include "digitalcurling/vector2.hpp"
 
 namespace digitalcurling::simulators {
@@ -32,12 +33,6 @@ class ISimulatorStorage;
 /// @sa ISimulatorFactory
 class ISimulator {
 public:
-
-    // constants ---
-
-    /// @brief シミュレータ上に配置可能なストーンの最大数
-    static constexpr std::uint8_t kStoneMax = 16;
-
 
     // types ---
 
@@ -68,7 +63,7 @@ public:
     /// @brief 全ストーンの位置と速度
     ///
     /// 盤面に存在しないストーンは `std::nullopt` として表されます。
-    using AllStones = std::array<std::optional<StoneState>, kStoneMax>;
+    using AllStones = std::array<std::optional<StoneState>, StoneCoordinate::kStoneMax>;
 
     /// @brief ストーンどうしの衝突の情報
     struct Collision {
