@@ -18,6 +18,20 @@ namespace {
 template<class... Ts> struct Overloaded : Ts... { using Ts::operator()...; };
 template<class... Ts> Overloaded(Ts...)->Overloaded<Ts...>;
 
+template <typename T> struct type_identity { using type = T; };
+template <typename T> using type_identity_t = typename type_identity<T>::type;
+
+template<typename T>
+inline T try_get_to(nlohmann::json const& j, std::string const& key, T &target, type_identity_t<T> default_value)
+{
+    if (j.contains(key)) {
+        return j.at(key).get_to(target);
+    } else {
+        target = default_value;
+        return default_value;
+    }
+}
+
 } // unnamed namespace
 
 
