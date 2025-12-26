@@ -3,19 +3,14 @@
 
 #include "digitalcurling/version.hpp"
 
-std::string digitalcurling::GetVersion()
-{
-    return "@digitalcurling_VERSION@";
-}
-std::uint32_t digitalcurling::GetVersionMajor()
-{
-    return @digitalcurling_VERSION_MAJOR@;
-}
-std::uint32_t digitalcurling::GetVersionMinor()
-{
-    return @digitalcurling_VERSION_MINOR@;
-}
-std::uint32_t digitalcurling::GetVersionPatch()
-{
-    return @digitalcurling_VERSION_PATCH@;
-}
+namespace digitalcurling {
+
+/// \brief  DigitalCurlingライブラリのバージョン
+constexpr Version LibraryVersion(
+    @digitalcurling_VERSION_MAJOR@,
+    @digitalcurling_VERSION_MINOR@,
+    @digitalcurling_VERSION_PATCH@,
+    "dc_"
+);
+
+} // namespace digitalcurling
