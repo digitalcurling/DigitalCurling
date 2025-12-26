@@ -15,6 +15,7 @@
 #include "digitalcurling/game_result.hpp"
 #include "digitalcurling/game_setting.hpp"
 #include "digitalcurling/stone.hpp"
+#include "digitalcurling/team.hpp"
 #include "digitalcurling/vector2.hpp"
 
 namespace digitalcurling {
@@ -51,7 +52,7 @@ struct GameState {
         , stones{{ {}, {} }}
         , scores{{ {}, {} }}
         , extra_end_score{{}}
-        , thinking_time_remaining{{}}
+        , thinking_time_remaining()
         , game_result()
     {}
 
@@ -65,7 +66,7 @@ struct GameState {
         , scores{{ std::vector<std::optional<std::uint8_t>>(setting.max_end),
                 std::vector<std::optional<std::uint8_t>>(setting.max_end) }}
         , extra_end_score{{}}
-        , thinking_time_remaining{{ setting.thinking_time[0], setting.thinking_time[1] }}
+        , thinking_time_remaining(setting.thinking_time)
         , game_result()
     {}
 
@@ -140,7 +141,7 @@ struct GameState {
     /// @brief 各チームの残り思考時間
     ///
     /// 0になると時間切れにより負けとなります。
-    std::array<std::chrono::milliseconds, 2> thinking_time_remaining;
+    TeamValue<std::chrono::milliseconds> thinking_time_remaining;
 
     /// @brief 試合結果
     ///
@@ -224,8 +225,7 @@ inline void to_json(nlohmann::json& j, GameState const& v) {
     j["scores"]["team1"] = v.scores[1];
     j["extra_end_score"]["team0"] = v.extra_end_score[0];
     j["extra_end_score"]["team1"] = v.extra_end_score[1];
-    j["thinking_time_remaining"]["team0"] = v.thinking_time_remaining[0];
-    j["thinking_time_remaining"]["team1"] = v.thinking_time_remaining[1];
+    j["thinking_time_remaining"] = v.thinking_time_remaining;
     j["game_result"] = v.game_result;
 }
 
@@ -239,8 +239,7 @@ inline void from_json(nlohmann::json const& j, GameState& v) {
     j.at("scores").at("team1").get_to(v.scores[1]);
     j.at("extra_end_score").at("team0").get_to(v.extra_end_score[0]);
     j.at("extra_end_score").at("team1").get_to(v.extra_end_score[1]);
-    j.at("thinking_time_remaining").at("team0").get_to(v.thinking_time_remaining[0]);
-    j.at("thinking_time_remaining").at("team1").get_to(v.thinking_time_remaining[1]);
+    j.at("thinking_time_remaining").get_to(v.thinking_time_remaining);
     j.at("game_result").get_to(v.game_result);
 }
 /// @endcond
