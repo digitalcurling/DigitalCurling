@@ -142,18 +142,21 @@ TEST(Json, GameSettingToJson)
     v.max_end = 6;
     v.sheet_width = 5.f;
     v.five_rock_rule = true;
-    v.thinking_time[0] = std::chrono::milliseconds(1'525);
-    v.thinking_time[1] = std::chrono::milliseconds(23'456);
-    v.extra_end_thinking_time[0] = std::chrono::milliseconds(525);
-    v.extra_end_thinking_time[1] = std::chrono::milliseconds(3'456);
+    v.thinking_time = dc::TeamValue<std::chrono::milliseconds>(
+        std::chrono::milliseconds(1'525), std::chrono::milliseconds(23'456)
+    );
+    v.extra_end_thinking_time = dc::TeamValue<std::chrono::milliseconds>(
+        std::chrono::milliseconds(525), std::chrono::milliseconds(3'456)
+    );
+
     json const j = v;
     EXPECT_EQ(j.at("max_end").get<decltype(dc::GameSetting::max_end)>(), v.max_end);
     EXPECT_EQ(j.at("sheet_width").get<decltype(dc::GameSetting::sheet_width)>(), v.sheet_width);
     EXPECT_EQ(j.at("five_rock_rule").get<decltype(dc::GameSetting::five_rock_rule)>(), v.five_rock_rule);
-    EXPECT_EQ(j.at("thinking_time").at("team0").get<decltype(dc::GameSetting::thinking_time)::value_type>(), v.thinking_time[0]);
-    EXPECT_EQ(j.at("thinking_time").at("team1").get<decltype(dc::GameSetting::thinking_time)::value_type>(), v.thinking_time[1]);
-    EXPECT_EQ(j.at("extra_end_thinking_time").at("team0").get<decltype(dc::GameSetting::thinking_time)::value_type>(), v.extra_end_thinking_time[0]);
-    EXPECT_EQ(j.at("extra_end_thinking_time").at("team1").get<decltype(dc::GameSetting::thinking_time)::value_type>(), v.extra_end_thinking_time[1]);
+    EXPECT_EQ(j.at("thinking_time").at("team0").get<std::chrono::milliseconds>(), v.thinking_time[dc::Team::k0]);
+    EXPECT_EQ(j.at("thinking_time").at("team1").get<std::chrono::milliseconds>(), v.thinking_time[dc::Team::k1]);
+    EXPECT_EQ(j.at("extra_end_thinking_time").at("team0").get<std::chrono::milliseconds>(), v.extra_end_thinking_time[dc::Team::k0]);
+    EXPECT_EQ(j.at("extra_end_thinking_time").at("team1").get<std::chrono::milliseconds>(), v.extra_end_thinking_time[dc::Team::k1]);
 }
 
 TEST(Json, GameSettingFromJson)
@@ -176,10 +179,10 @@ TEST(Json, GameSettingFromJson)
     EXPECT_EQ(v.max_end, 10);
     EXPECT_EQ(v.sheet_width, 4.5f);
     EXPECT_FALSE(v.five_rock_rule);
-    EXPECT_EQ(v.thinking_time[0], std::chrono::milliseconds(1234));
-    EXPECT_EQ(v.thinking_time[1], std::chrono::milliseconds(5678));
-    EXPECT_EQ(v.extra_end_thinking_time[0], std::chrono::milliseconds(234));
-    EXPECT_EQ(v.extra_end_thinking_time[1], std::chrono::milliseconds(678));
+    EXPECT_EQ(v.thinking_time[dc::Team::k0], std::chrono::milliseconds(1234));
+    EXPECT_EQ(v.thinking_time[dc::Team::k1], std::chrono::milliseconds(5678));
+    EXPECT_EQ(v.extra_end_thinking_time[dc::Team::k0], std::chrono::milliseconds(234));
+    EXPECT_EQ(v.extra_end_thinking_time[dc::Team::k1], std::chrono::milliseconds(678));
 }
 
 TEST(Json, GameResultReasonToJson)
@@ -241,11 +244,12 @@ TEST(Json, GameStateToJson)
     setting.max_end = 10;
     setting.sheet_width = 4.75f;
     setting.five_rock_rule = true;
-    setting.thinking_time[0] = std::chrono::milliseconds(10'000);
-    setting.thinking_time[1] = std::chrono::milliseconds(10'000);
-    setting.extra_end_thinking_time[0] = std::chrono::milliseconds(1'000);
-    setting.extra_end_thinking_time[1] = std::chrono::milliseconds(1'000);
-
+    setting.thinking_time = dc::TeamValue<std::chrono::milliseconds>(
+        std::chrono::milliseconds(1'525), std::chrono::milliseconds(23'456)
+    );
+    setting.extra_end_thinking_time = dc::TeamValue<std::chrono::milliseconds>(
+        std::chrono::milliseconds(525), std::chrono::milliseconds(3'456)
+    );
 
     dc::GameState state(setting);
     state.end = 1;
@@ -259,22 +263,22 @@ TEST(Json, GameStateToJson)
     state.game_result.reset();
 
     json const j = state;
-    EXPECT_EQ(j["end"].get<std::uint8_t>(), state.end);
-    EXPECT_EQ(j["shot"].get<std::uint8_t>(), state.shot);
-    EXPECT_EQ(j["hammer"].get<std::string>(), "team0");
-    EXPECT_EQ(j["stones"]["team0"][0]["position"]["x"].get<float>(), 0.5f);
-    EXPECT_TRUE(j["stones"]["team1"][0].is_null());
-    EXPECT_EQ(j["scores"]["team0"].size(), setting.max_end);
-    EXPECT_EQ(j["scores"]["team1"].size(), setting.max_end);
-    EXPECT_EQ(j["scores"]["team0"][0].get<std::uint8_t>(), 2);
-    EXPECT_EQ(j["scores"]["team1"][0].get<std::uint8_t>(), 0);
-    EXPECT_TRUE(j["scores"]["team0"][1].is_null());
-    EXPECT_TRUE(j["scores"]["team1"][1].is_null());
-    EXPECT_EQ(j["thinking_time_remaining"]["team0"].get<std::chrono::milliseconds>(), state.thinking_time_remaining[0]);
-    EXPECT_EQ(j["thinking_time_remaining"]["team1"].get<std::chrono::milliseconds>(), state.thinking_time_remaining[1]);
-    EXPECT_TRUE(j["extra_end_score"]["team0"].is_null());
-    EXPECT_TRUE(j["extra_end_score"]["team1"].is_null());
-    EXPECT_TRUE(j["game_result"].is_null());
+    EXPECT_EQ(j.at("end").get<std::uint8_t>(), state.end);
+    EXPECT_EQ(j.at("shot").get<std::uint8_t>(), state.shot);
+    EXPECT_EQ(j.at("hammer").get<std::string>(), "team0");
+    EXPECT_EQ(j.at("stones").at("team0")[0].at("position").at("x").get<float>(), 0.5f);
+    EXPECT_TRUE(j.at("stones").at("team1")[0].is_null());
+    EXPECT_EQ(j.at("scores").at("team0").size(), setting.max_end);
+    EXPECT_EQ(j.at("scores").at("team1").size(), setting.max_end);
+    EXPECT_EQ(j.at("scores").at("team0")[0].get<std::uint8_t>(), 2);
+    EXPECT_EQ(j.at("scores").at("team1")[0].get<std::uint8_t>(), 0);
+    EXPECT_TRUE(j.at("scores").at("team0")[1].is_null());
+    EXPECT_TRUE(j.at("scores").at("team1")[1].is_null());
+    EXPECT_EQ(j.at("thinking_time_remaining").at("team0").get<std::chrono::milliseconds>(), state.thinking_time_remaining[dc::Team::k0]);
+    EXPECT_EQ(j.at("thinking_time_remaining").at("team1").get<std::chrono::milliseconds>(), state.thinking_time_remaining[dc::Team::k1]);
+    EXPECT_TRUE(j.at("extra_end_score").at("team0").is_null());
+    EXPECT_TRUE(j.at("extra_end_score").at("team1").is_null());
+    EXPECT_TRUE(j.at("game_result").is_null());
 }
 
 TEST(Json, GameStateFromJson)
@@ -362,8 +366,9 @@ TEST(Json, GameStateFromJson)
     EXPECT_FALSE(state.scores[1][1].has_value());
     EXPECT_FALSE(state.extra_end_score[0].has_value());
     EXPECT_FALSE(state.extra_end_score[1].has_value());
-    EXPECT_EQ(state.thinking_time_remaining[0], std::chrono::milliseconds(10'500));
-    EXPECT_EQ(state.thinking_time_remaining[1], std::chrono::milliseconds(9'500));
+
+    EXPECT_EQ(state.thinking_time_remaining[dc::Team::k0], std::chrono::milliseconds(10'500));
+    EXPECT_EQ(state.thinking_time_remaining[dc::Team::k1], std::chrono::milliseconds(9'500));
     EXPECT_EQ(state.game_result->winner, dc::Team::k0);
     EXPECT_EQ(state.game_result->reason, dc::GameResult::Reason::kConcede);
 }
