@@ -7,13 +7,12 @@
 #pragma once
 
 #include <cstdint>
-#include <array>
 #include <optional>
-#include <vector>
 #include <chrono>
 #include "digitalcurling/common.hpp"
-#include "digitalcurling/game_result.hpp"
+#include "digitalcurling/game_scores.hpp"
 #include "digitalcurling/game_setting.hpp"
+#include "digitalcurling/game_result.hpp"
 #include "digitalcurling/stone.hpp"
 #include "digitalcurling/stone_coordinate.hpp"
 #include "digitalcurling/team.hpp"
@@ -42,8 +41,7 @@ struct GameState {
         , shot(0)
         , hammer(Team::k1)
         , stones()
-        , scores{{ {}, {} }}
-        , extra_end_score{{}}
+        , scores()
         , thinking_time_remaining()
         , game_result()
     {}
@@ -55,9 +53,7 @@ struct GameState {
         , shot(0)
         , hammer(Team::k1)
         , stones()
-        , scores{{ std::vector<std::optional<std::uint8_t>>(setting.max_end),
-                std::vector<std::optional<std::uint8_t>>(setting.max_end) }}
-        , extra_end_score{{}}
+        , scores(setting.max_end)
         , thinking_time_remaining(setting.thinking_time)
         , game_result()
     {}
@@ -102,31 +98,15 @@ struct GameState {
 
     /// @brief 各エンドのスコアを格納
     ///
-    /// 1つ目のインデックスはチーム、2つ目のインデックスはエンドを表します。
+    /// スコアが未確定・エクストラエンドなし などの場合は `std::nullopt` になります。
+    ///
+    /// Ex.) 10エンドゲームの場合の例
     /// ```cpp
-    /// scores[0][0]  // チーム0の0エンド目のスコア
-    /// scores[1][9]  // チーム1の9エンド目のスコア
+    /// scores[Team::k0][0]  // チーム0の1エンド目のスコア
+    /// scores[Team::k0][9]  // チーム0の10エンド目のスコア
+    /// scores[Team::k1][10] // チーム1のエクストラエンドのスコア
     /// ```
-    ///
-    /// スコアが未確定の場合は `std::nullopt` になります。
-    ///
-    /// @sa extra_end_score 延長エンドのスコア
-    std::array<
-        std::vector<std::optional<std::uint8_t>>,
-        2> scores;
-
-    /// @brief エクストラエンド(延長戦)のスコア
-    ///
-    /// インデックスはチームを表します。
-    /// ```cpp
-    /// extra_end_score[0]  // チーム0のエクストラエンドのスコア
-    /// extra_end_score[1]  // チーム1のエクストラエンドのスコア
-    /// ```
-    ///
-    /// スコアが未確定の場合は `std::nullopt` になります。
-    /// エクストラエンドの得点が0以外になったとき(つまり延長戦によって勝敗が決定したとき)のみ、
-    /// 有効な(`std::nullopt` 以外の)値が格納されます。
-    std::array<std::optional<std::uint8_t>, 2> extra_end_score;
+    GameScores scores;
 
     /// @brief 各チームの残り思考時間
     ///
@@ -137,30 +117,6 @@ struct GameState {
     ///
     /// `std::nullopt` の値は試合中を意味します。
     std::optional<GameResult> game_result;
-
-    /// @brief チームの現在までの合計スコアを得る
-    /// @param[in] team チーム
-    /// @returns 引数で指定したプレイヤーの合計スコア
-    /// @exception std::invalid_argument 引数が不正な場合
-    std::uint32_t GetTotalScore(Team team) const {
-        if (team == Team::kInvalid) {
-            throw std::invalid_argument("team");
-        }
-
-        std::uint32_t score_sum = 0;
-
-        for (auto const& score : scores[size_t(team)]) {
-            if (score) {
-                score_sum += *score;
-            }
-        }
-
-        if (auto const& exscore = extra_end_score[size_t(team)]; exscore) {
-            score_sum += *exscore;
-        }
-
-        return score_sum;
-    }
 
     /// @brief 次に行動するチームを得る
     /// @returns 次に行動するチーム (ゲームがすでに終了している場合 `Team::kInvalid`)
@@ -205,31 +161,7 @@ struct GameState {
 
 /// @cond Doxygen_Suppress
 // json
-inline void to_json(nlohmann::json& j, GameState const& v) {
-    j["end"] = v.end;
-    j["shot"] = v.shot;
-    j["hammer"] = v.hammer;
-    j["stones"] = v.stones;
-    j["scores"]["team0"] = v.scores[0];
-    j["scores"]["team1"] = v.scores[1];
-    j["extra_end_score"]["team0"] = v.extra_end_score[0];
-    j["extra_end_score"]["team1"] = v.extra_end_score[1];
-    j["thinking_time_remaining"] = v.thinking_time_remaining;
-    j["game_result"] = v.game_result;
-}
-
-inline void from_json(nlohmann::json const& j, GameState& v) {
-    j.at("end").get_to(v.end);
-    j.at("shot").get_to(v.shot);
-    j.at("hammer").get_to(v.hammer);
-    j.at("stones").get_to(v.stones);
-    j.at("scores").at("team0").get_to(v.scores[0]);
-    j.at("scores").at("team1").get_to(v.scores[1]);
-    j.at("extra_end_score").at("team0").get_to(v.extra_end_score[0]);
-    j.at("extra_end_score").at("team1").get_to(v.extra_end_score[1]);
-    j.at("thinking_time_remaining").get_to(v.thinking_time_remaining);
-    j.at("game_result").get_to(v.game_result);
-}
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GameState, end, shot, hammer, stones, scores, thinking_time_remaining, game_result)
 /// @endcond
 
 } // namespace digitalcurling

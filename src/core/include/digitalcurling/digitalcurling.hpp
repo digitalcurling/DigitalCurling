@@ -19,6 +19,7 @@
 #include "digitalcurling/common.hpp"
 #include "digitalcurling/coordinate.hpp"
 #include "digitalcurling/game_result.hpp"
+#include "digitalcurling/game_scores.hpp"
 #include "digitalcurling/game_setting.hpp"
 #include "digitalcurling/game_state.hpp"
 #include "digitalcurling/team.hpp"
