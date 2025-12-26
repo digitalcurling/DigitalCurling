@@ -21,6 +21,25 @@ TEST(Json, millisecondsFromJson)
     EXPECT_EQ(v.count(), 1234);
 }
 
+TEST(Json, VersionToJson)
+{
+    dc::Version const v(1, 2, 3, "prefix_");
+    json const j = v;
+    EXPECT_EQ(j.get<std::string>(), "prefix_v1.2.3");
+}
+
+TEST(Json, VersionFromJson)
+{
+    json const j = "prefix_v1.2.3";
+    dc::Version v;
+    j.get_to(v);
+    std::cout << v.ToString() << std::endl;
+    EXPECT_STREQ(v.prefix, "prefix_");
+    EXPECT_EQ(v.major, 1);
+    EXPECT_EQ(v.minor, 2);
+    EXPECT_EQ(v.patch, 3);
+}
+
 TEST(Json, Vector2ToJson)
 {
     dc::Vector2 const v(1.5f, 2.5f);
