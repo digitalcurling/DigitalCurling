@@ -37,5 +37,9 @@
 \brief 選手(プレイヤー)を定義する名前空間
 
 
+\namespace digitalcurling::rules
+\brief 追加ルールを定義する名前空間
+
+
 \namespace digitalcurling::simulators
 \brief 物理シミュレーターを定義する名前空間
