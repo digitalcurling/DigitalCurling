@@ -255,16 +255,18 @@ TEST(Json, GameStateToJson)
     state.end = 1;
     state.shot = 10;
     state.hammer = dc::Team::k0;
-    state.scores[0][0].emplace(2);
-    state.scores[1][0].emplace(0);
-    state.extra_end_score[0].reset();
-    state.extra_end_score[1].reset();
     state.game_result.reset();
 
     auto stones0 = std::array<std::optional<dc::Stone>, 8>{};
     auto stones1 = std::array<std::optional<dc::Stone>, 8>{};
     stones0[0] = std::make_optional<dc::Stone>(dc::Vector2(1.5f, 2.5f), 3.5f);
     state.stones = dc::StoneCoordinate(std::array<std::array<std::optional<dc::Stone>, 8>, 2>{ stones0, stones1 });
+
+    auto scores0 = std::vector<std::optional<std::uint8_t>>(setting.max_end + 1, std::nullopt);
+    auto scores1 = std::vector<std::optional<std::uint8_t>>(setting.max_end + 1, std::nullopt);
+    scores0[0] = 2;
+    scores1[0] = 0;
+    state.scores = dc::GameScores(std::array<std::vector<std::optional<std::uint8_t>>, 2>{ scores0, scores1 });
 
     json const j = state;
     EXPECT_EQ(j.at("end").get<std::uint8_t>(), state.end);
@@ -274,16 +276,14 @@ TEST(Json, GameStateToJson)
     EXPECT_EQ(j.at("stones").at("team0")[0].at("position").at("y").get<float>(), 2.5f);
     EXPECT_EQ(j.at("stones").at("team0")[0].at("angle").get<float>(), 3.5f);
     EXPECT_TRUE(j.at("stones").at("team1")[0].is_null());
-    EXPECT_EQ(j.at("scores").at("team0").size(), setting.max_end);
-    EXPECT_EQ(j.at("scores").at("team1").size(), setting.max_end);
+    EXPECT_EQ(j.at("scores").at("team0").size(), setting.max_end + 1);
+    EXPECT_EQ(j.at("scores").at("team1").size(), setting.max_end + 1);
     EXPECT_EQ(j.at("scores").at("team0")[0].get<std::uint8_t>(), 2);
     EXPECT_EQ(j.at("scores").at("team1")[0].get<std::uint8_t>(), 0);
     EXPECT_TRUE(j.at("scores").at("team0")[1].is_null());
     EXPECT_TRUE(j.at("scores").at("team1")[1].is_null());
     EXPECT_EQ(j.at("thinking_time_remaining").at("team0").get<std::chrono::milliseconds>(), state.thinking_time_remaining[dc::Team::k0]);
     EXPECT_EQ(j.at("thinking_time_remaining").at("team1").get<std::chrono::milliseconds>(), state.thinking_time_remaining[dc::Team::k1]);
-    EXPECT_TRUE(j.at("extra_end_score").at("team0").is_null());
-    EXPECT_TRUE(j.at("extra_end_score").at("team1").is_null());
     EXPECT_TRUE(j.at("game_result").is_null());
 }
 
@@ -330,15 +330,11 @@ TEST(Json, GameStateFromJson)
         }},
         { "scores", {
             { "team0", json::array({
-                0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
+                0, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
             })},
             { "team1", json::array({
-                3, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
+                3, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
             })}
-        }},
-        { "extra_end_score", {
-            { "team0", nullptr },
-            { "team1", nullptr }
         }},
         { "thinking_time_remaining", {
             { "team0", 10.5 },
@@ -366,14 +362,12 @@ TEST(Json, GameStateFromJson)
     EXPECT_EQ(state.stones[dc::Team::k1][0]->angle, 2.3f);
     EXPECT_FALSE(state.stones[dc::Team::k1][1].has_value());
 
-    EXPECT_EQ(state.scores[0].size(), 8);
-    EXPECT_EQ(state.scores[1].size(), 8);
-    EXPECT_EQ(state.scores[0][0].value(), 0);
-    EXPECT_EQ(state.scores[1][0].value(), 3);
-    EXPECT_FALSE(state.scores[0][1].has_value());
-    EXPECT_FALSE(state.scores[1][1].has_value());
-    EXPECT_FALSE(state.extra_end_score[0].has_value());
-    EXPECT_FALSE(state.extra_end_score[1].has_value());
+    EXPECT_EQ(state.scores[dc::Team::k0].size(), 9);
+    EXPECT_EQ(state.scores[dc::Team::k1].size(), 9);
+    EXPECT_EQ(state.scores[dc::Team::k0][0].value(), 0);
+    EXPECT_EQ(state.scores[dc::Team::k1][0].value(), 3);
+    EXPECT_FALSE(state.scores[dc::Team::k0][1].has_value());
+    EXPECT_FALSE(state.scores[dc::Team::k1][1].has_value());
 
     EXPECT_EQ(state.thinking_time_remaining[dc::Team::k0], std::chrono::milliseconds(10'500));
     EXPECT_EQ(state.thinking_time_remaining[dc::Team::k1], std::chrono::milliseconds(9'500));
