@@ -12,6 +12,7 @@
 #include "digitalcurling/players/i_player.hpp"
 #include "digitalcurling/players/i_player_factory.hpp"
 #include "digitalcurling/players/i_player_storage.hpp"
+#include "digitalcurling/plugins/i_plugin_object.hpp"
 #include "digitalcurling/rules/i_additional_rule.hpp"
 #include "digitalcurling/rules/free_guard_zone.hpp"
 #include "digitalcurling/rules/no_tick_shot.hpp"

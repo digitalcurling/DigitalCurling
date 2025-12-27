@@ -10,6 +10,7 @@
 #include <string>
 #include "digitalcurling/common.hpp"
 #include "digitalcurling/players/i_player.hpp"
+#include "digitalcurling/plugins/i_plugin_object.hpp"
 
 namespace digitalcurling::players {
 
@@ -17,16 +18,14 @@ namespace digitalcurling::players {
 /// @brief IPlayer を構築するためのファクトリーインターフェース
 ///
 /// `IPlayer` のインスタンスはこのクラスの派生クラスの `CreatePlayer()` で生成されます。
-class IPlayerFactory {
-protected:
+class IPlayerFactory : public plugins::IPluginObjectCreator, public plugins::FactoryHandle {
+public:
     IPlayerFactory() = default;
     /// @brief コピーコンストラクタ
     IPlayerFactory(IPlayerFactory const&) = default;
     /// @brief コピー代入演算子
     IPlayerFactory & operator = (IPlayerFactory const&) = default;
-
-public:
-    virtual ~IPlayerFactory() = default;
+    virtual ~IPlayerFactory() override = default;
 
     /// @brief プレイヤーを生成する
     /// @return 生成されたプレイヤー
@@ -41,11 +40,15 @@ public:
     /// プレイヤーIDはプレイヤーの種類ごとに異なります。
     ///
     /// @returns プレイヤーID
-    virtual std::string GetPlayerId() const = 0;
+    virtual std::string GetPlayerId() const { return std::string(GetId()); }
 
     /// @brief プレイヤーの性別を得る
     /// @returns プレイヤーの性別
     virtual Gender GetGender() const = 0;
+
+    virtual plugins::TargetHandle* Create() const override {
+        return CreatePlayer().release();
+    }
 };
 
 } // namespace digitalcurling::players

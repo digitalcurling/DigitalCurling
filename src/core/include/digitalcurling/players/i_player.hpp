@@ -10,6 +10,7 @@
 #include <memory>
 #include "digitalcurling/vector2.hpp"
 #include "digitalcurling/moves/shot.hpp"
+#include "digitalcurling/plugins/i_plugin_object.hpp"
 
 namespace digitalcurling::players {
 
@@ -33,16 +34,14 @@ enum class Gender : int8_t {
 /// `IPlayerStorage` を用いて内部状態を保存/復元することが可能です。
 /// 状態の保存には `IPlayer::CreateStorage()` または `IPlayer::Save()` を、
 /// 状態の復元には `IPlayerStorage::CreatePlayer()` または `IPlayer::Load()` を使用してください。
-class IPlayer {
-protected:
+class IPlayer : public plugins::IPluginObject, public plugins::PlayerHandle {
+public:
     IPlayer() = default;
     /// @brief コピーコンストラクタ
     IPlayer(IPlayer const&) = default;
     /// @brief コピー代入演算子
     IPlayer & operator = (IPlayer const&) = default;
-
-public:
-    virtual ~IPlayer() = default;
+    virtual ~IPlayer() override = default;
 
     /// @brief ショットを行う
     /// @param[in] shot 理想的なショット
@@ -54,7 +53,7 @@ public:
     /// プレイヤーIDはプレイヤーの種類ごとに異なります。
     ///
     /// @returns プレイヤーID
-    virtual std::string GetPlayerId() const = 0;
+    virtual std::string GetPlayerId() const { return std::string(GetId()); }
 
     /// @brief プレイヤーの性別を得る
     /// @returns 性別
@@ -82,7 +81,6 @@ public:
     /// @brief ストレージから状態を復元する
     /// @param[in] storage ストレージ
     virtual void Load(IPlayerStorage const& storage) = 0;
-
 };
 
 /// @cond Doxygen_Suppress

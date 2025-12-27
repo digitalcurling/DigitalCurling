@@ -10,6 +10,7 @@
 #include <string>
 #include "digitalcurling/common.hpp"
 #include "digitalcurling/players/i_player.hpp"
+#include "digitalcurling/plugins/i_plugin_object.hpp"
 
 namespace digitalcurling::players {
 
@@ -21,16 +22,14 @@ namespace digitalcurling::players {
 /// すなわち、あるストレージに保存された状態を復元した後の `IPlayer::Play()` の呼出し結果は、そのストレージに保存した時点からの `IPlayer::Play()` の呼出し結果と一致します。
 ///
 /// ストレージは `IPlayer` のそれぞれの実装と対応関係にあるため、 `GetPlayerId()` で得られるIDが一致していない場合は保存/復元はできません。
-class IPlayerStorage {
-protected:
+class IPlayerStorage : public plugins::IPluginObjectCreator, public plugins::StorageHandle {
+public:
     IPlayerStorage() = default;
     /// @brief コピーコンストラクタ
     IPlayerStorage(IPlayerStorage const&) = default;
     /// @brief コピー代入演算子
     IPlayerStorage & operator = (IPlayerStorage const&) = default;
-
-public:
-    virtual ~IPlayerStorage() = default;
+    virtual ~IPlayerStorage() override = default;
 
     /// @brief このストレージが持つ状態と同じ状態を持つプレイヤーを生成する
     /// @returns 生成されたプレイヤー
@@ -41,11 +40,15 @@ public:
     /// プレイヤーIDはプレイヤーの種類ごとに異なります。
     ///
     /// @returns プレイヤーID
-    virtual std::string GetPlayerId() const = 0;
+    virtual std::string GetPlayerId() const { return std::string(GetId()); }
 
     /// @brief プレイヤーの性別を得る
     /// @returns プレイヤーの性別
     virtual Gender GetGender() const = 0;
+
+    virtual plugins::TargetHandle* Create() const override {
+        return CreatePlayer().release();
+    }
 };
 
 } // namespace digitalcurling::players
