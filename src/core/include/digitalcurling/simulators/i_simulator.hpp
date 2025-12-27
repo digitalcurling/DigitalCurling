@@ -15,6 +15,7 @@
 #include "digitalcurling/stone.hpp"
 #include "digitalcurling/stone_coordinate.hpp"
 #include "digitalcurling/vector2.hpp"
+#include "digitalcurling/plugins/i_plugin_object.hpp"
 
 namespace digitalcurling::simulators {
 
@@ -31,11 +32,10 @@ class ISimulatorStorage;
 /// 状態の復元には `ISimulatorStorage::CreateSimulator()` または `ISimulator::Load()` を使用してください。
 ///
 /// @sa ISimulatorFactory
-class ISimulator {
+class ISimulator : public plugins::IPluginObject, public plugins::SimulatorHandle {
+
+// types ---
 public:
-
-    // types ---
-
     /// @brief ストーンの位置，角度，速度，角速度を格納します
     struct StoneState : public Stone {
         /// @brief 速度(m/s)
@@ -122,7 +122,7 @@ protected:
     ISimulator& operator = (ISimulator const&) = default;
 
 public:
-    virtual ~ISimulator() = default;
+    virtual ~ISimulator() override = default;
 
     /// @brief 全ストーンの情報を設定する
     /// @param[in] stones 全ストーンの情報
@@ -166,7 +166,7 @@ public:
     /// シミュレータIDはシミュレータの種類ごとに異なります。
     ///
     /// @returns シミュレータID
-    virtual std::string GetSimulatorId() const = 0;
+    virtual std::string GetSimulatorId() const { return std::string(GetId()); }
 
     /// @brief ファクトリーを得る
     ///
