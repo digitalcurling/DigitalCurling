@@ -9,10 +9,11 @@
 #include <memory>
 #include <string>
 #include "digitalcurling/common.hpp"
+#include "digitalcurling/plugins/i_plugin_object.hpp"
+#include "digitalcurling/simulators/i_simulator.hpp"
 
 namespace digitalcurling::simulators {
 
-class ISimulator;
 
 /// @brief ISimulator の状態を保存するストレージインターフェース
 ///
@@ -21,16 +22,14 @@ class ISimulator;
 /// すなわち、あるストレージに保存された状態を復元した後のシミュレーションは、そのストレージに保存した時点からのシミュレーションと同じものになります。
 ///
 /// ストレージは `ISimulator` のそれぞれの実装と対応関係にあるため、 `GetSimulatorId()` で得られるIDが一致していない場合は保存/復元はできません。
-class ISimulatorStorage {
-protected:
+class ISimulatorStorage : public plugins::IPluginObjectCreator, public plugins::StorageHandle {
+public:
     ISimulatorStorage() = default;
     /// @brief コピーコンストラクタ
     ISimulatorStorage(ISimulatorStorage const&) = default;
     /// @brief コピー代入演算子
     ISimulatorStorage & operator = (ISimulatorStorage const&) = default;
-
-public:
-    virtual ~ISimulatorStorage() = default;
+    virtual ~ISimulatorStorage() override = default;
 
     /// @brief このストレージが持つ状態と同じ状態を持つシミュレータを生成する
     /// @returns 生成されたシミュレータ
@@ -41,7 +40,11 @@ public:
     /// シミュレータIDはシミュレータの種類ごとに異なります。
     ///
     /// @returns シミュレータID
-    virtual std::string GetSimulatorId() const = 0;
+    virtual std::string GetSimulatorId() const { return std::string(GetId()); }
+
+    virtual plugins::TargetHandle* Create() const override {
+        return CreateSimulator().release();
+    }
 };
 
 } // namespace digitalcurling::simulators
