@@ -34,15 +34,15 @@ jobs:
       run: sudo apt-get update; sudo apt-get install -y doxygen
       
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DDIGITALCURLING3_BUILD_DOC=ON
+      run: cmake -B ${{github.workspace}}/build -DDIGITALCURLING3_BUILD_DOCS=ON
 
     - name: Build Doc
-      run: cmake --build ${{github.workspace}}/build --target digitalcurling3__doc
+      run: cmake --build ${{github.workspace}}/build --target digitalcurling3_docs
       
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
       with: 
-        path: ${{github.workspace}}/build/doc/html
+        path: ${{github.workspace}}/build/docs/html
     
   # Deployment job
   deploy:

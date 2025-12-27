@@ -26,7 +26,7 @@ if(DIGITALCURLING3_BUILD_TEST)
 endif()
 
 # documents
-option(DIGITALCURLING3_BUILD_DOC "Build digital curling document" OFF)
-if(DIGITALCURLING3_BUILD_DOC)
-    add_subdirectory(doc)
+option(DIGITALCURLING3_BUILD_DOCS "Build digital curling document" OFF)
+if(DIGITALCURLING3_BUILD_DOCS)
+    add_subdirectory(docs)
 endif()
