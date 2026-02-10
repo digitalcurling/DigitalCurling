@@ -1,3 +1,6 @@
+// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
+// SPDX-License-Identifier: MIT
+
 #include "common.hpp"
 
 namespace dc = digitalcurling3;

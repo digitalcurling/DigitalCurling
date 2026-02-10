@@ -1,4 +1,7 @@
-﻿#include "common.hpp"
+﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
+// SPDX-License-Identifier: MIT
+
+#include "common.hpp"
 
 using digitalcurling3::Vector2;
 namespace dcco = digitalcurling3::coordinate;
