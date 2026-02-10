@@ -4,8 +4,7 @@
 /// \file
 /// \brief Result を定義します
 
-#ifndef DIGITALCURLING3_GAME_RESULT_HPP
-#define DIGITALCURLING3_GAME_RESULT_HPP
+#pragma once
 
 #include <cstdint>
 #include "common.hpp"
@@ -53,5 +52,3 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
 /// \endcond
 
 } // namespace digitalcurling3
-
-#endif // DIGITALCURLING3_GAME_RESULT_HPP

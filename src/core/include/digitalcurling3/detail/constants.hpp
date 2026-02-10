@@ -4,8 +4,7 @@
 /// \file
 /// \brief 定数を定義します
 
-#ifndef DIGITALCURLING3_CONSTANTS_HPP
-#define DIGITALCURLING3_CONSTANTS_HPP
+#pragma once
 
 namespace digitalcurling3 {
 
@@ -17,5 +16,3 @@ constexpr float kPi = 3.14159265359f;
 
 
 } // namespace digitalcurling3
-
-#endif // DIGITALCURLING3_CONSTANTS_HPP

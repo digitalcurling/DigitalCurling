@@ -4,8 +4,7 @@
 /// \file
 /// \brief IPlayerStorage を定義します
 
-#ifndef DIGITALCURLING3_I_PLAYER_STORAGE_HPP
-#define DIGITALCURLING3_I_PLAYER_STORAGE_HPP
+#pragma once
 
 #include <memory>
 #include <string>
@@ -47,5 +46,3 @@ public:
 };
 
 } // namespace digitalcurling3
-
-#endif // DIGITALCURLING3_I_SIMULATOR_STORAGE_HPP

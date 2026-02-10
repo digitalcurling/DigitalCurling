@@ -4,8 +4,7 @@
 /// \file
 /// \brief GameSetting を定義します
 
-#ifndef DIGITALCURLING3_GAME_SETTING_HPP
-#define DIGITALCURLING3_GAME_SETTING_HPP
+#pragma once
 
 #include <cstdint>
 #include <chrono>
@@ -66,5 +65,3 @@ inline void from_json(nlohmann::json const& j, GameSetting& v) {
 /// \endcond
 
 } // namespace digitalcurling3
-
-#endif // DIGITALCURLING3_GAME_SETTING_HPP

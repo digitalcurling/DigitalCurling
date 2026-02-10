@@ -4,8 +4,7 @@
 /// \file
 /// \brief Concede を定義します
 
-#ifndef DIGITALCURLING3_MOVES_CONCEDE_HPP
-#define DIGITALCURLING3_MOVES_CONCEDE_HPP
+#pragma once
 
 #include <string_view>
 
@@ -20,5 +19,3 @@ struct Concede {
 };
 
 } // namespace digitalcurling3::moves
-
-#endif // DIGITALCURLING3_MOVES_CONCEDE_HPP

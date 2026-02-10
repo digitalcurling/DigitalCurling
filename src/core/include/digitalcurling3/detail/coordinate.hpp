@@ -4,8 +4,7 @@
 /// \file
 /// \brief 座標変換関連を定義します
 
-#ifndef DIGITALCURLING3_COORDINATE_HPP
-#define DIGITALCURLING3_COORDINATE_HPP
+#pragma once
 
 #include <cassert>
 #include "vector2.hpp"
@@ -253,5 +252,3 @@ constexpr float GetBackBoardY(bool side, Id coord) noexcept
 
 
 } // namespace digitalcurling3::coordinate
-
-#endif // DIGITALCURLING3_COORDINATE_HPP

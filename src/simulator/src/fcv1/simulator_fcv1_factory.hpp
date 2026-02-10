@@ -4,8 +4,7 @@
 /// \file
 /// \brief SimulatorFCV1Factory を定義します
 
-#ifndef DIGITALCURLING3_SIMULATORS_SIMULATOR_FCV1_FACTORY_HPP
-#define DIGITALCURLING3_SIMULATORS_SIMULATOR_FCV1_FACTORY_HPP
+#pragma once
 
 #include <string_view>
 #include "../json/common.hpp"
@@ -50,5 +49,3 @@ void from_json(nlohmann::json const&, SimulatorFCV1Factory &);
 /// \endcond
 
 } // namespace digitalcurling3::simulators
-
-#endif // DIGITALCURLING3_SIMULATORS_SIMULATOR_FCV1_FACTORY_HPP

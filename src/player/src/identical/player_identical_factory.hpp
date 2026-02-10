@@ -4,8 +4,7 @@
 /// \file
 /// \brief PlayerIdenticalFactory を定義します
 
-#ifndef DIGITALCURLING3_PLAYERS_PLAYER_IDENTICAL_FACTORY_HPP
-#define DIGITALCURLING3_PLAYERS_PLAYER_IDENTICAL_FACTORY_HPP
+#pragma once
 
 #include <memory>
 #include "../json/common.hpp"
@@ -41,5 +40,3 @@ void from_json(nlohmann::json const&, PlayerIdenticalFactory &);
 /// \endcond
 
 } // namespace digitalcurling3::players
-
-#endif // DIGITALCURLING3_PLAYERS_PLAYER_IDENTICAL_FACTORY_HPP

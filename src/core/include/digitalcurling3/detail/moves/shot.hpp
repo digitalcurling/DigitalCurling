@@ -4,8 +4,7 @@
 /// \file
 /// \brief Shot を定義します
 
-#ifndef DIGITALCURLING3_MOVES_SHOT_HPP
-#define DIGITALCURLING3_MOVES_SHOT_HPP
+#pragma once
 
 #include <cstdint>
 #include <string_view>
@@ -42,5 +41,3 @@ NLOHMANN_JSON_SERIALIZE_ENUM(Shot::Rotation, {
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Shot, velocity, rotation)
 
 } // namespace digitalcurling3::moves
-
-#endif // DIGITALCURLING3_MOVES_SHOT_HPP

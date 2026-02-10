@@ -4,8 +4,7 @@
 /// \file
 /// \brief IPlayerFactory を定義します
 
-#ifndef DIGITALCURLING3_I_PLAYER_FACTORY_HPP
-#define DIGITALCURLING3_I_PLAYER_FACTORY_HPP
+#pragma once
 
 #include <memory>
 #include <string>
@@ -48,5 +47,3 @@ public:
 };
 
 } // namespace digitalcurling3
-
-#endif // DIGITALCURLING3_I_PLAYER_FACTORY_HPP

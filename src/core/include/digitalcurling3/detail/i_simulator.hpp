@@ -4,8 +4,7 @@
 /// \file
 /// \brief ISimulator を定義します
 
-#ifndef DIGITALCURLING3_I_SIMULATOR_HPP
-#define DIGITALCURLING3_I_SIMULATOR_HPP
+#pragma once
 
 #include <cstdint>
 #include <array>
@@ -242,5 +241,3 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
 )
 
 } // namespace digitalcurling3
-
-#endif // DIGITALCURLING3_I_SIMULATOR_HPP
