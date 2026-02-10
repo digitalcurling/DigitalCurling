@@ -4,8 +4,7 @@
 /// \file
 /// \brief バージョン取得関数を定義します
 
-#ifndef DIGITALCURLING3_VERSION_HPP
-#define DIGITALCURLING3_VERSION_HPP
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -41,5 +40,3 @@ inline std::uint32_t GetVersionPatch();
 } // namespace digitalcurling3
 
 #include "digitalcurling3/detail/version_info.hpp"
-
-#endif // DIGITALCURLING3_VERSION_HPP

@@ -4,8 +4,7 @@
 /// \file
 /// \brief IShotRandomizer を定義します
 
-#ifndef DIGITALCURLING3_I_PLAYER_HPP
-#define DIGITALCURLING3_I_PLAYER_HPP
+#pragma once
 
 #include <string>
 #include <memory>
@@ -74,5 +73,3 @@ public:
 
 
 } // namespace digitalcurling3
-
-#endif // DIGITALCURLING3_I_PLAYER_HPP

@@ -4,8 +4,7 @@
 /// \file
 /// \brief Transform を定義します
 
-#ifndef DIGITALCURLING3_TRANSFORM_HPP
-#define DIGITALCURLING3_TRANSFORM_HPP
+#pragma once
 
 #include "vector2.hpp"
 #include "nlohmann/json.hpp"
@@ -38,5 +37,3 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
 )
 
 } // namespace digitalcurling3
-
-#endif // DIGITALCURLING3_TRANSFORM_HPP

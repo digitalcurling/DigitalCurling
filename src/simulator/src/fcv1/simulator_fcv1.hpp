@@ -1,8 +1,7 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-#ifndef DIGITALCURLING3_SRC_SIMULATORS_SIMULATOR_FCV1_HPP
-#define DIGITALCURLING3_SRC_SIMULATORS_SIMULATOR_FCV1_HPP
+#pragma once
 
 #include "digitalcurling3/detail/i_simulator.hpp"
 #include "digitalcurling3/detail/simulators/simulator_fcv1_factory.hpp"
@@ -67,5 +66,3 @@ private:
 };
 
 } // namespace digitalcurling3::simulation
-
-#endif // DIGITALCURLING3_SRC_SIMULATORS_SIMULATOR_FCV1_HPP

@@ -1,8 +1,7 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-#ifndef DIGITALCURLING3_SRC_BOX2D_UTIL_HPP
-#define DIGITALCURLING3_SRC_BOX2D_UTIL_HPP
+#pragma once
 
 #include "box2d/box2d.h"
 #include "digitalcurling3/detail/vector2.hpp"
@@ -20,5 +19,3 @@ inline Vector2 ToDC2Vector2(b2Vec2 v)
 }
 
 } // namespace digitalcurling3
-
-#endif // DIGITALCURLING3_SRC_BOX2D_UTIL_HPP

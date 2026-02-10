@@ -4,8 +4,7 @@
 /// \file
 /// \brief Vector2 を定義します
 
-#ifndef DIGITALCURLING3_VECTOR2_HPP
-#define DIGITALCURLING3_VECTOR2_HPP
+#pragma once
 
 #include <cmath>
 #include "common.hpp"
@@ -149,5 +148,3 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(
 )
 
 } // namespace digitalcurling3
-
-#endif // DIGITALCURLING3_VECTOR2_HPP

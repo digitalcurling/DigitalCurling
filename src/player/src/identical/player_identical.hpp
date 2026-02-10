@@ -1,8 +1,7 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-#ifndef DIGITALCURLING3_SRC_PLAYERS_PLAYER_IDENTICAL_HPP
-#define DIGITALCURLING3_SRC_PLAYERS_PLAYER_IDENTICAL_HPP
+#pragma once
 
 #include "digitalcurling3/detail/i_player.hpp"
 
@@ -25,5 +24,3 @@ public:
 
 
 } // namespace digitalcurling3::players
-
-#endif // DIGITALCURLING3_SRC_PLAYERS_PLAYER_IDENTICAL_HPP

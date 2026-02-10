@@ -4,8 +4,7 @@
 /// \file
 /// \brief GameState を定義します
 
-#ifndef DIGITALCURLING3_GAME_STATE_HPP
-#define DIGITALCURLING3_GAME_STATE_HPP
+#pragma once
 
 #include <cstdint>
 #include <array>
@@ -342,5 +341,3 @@ inline void from_json(nlohmann::json const& j, GameState& v) {
 /// \endcond
 
 } // namespace digitalcurling3
-
-#endif // DIGITALCURLING3_GAME_STATE_HPP

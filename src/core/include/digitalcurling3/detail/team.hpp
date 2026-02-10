@@ -4,8 +4,7 @@
 /// \file
 /// \brief Team を定義します
 
-#ifndef DIGITALCURLING3_TEAM_HPP
-#define DIGITALCURLING3_TEAM_HPP
+#pragma once
 
 #include <cstdint>
 #include <cassert>
@@ -74,5 +73,3 @@ NLOHMANN_JSON_SERIALIZE_ENUM(Team, {
 })
 
 } // namespace digitalcurling3
-
-#endif // DIGITALCURLING3_TEAM_HPP

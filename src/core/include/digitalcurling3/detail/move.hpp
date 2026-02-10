@@ -4,8 +4,7 @@
 /// \file
 /// \brief Move を定義します
 
-#ifndef DIGITALCURLING3_MOVE_HPP
-#define DIGITALCURLING3_MOVE_HPP
+#pragma once
 
 #include <variant>
 #include "moves/shot.hpp"
@@ -61,6 +60,3 @@ struct adl_serializer<digitalcurling3::Move> {
 
 } // namespace nlohmann
 /// \endcond
-
-
-#endif // DIGITALCURLING3_MOVE_HPP

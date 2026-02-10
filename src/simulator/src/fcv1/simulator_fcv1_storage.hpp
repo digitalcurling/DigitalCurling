@@ -1,8 +1,7 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-#ifndef DIGITALCURLING3_SRC_SIMULATORS_SIMULATOR_FCV1_STORAGE_HPP
-#define DIGITALCURLING3_SRC_SIMULATORS_SIMULATOR_FCV1_STORAGE_HPP
+#pragma once
 
 #include "digitalcurling3/detail/i_simulator.hpp"
 #include "digitalcurling3/detail/i_simulator_storage.hpp"
@@ -37,5 +36,3 @@ void to_json(nlohmann::json &, SimulatorFCV1Storage const&);
 void from_json(nlohmann::json const&, SimulatorFCV1Storage &);
 
 } // namespace digitalcurling3::simulators
-
-#endif // DIGITALCURLING3_SRC_SIMULATORS_SIMULATOR_FCV1_STORAGE_HPP

@@ -4,8 +4,7 @@
 /// \file
 /// \brief PlayerNormalDist を定義します
 
-#ifndef DIGITALCURLING3_SRC_PLAYERS_PLAYER_NORMAL_DIST_HPP
-#define DIGITALCURLING3_SRC_PLAYERS_PLAYER_NORMAL_DIST_HPP
+#pragma once
 
 #include <random>
 #include <optional>
@@ -53,5 +52,3 @@ private:
 
 
 } // namespace digitalcurling3::players
-
-#endif // DIGITALCURLING3_SRC_PLAYERS_PLAYER_NORMAL_DIST_HPP

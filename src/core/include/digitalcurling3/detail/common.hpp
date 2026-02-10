@@ -4,8 +4,7 @@
 /// \file
 /// \brief 必要なJSON変換関数を定義します
 
-#ifndef DIGITALCURLING3_JSON_COMMON_HPP
-#define DIGITALCURLING3_JSON_COMMON_HPP
+#pragma once
 
 #include <optional>
 #include <chrono>
@@ -65,5 +64,3 @@ struct adl_serializer<std::chrono::milliseconds> {
 
 } // namespace nlohmann
 /// \endcond
-
-#endif // DIGITALCURLING3_JSON_COMMON_HPP

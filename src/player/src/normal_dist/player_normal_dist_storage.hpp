@@ -1,8 +1,7 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-#ifndef DIGITALCURLING3_SRC_PLAYERS_PLAYER_NORMAL_DIST_STORAGE_HPP
-#define DIGITALCURLING3_SRC_PLAYERS_PLAYER_NORMAL_DIST_STORAGE_HPP
+#pragma once
 
 #include "digitalcurling3/detail/i_player_storage.hpp"
 #include "digitalcurling3/detail/players/player_normal_dist_factory.hpp"
@@ -40,6 +39,3 @@ void to_json(nlohmann::json &, PlayerNormalDistStorage const&);
 void from_json(nlohmann::json const&, PlayerNormalDistStorage &);
 
 } // namespace digitalcurling3::players
-
-
-#endif // DIGITALCURLING3_SRC_PLAYERS_PLAYER_NORMAL_DIST_STORAGE_HPP

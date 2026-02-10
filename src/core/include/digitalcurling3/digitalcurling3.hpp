@@ -4,8 +4,7 @@
 /// \file
 /// \brief ユーザーがインクルードするヘッダーファイルです
 
-#ifndef DIGITALCURLING3_DIGITALCURLING3_HPP
-#define DIGITALCURLING3_DIGITALCURLING3_HPP
+#pragma once
 
 #include "detail/moves/concede.hpp"
 #include "detail/moves/shot.hpp"
@@ -26,5 +25,3 @@
 #include "detail/transform.hpp"
 #include "detail/vector2.hpp"
 #include "detail/version.hpp"
-
-#endif // DIGITALCURLING3_DIGITALCURLING3_HPP
