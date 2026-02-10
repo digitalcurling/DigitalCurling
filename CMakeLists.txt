@@ -15,14 +15,14 @@ set(CMAKE_CXX_VISIBLIRY_PRESET hidden)
 set(CMAKE_VISIBLITY_INLINES_HIDDEN TRUE)
 
 # main source
-add_subdirectory(src) # digitalcurling3::digitalcurling3
+add_subdirectory(src/core/src)
 
 # tests
 option(DIGITALCURLING3_BUILD_TEST "Build digital curling test" OFF)
 if(DIGITALCURLING3_BUILD_TEST)
     enable_testing()
     include(GoogleTest)
-    add_subdirectory(test)
+    add_subdirectory(src/core/test)
 endif()
 
 # documents
