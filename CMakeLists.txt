@@ -1,21 +1,34 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.26)
 
 project(digitalcurling3
     VERSION 1.0.0
     LANGUAGES CXX
 )
 
-# use C++ 17 standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+# --- Build options ---
+option(DIGITALCURLING3_BUILD_TEST "Build tests for DigitalCurling system" ${PROJECT_IS_TOP_LEVEL})
+option(DIGITALCURLING3_BUILD_DOCS "Build documents for DigitalCurling system" OFF)
 
-# symbol visiblity
-set(CMAKE_CXX_VISIBLIRY_PRESET hidden)
-set(CMAKE_VISIBLITY_INLINES_HIDDEN TRUE)
+# --- Build settings ---
+set(BUILD_SHARED_LIBS OFF)
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/utf-8>)
 
-# tests (prepare)
-option(DIGITALCURLING3_BUILD_TEST "Build digital curling test" OFF)
+if(NOT DEFINED CMAKE_CXX_STANDARD)
+    set(CMAKE_CXX_STANDARD 17)
+endif()
+if(NOT DEFINED CMAKE_CXX_STANDARD_REQUIRED)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+endif()
+
+function(digitalcurling3_apply_standard_settings target_name)
+    set_target_properties(${target_name} PROPERTIES
+        CXX_EXTENSIONS OFF
+        CXX_VISIBILITY_PRESET hidden
+        VISIBILITY_INLINES_HIDDEN TRUE
+    )
+endfunction()
+
+# --- Test preparations ---
 if(DIGITALCURLING3_BUILD_TEST)
     enable_testing()
     add_subdirectory("${PROJECT_SOURCE_DIR}/extern/googletest" "${PROJECT_BINARY_DIR}/extern/googletest")
@@ -30,17 +43,18 @@ if(DIGITALCURLING3_BUILD_TEST)
     target_link_libraries(digitalcurling3_test PRIVATE GTest::gtest_main GTest::gmock)
 endif()
 
-# main source
+
+# --- Build libraries ---
 add_subdirectory(src/core)
 
-# tests
+
+# --- Build tests ---
 if(DIGITALCURLING3_BUILD_TEST)
     include(GoogleTest)
     gtest_discover_tests(digitalcurling3_test)
 endif()
 
-# documents
-option(DIGITALCURLING3_BUILD_DOCS "Build digital curling document" OFF)
+# --- Create documents ---
 if(DIGITALCURLING3_BUILD_DOCS)
     add_subdirectory(docs)
 endif()

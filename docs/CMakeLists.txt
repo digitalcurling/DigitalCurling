@@ -1,11 +1,11 @@
-# Doxygen
+# --- Doxygen setup ---
 find_package(Doxygen)
 if(NOT DOXYGEN_FOUND)
     message(WARNING "Doxygen not found, documentation will not be generated")
     return()
 endif()
 
-# Doxyfile options
+# --- Doxyfile configuration ---
 set(DOXYGEN_PROJECT_NAME "DigitalCurling3")
 set(DOXYGEN_PROJECT_NUMBER ${PROJECT_VERSION})
 set(DOXYGEN_PROJECT_BRIEF "A curling simulation system")
@@ -21,7 +21,7 @@ set(DOXYGEN_STRIP_FROM_PATH "${CMAKE_SOURCE_DIR}/src")
 set(DOXYGEN_FULL_PATH_NAMES YES)
 set(DOXYGEN_FILE_PATTERNS "*.hpp" "*.dox")
 
-# configure doxygen
+# --- Create documents ---
 doxygen_add_docs(digitalcurling3_docs
     "${CMAKE_SOURCE_DIR}/src/core/include"
     mainpage.md
@@ -31,12 +31,10 @@ doxygen_add_docs(digitalcurling3_docs
     json.md
 )
 
-# copy logo.svg
+# --- Copy static files ---
 add_custom_command(TARGET digitalcurling3_docs PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/logo.svg ${CMAKE_CURRENT_BINARY_DIR}
 )
-
-# copy figures to binary directory
 add_custom_command(TARGET digitalcurling3_docs POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/fig ${CMAKE_CURRENT_BINARY_DIR}/html/fig
 )
