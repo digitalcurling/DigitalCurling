@@ -8,6 +8,7 @@
 
 #include <cstdint>
 #include <chrono>
+#include <nlohmann/json.hpp>
 #include "digitalcurling/common.hpp"
 #include "digitalcurling/team.hpp"
 

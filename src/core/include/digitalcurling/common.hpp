@@ -6,8 +6,10 @@
 
 #pragma once
 
-#include <optional>
+#include <cmath>
 #include <chrono>
+#include <optional>
+#include <string>
 #include <nlohmann/json.hpp>
 
 /// @cond Doxygen_Suppress

@@ -11,6 +11,7 @@
 #include <cassert>
 #include <string>
 #include <type_traits>
+#include <nlohmann/json.hpp>
 #include "digitalcurling/common.hpp"
 
 namespace digitalcurling {

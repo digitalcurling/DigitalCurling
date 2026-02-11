@@ -10,6 +10,7 @@
 #include <optional>
 #include <chrono>
 #include <stdexcept>
+#include <nlohmann/json.hpp>
 #include "digitalcurling/common.hpp"
 #include "digitalcurling/game_scores.hpp"
 #include "digitalcurling/game_setting.hpp"

@@ -7,7 +7,7 @@
 #pragma once
 
 #include <cmath>
-#include "digitalcurling/common.hpp"
+#include <nlohmann/json.hpp>
 
 namespace digitalcurling {
 

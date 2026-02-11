@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include <cstdint>
+#include <cmath>
 #include <string_view>
-#include "digitalcurling/common.hpp"
+#include <nlohmann/json.hpp>
 #include "digitalcurling/vector2.hpp"
 
 namespace digitalcurling::moves {
