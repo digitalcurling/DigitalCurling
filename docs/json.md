@@ -7,7 +7,7 @@
 一部を除きほぼすべての構造体/クラスは下記の手順でJSONに変換できます．
 
 ```cpp
-namespace dc = digitalcurling3;
+namespace dc = digitalcurling;
 
 dc::GameSetting game_setting;  // 変換元のインスタンス
 

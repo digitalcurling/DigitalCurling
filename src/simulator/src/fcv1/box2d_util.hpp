@@ -4,9 +4,9 @@
 #pragma once
 
 #include "box2d/box2d.h"
-#include "digitalcurling3/detail/vector2.hpp"
+#include "digitalcurling/detail/vector2.hpp"
 
-namespace digitalcurling3 {
+namespace digitalcurling {
 
 inline b2Vec2 ToB2Vec2(Vector2 v)
 {
@@ -18,4 +18,4 @@ inline Vector2 ToDC2Vector2(b2Vec2 v)
     return { v.x, v.y };
 }
 
-} // namespace digitalcurling3
+} // namespace digitalcurling

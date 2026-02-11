@@ -9,7 +9,7 @@
 #include <cassert>
 #include "vector2.hpp"
 
-namespace digitalcurling3::coordinate {
+namespace digitalcurling::coordinate {
 
 namespace detail {
 
@@ -237,4 +237,4 @@ constexpr float GetBackBoardY(bool side, Id coord) noexcept
 
 
 
-} // namespace digitalcurling3::coordinate
+} // namespace digitalcurling::coordinate

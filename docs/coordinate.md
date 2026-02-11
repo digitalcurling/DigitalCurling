@@ -30,15 +30,15 @@
 
 名前 | enum | 説明
 -----|------|--------------
-シミュレーション座標系 | [coordinate::Id::kSimulation](@ref digitalcurling3::coordinate::Id::kSimulation) | 物理シミュレーションを行う座標系．[ISimulator](@ref digitalcurling3::ISimulator)への入出力はこの座標系で行う．
-ショット座標系0 | [coordinate::Id::kShot0](@ref digitalcurling3::coordinate::Id::kShot0) | 偶数エンドで思考エンジンに送信される座標はこの座標系上のものです
-ショット座標系1 | [coordinate::Id::kShot1](@ref digitalcurling3::coordinate::Id::kShot1) | 奇数エンドで思考エンジンに送信される座標はこの座標系上のものです
+シミュレーション座標系 | [coordinate::Id::kSimulation](@ref digitalcurling::coordinate::Id::kSimulation) | 物理シミュレーションを行う座標系．[ISimulator](@ref digitalcurling::ISimulator)への入出力はこの座標系で行う．
+ショット座標系0 | [coordinate::Id::kShot0](@ref digitalcurling::coordinate::Id::kShot0) | 偶数エンドで思考エンジンに送信される座標はこの座標系上のものです
+ショット座標系1 | [coordinate::Id::kShot1](@ref digitalcurling::coordinate::Id::kShot1) | 奇数エンドで思考エンジンに送信される座標はこの座標系上のものです
 
 各座標系の原点と座標軸の方向は次の図の通りです．
 
 ![座標系](fig/coord_all.png)
 
 
-それぞれの座標系間の座標変換は[名前空間coordinate](@ref digitalcurling3::coordinate)内の関数で行うことができます．
+それぞれの座標系間の座標変換は[名前空間coordinate](@ref digitalcurling::coordinate)内の関数で行うことができます．
 
 

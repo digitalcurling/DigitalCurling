@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include "digitalcurling3/detail/i_simulator.hpp"
-#include "digitalcurling3/detail/simulators/simulator_fcv1_factory.hpp"
+#include "digitalcurling/detail/i_simulator.hpp"
+#include "digitalcurling/detail/simulators/simulator_fcv1_factory.hpp"
 #include "simulators_simulator_fcv1_storage.hpp"
 #include "box2d_util.hpp"
 
-namespace digitalcurling3::simulators {
+namespace digitalcurling::simulators {
 
 class SimulatorFCV1Storage;
 
@@ -65,4 +65,4 @@ private:
     void UpdateWithStorage();
 };
 
-} // namespace digitalcurling3::simulation
+} // namespace digitalcurling::simulation

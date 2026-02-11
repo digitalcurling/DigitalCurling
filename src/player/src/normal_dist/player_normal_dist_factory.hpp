@@ -12,7 +12,7 @@
 #include "../json/common.hpp"
 #include "../i_player_factory.hpp"
 
-namespace digitalcurling3::players {
+namespace digitalcurling::players {
 
 /// \brief プレイヤーNormal DistのID
 constexpr std::string_view kPlayerNormalDistId = "normal_dist";
@@ -55,4 +55,4 @@ void to_json(nlohmann::json &, PlayerNormalDistFactory const&);
 void from_json(nlohmann::json const&, PlayerNormalDistFactory &);
 /// \endcond
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling::players

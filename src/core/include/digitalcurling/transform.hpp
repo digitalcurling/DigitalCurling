@@ -9,7 +9,7 @@
 #include "vector2.hpp"
 #include "nlohmann/json.hpp"
 
-namespace digitalcurling3 {
+namespace digitalcurling {
 
 
 /// @brief 位置と角度を格納する構造体
@@ -34,4 +34,4 @@ struct Transform {
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Transform, position, angle)
 /// @endcond
 
-} // namespace digitalcurling3
+} // namespace digitalcurling

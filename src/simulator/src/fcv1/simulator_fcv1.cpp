@@ -6,7 +6,7 @@
 #include <cmath>
 #include <limits>
 
-namespace digitalcurling3::simulators {
+namespace digitalcurling::simulators {
 
 namespace {
 
@@ -287,4 +287,4 @@ void SimulatorFCV1::UpdateWithStorage()
 
 
 
-} // namespace digitalcurling3::simulators
+} // namespace digitalcurling::simulators

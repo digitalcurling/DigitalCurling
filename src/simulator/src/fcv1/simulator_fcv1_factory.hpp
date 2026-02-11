@@ -10,7 +10,7 @@
 #include "../json/common.hpp"
 #include "../i_simulator_factory.hpp"
 
-namespace digitalcurling3::simulators {
+namespace digitalcurling::simulators {
 
 /// \brief シミュレータFCV1のID
 constexpr std::string_view kSimulatorFCV1Id = "fcv1";
@@ -48,4 +48,4 @@ void to_json(nlohmann::json &, SimulatorFCV1Factory const&);
 void from_json(nlohmann::json const&, SimulatorFCV1Factory &);
 /// \endcond
 
-} // namespace digitalcurling3::simulators
+} // namespace digitalcurling::simulators

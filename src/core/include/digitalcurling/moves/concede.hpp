@@ -8,7 +8,7 @@
 
 #include <string_view>
 
-namespace digitalcurling3::moves {
+namespace digitalcurling::moves {
 
 
 /// @brief 行動：コンシード
@@ -18,4 +18,4 @@ struct Concede {
     static constexpr std::string_view kTypeName = "concede";
 };
 
-} // namespace digitalcurling3::moves
+} // namespace digitalcurling::moves

@@ -5,7 +5,7 @@
 
 #include "simulators_simulator_fcv1.hpp"
 
-namespace digitalcurling3::simulators {
+namespace digitalcurling::simulators {
 
 SimulatorFCV1Storage::SimulatorFCV1Storage(SimulatorFCV1Factory const& factory)
     : factory(factory)
@@ -34,4 +34,4 @@ void from_json(nlohmann::json const& j, SimulatorFCV1Storage & v)
     j.at("collisions").get_to(v.collisions);
 }
 
-} // namespace digitalcurling3::simulators
+} // namespace digitalcurling::simulators

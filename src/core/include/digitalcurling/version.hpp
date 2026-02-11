@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <string>
 
-namespace digitalcurling3 {
+namespace digitalcurling {
 
 /// @brief バージョンを得る
 /// @returns バージョン文字列(例: "1.0.0")
@@ -27,6 +27,6 @@ inline std::uint32_t GetVersionMinor();
 /// @returns パッチバージョン
 inline std::uint32_t GetVersionPatch();
 
-} // namespace digitalcurling3
+} // namespace digitalcurling
 
 #include "digitalcurling/detail/version_info.hpp"

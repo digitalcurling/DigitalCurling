@@ -3,19 +3,19 @@
 
 #include "digitalcurling/version.hpp"
 
-std::string digitalcurling3::GetVersion()
+std::string digitalcurling::GetVersion()
 {
     return "@digitalcurling_VERSION@";
 }
-std::uint32_t digitalcurling3::GetVersionMajor()
+std::uint32_t digitalcurling::GetVersionMajor()
 {
     return @digitalcurling_VERSION_MAJOR@;
 }
-std::uint32_t digitalcurling3::GetVersionMinor()
+std::uint32_t digitalcurling::GetVersionMinor()
 {
     return @digitalcurling_VERSION_MINOR@;
 }
-std::uint32_t digitalcurling3::GetVersionPatch()
+std::uint32_t digitalcurling::GetVersionPatch()
 {
     return @digitalcurling_VERSION_PATCH@;
 }

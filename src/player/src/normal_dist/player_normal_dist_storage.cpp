@@ -4,7 +4,7 @@
 #include "players_player_normal_dist_storage.hpp"
 #include "players_player_normal_dist.hpp"
 
-namespace digitalcurling3::players {
+namespace digitalcurling::players {
 
 std::unique_ptr<IPlayer> PlayerNormalDistStorage::CreatePlayer() const
 {
@@ -34,4 +34,4 @@ void from_json(nlohmann::json const& j, PlayerNormalDistStorage & v)
     j.at("angle_dist_data").get_to(v.angle_dist_data);
 }
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling::players

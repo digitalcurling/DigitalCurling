@@ -8,10 +8,10 @@
 
 #include <random>
 #include <optional>
-#include "digitalcurling3/detail/i_player.hpp"
-#include "digitalcurling3/detail/players/player_normal_dist_factory.hpp"
+#include "digitalcurling/detail/i_player.hpp"
+#include "digitalcurling/detail/players/player_normal_dist_factory.hpp"
 
-namespace digitalcurling3::players {
+namespace digitalcurling::players {
 
 class PlayerNormalDistStorage;
 
@@ -51,4 +51,4 @@ private:
 
 
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling::players

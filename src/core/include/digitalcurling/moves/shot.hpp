@@ -11,7 +11,7 @@
 #include "../common.hpp"
 #include "../vector2.hpp"
 
-namespace digitalcurling3::moves {
+namespace digitalcurling::moves {
 
 
 /// @brief 行動：ショット
@@ -45,4 +45,4 @@ NLOHMANN_JSON_SERIALIZE_ENUM(Shot::Rotation, {
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Shot, velocity, rotation)
 /// @endcond
 
-} // namespace digitalcurling3::moves
+} // namespace digitalcurling::moves

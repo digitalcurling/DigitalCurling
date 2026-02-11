@@ -9,7 +9,7 @@
 #include <cmath>
 #include "common.hpp"
 
-namespace digitalcurling3 {
+namespace digitalcurling {
 
 
 /// @brief 2次元ベクトル
@@ -140,4 +140,4 @@ constexpr Vector2 operator / (Vector2 v, float f)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Vector2, x, y)
 /// @endcond
 
-} // namespace digitalcurling3
+} // namespace digitalcurling
