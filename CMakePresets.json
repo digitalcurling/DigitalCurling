@@ -1,0 +1,206 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": { "major": 3, "minor": 26, "patch": 0 },
+    "configurePresets": [
+        {
+            "name": "base-common",
+            "hidden": true,
+            "description": "Common settings for all presets",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CXX_SCAN_FOR_MODULES": "OFF",
+                "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${sourceDir}/build/${presetName}/bin",
+                "CMAKE_LIBRARY_OUTPUT_DIRECTORY": "${sourceDir}/build/${presetName}/lib",
+                "CMAKE_ARCHIVE_OUTPUT_DIRECTORY": "${sourceDir}/build/${presetName}/lib",
+                "FETCHCONTENT_BASE_DIR": "${sourceDir}/build/${presetName}/_deps",
+
+                "UUIDV7LIB_FORCE_NATIVE": "ON",
+                "DIGITALCURLING_PLUGIN_LOADER_SHARED": "ON",
+                "DIGITALCURLING_BUNDLE_PLUGINS": "ON"
+            },
+            "binaryDir": "${sourceDir}/build/${presetName}"
+        },
+        {
+            "name": "base-android",
+            "hidden": true,
+            "inherits": "base-common",
+            "cacheVariables": {
+                "CMAKE_SYSTEM_NAME": "Android",
+                "CMAKE_SYSTEM_VERSION": "28",
+                "ANDROID_PLATFORM": "android-28"
+            }
+        },
+        {
+            "name": "base-apple",
+            "hidden": true,
+            "inherits": "base-common",
+            "generator": "Xcode",
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
+        },
+        {
+            "name": "windows-x64",
+            "inherits": "base-common",
+            "displayName": "Windows x64",
+            "architecture": "x64",
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+        },
+        {
+            "name": "windows-arm64",
+            "inherits": "base-common",
+            "displayName": "Windows ARM64",
+            "architecture": "ARM64",
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+        },
+        {
+            "name": "osx-arm64",
+            "inherits": "base-apple",
+            "displayName": "macOS ARM64",
+            "cacheVariables": {
+                "CMAKE_OSX_ARCHITECTURES": "arm64"
+            }
+        },
+        {
+            "name": "osx-x64",
+            "inherits": "base-apple",
+            "displayName": "macOS x64",
+            "cacheVariables": {
+                "CMAKE_OSX_ARCHITECTURES": "x86_64"
+            }
+        },
+        {
+            "name": "linux-x64",
+            "inherits": "base-common",
+            "displayName": "Linux x64 (Native)",
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+        },
+        {
+            "name": "linux-arm64",
+            "inherits": "base-common",
+            "displayName": "Linux ARM64 (Native)",
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+        },
+        {
+            "name": "linux-x64-cross",
+            "inherits": "base-common",
+            "displayName": "Linux x64 (Crosscompile)",
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" },
+            "cacheVariables": {
+                "CMAKE_SYSTEM_NAME": "Linux",
+                "CMAKE_SYSTEM_PROCESSOR": "x86_64",
+                "CMAKE_C_COMPILER": "x86_64-linux-gnu-gcc",
+                "CMAKE_CXX_COMPILER": "x86_64-linux-gnu-g++"
+            }
+        },
+        {
+            "name": "linux-arm64-cross",
+            "inherits": "base-common",
+            "displayName": "Linux ARM64 (Crosscompile)",
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" },
+            "cacheVariables": {
+                "CMAKE_SYSTEM_NAME": "Linux",
+                "CMAKE_SYSTEM_PROCESSOR": "aarch64",
+                "CMAKE_C_COMPILER": "aarch64-linux-gnu-gcc",
+                "CMAKE_CXX_COMPILER": "aarch64-linux-gnu-g++"
+            }
+        },
+        {
+            "name": "linux-musl-x64",
+            "inherits": "base-common",
+            "displayName": "Alpine Linux x64",
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+        },
+        {
+            "name": "linux-musl-arm64",
+            "inherits": "base-common",
+            "displayName": "Alpine Linux ARM64",
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+        },
+        {
+            "name": "android-arm64",
+            "inherits": "base-android",
+            "displayName": "Android ARM64",
+            "cacheVariables": {
+                "ANDROID_ABI": "arm64-v8a"
+            }
+        },
+        {
+            "name": "android-x64",
+            "inherits": "base-android",
+            "displayName": "Android x64",
+            "cacheVariables": {
+                "ANDROID_ABI": "x86_64"
+            }
+        },
+        {
+            "name": "ios-arm64",
+            "inherits": "base-apple",
+            "displayName": "iOS Device",
+            "cacheVariables": {
+                "CMAKE_SYSTEM_NAME": "iOS",
+                "CMAKE_OSX_SYSROOT": "iphoneos",
+                "CMAKE_OSX_ARCHITECTURES": "arm64"
+            }
+        },
+        {
+            "name": "iossimulator-arm64",
+            "inherits": "base-apple",
+            "displayName": "iOS Simulator (ARM64)",
+            "cacheVariables": {
+                "CMAKE_SYSTEM_NAME": "iOS",
+                "CMAKE_OSX_SYSROOT": "iphonesimulator",
+                "CMAKE_OSX_ARCHITECTURES": "arm64"
+            }
+        },
+        {
+            "name": "iossimulator-x64",
+            "inherits": "base-apple",
+            "displayName": "iOS Simulator (x64)",
+            "cacheVariables": {
+                "CMAKE_SYSTEM_NAME": "iOS",
+                "CMAKE_OSX_SYSROOT": "iphonesimulator",
+                "CMAKE_OSX_ARCHITECTURES": "x86_64"
+            }
+        },
+        {
+            "name": "catalyst-arm64",
+            "inherits": "base-apple",
+            "displayName": "Mac Catalyst (ARM64)",
+            "cacheVariables": {
+                "CMAKE_SYSTEM_NAME": "iOS",
+                "CMAKE_OSX_SYSROOT": "macosx",
+                "CMAKE_OSX_ARCHITECTURES": "arm64",
+                "CMAKE_XCODE_ATTRIBUTE_SUPPORTS_MACCATALYST": "YES"
+            }
+        },
+        {
+            "name": "catalyst-x64",
+            "inherits": "base-apple",
+            "displayName": "Mac Catalyst (x64)",
+            "cacheVariables": {
+                "CMAKE_SYSTEM_NAME": "iOS",
+                "CMAKE_OSX_SYSROOT": "macosx",
+                "CMAKE_OSX_ARCHITECTURES": "x86_64",
+                "CMAKE_XCODE_ATTRIBUTE_SUPPORTS_MACCATALYST": "YES"
+            }
+        }
+    ],
+    "buildPresets": [
+        { "name": "windows-x64", "configurePreset": "windows-x64", "configuration": "Release" },
+        { "name": "windows-arm64", "configurePreset": "windows-arm64", "configuration": "Release" },
+        { "name": "linux-x64", "configurePreset": "linux-x64", "configuration": "Release" },
+        { "name": "linux-arm64", "configurePreset": "linux-arm64", "configuration": "Release" },
+        { "name": "linux-x64-cross", "configurePreset": "linux-x64-cross", "configuration": "Release" },
+        { "name": "linux-arm64-cross", "configurePreset": "linux-arm64-cross", "configuration": "Release" },
+        { "name": "linux-musl-x64", "configurePreset": "linux-musl-x64", "configuration": "Release" },
+        { "name": "linux-musl-arm64", "configurePreset": "linux-musl-arm64", "configuration": "Release" },
+        { "name": "android-arm64", "configurePreset": "android-arm64", "configuration": "Release" },
+        { "name": "android-x64", "configurePreset": "android-x64", "configuration": "Release" },
+        { "name": "osx-arm64", "configurePreset": "osx-arm64", "configuration": "Release" },
+        { "name": "osx-x64", "configurePreset": "osx-x64", "configuration": "Release" },
+        { "name": "ios-arm64", "configurePreset": "ios-arm64", "configuration": "Release" },
+        { "name": "iossimulator-arm64", "configurePreset": "iossimulator-arm64", "configuration": "Release" },
+        { "name": "iossimulator-x64", "configurePreset": "iossimulator-x64", "configuration": "Release" },
+        { "name": "catalyst-arm64", "configurePreset": "catalyst-arm64", "configuration": "Release" },
+        { "name": "catalyst-x64", "configurePreset": "catalyst-x64", "configuration": "Release" }
+    ]
+}
