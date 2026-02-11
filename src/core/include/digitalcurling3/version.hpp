@@ -29,4 +29,4 @@ inline std::uint32_t GetVersionPatch();
 
 } // namespace digitalcurling3
 
-#include "digitalcurling3/detail/version_info.hpp"
+#include "digitalcurling/detail/version_info.hpp"
