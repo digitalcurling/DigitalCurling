@@ -7,6 +7,7 @@ project(digitalcurling
 
 # --- Build options ---
 option(DIGITALCURLING_BUILD_PLAYERS "Build player plugins for DigitalCurling system" ON)
+option(DIGITALCURLING_BUILD_SIMULATORS "Build simulator plugins for DigitalCurling system" ON)
 set(DIGITALCURLING_PLUGIN_OUTPUT_DIR "plugins" CACHE STRING "Output directory for plugins relative to build dir")
 
 option(DIGITALCURLING_BUILD_TEST "Build tests for DigitalCurling system" ${PROJECT_IS_TOP_LEVEL})
@@ -27,7 +28,7 @@ endif()
 set(DIGITALCURLING_ACTIVE_PLUGIN_TARGETS "")
 set(DIGITALCURLING_PLUGIN_TYPE MODULE)
 
-if(DIGITALCURLING_BUILD_PLAYERS)
+if(DIGITALCURLING_BUILD_PLAYERS OR DIGITALCURLING_BUILD_SIMULATORS)
     cmake_path(ABSOLUTE_PATH DIGITALCURLING_PLUGIN_OUTPUT_DIR
             BASE_DIRECTORY "${CMAKE_BINARY_DIR}"
             OUTPUT_VARIABLE DIGITALCURLING_PLUGIN_OUTPUT_DIR_ABS)
@@ -72,6 +73,10 @@ add_subdirectory(src/plugin-api)
 
 if(DIGITALCURLING_BUILD_PLAYERS)
     add_subdirectory(src/player)
+endif()
+
+if(DIGITALCURLING_BUILD_SIMULATORS)
+    add_subdirectory(src/simulator)
 endif()
 
 

@@ -3,19 +3,25 @@
 
 #pragma once
 
-#include "box2d/box2d.h"
-#include "digitalcurling/detail/vector2.hpp"
+#include <box2d/box2d.h>
+#include "digitalcurling/vector2.hpp"
 
-namespace digitalcurling {
+namespace digitalcurling::simulators {
 
+
+/// @brief Box2D の b2Vec2 に変換する
+/// @param v ベクトル (digitalcurling::Vector2)
+/// @return ベクトル (b2Vec2)
 inline b2Vec2 ToB2Vec2(Vector2 v)
 {
     return { v.x, v.y };
 }
-
-inline Vector2 ToDC2Vector2(b2Vec2 v)
+/// @brief DigitalCurling の Vector2 に変換する
+/// @param v ベクトル (b2Vec2)
+/// @return ベクトル (digitalcurling::Vector2)
+inline Vector2 ToDigitalCurlingVector2(b2Vec2 v)
 {
     return { v.x, v.y };
 }
 
-} // namespace digitalcurling
+} // namespace digitalcurling::simulators
