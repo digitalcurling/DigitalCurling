@@ -4,7 +4,7 @@
 #include <iostream>
 #include "common.hpp"
 
-namespace dc = digitalcurling3;
+namespace dc = digitalcurling;
 using nlohmann::json;
 
 namespace {

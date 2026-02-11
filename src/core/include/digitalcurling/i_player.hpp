@@ -11,7 +11,7 @@
 #include "vector2.hpp"
 #include "moves/shot.hpp"
 
-namespace digitalcurling3 {
+namespace digitalcurling {
 
 class IPlayerFactory;
 class IPlayerStorage;
@@ -70,4 +70,4 @@ public:
     virtual void Load(IPlayerStorage const& storage) = 0;
 };
 
-} // namespace digitalcurling3
+} // namespace digitalcurling

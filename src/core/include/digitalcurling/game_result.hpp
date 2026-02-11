@@ -10,7 +10,7 @@
 #include "common.hpp"
 #include "team.hpp"
 
-namespace digitalcurling3 {
+namespace digitalcurling {
 
 
 /// @brief 試合結果
@@ -49,4 +49,4 @@ NLOHMANN_JSON_SERIALIZE_ENUM(GameResult::Reason, {
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GameResult, winner, reason)
 /// @endcond
 
-} // namespace digitalcurling3
+} // namespace digitalcurling

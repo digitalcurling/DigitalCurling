@@ -11,7 +11,7 @@
 #include <string>
 #include <type_traits>
 
-namespace digitalcurling3 {
+namespace digitalcurling {
 
 
 /// @name Teams
@@ -78,4 +78,4 @@ NLOHMANN_JSON_SERIALIZE_ENUM(Team, {
 })
 /// @endcond
 
-} // namespace digitalcurling3
+} // namespace digitalcurling

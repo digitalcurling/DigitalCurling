@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "digitalcurling3/detail/i_player_storage.hpp"
+#include "digitalcurling/detail/i_player_storage.hpp"
 
-namespace digitalcurling3::players {
+namespace digitalcurling::players {
 
 class PlayerIdenticalStorage : public IPlayerStorage {
 public:
@@ -32,4 +32,4 @@ public:
 void to_json(nlohmann::json &, PlayerIdenticalStorage const&);
 void from_json(nlohmann::json const&, PlayerIdenticalStorage &);
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling::players

@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "digitalcurling3/detail/i_simulator.hpp"
-#include "digitalcurling3/detail/i_simulator_storage.hpp"
-#include "digitalcurling3/detail/simulators/simulator_fcv1_factory.hpp"
+#include "digitalcurling/detail/i_simulator.hpp"
+#include "digitalcurling/detail/i_simulator_storage.hpp"
+#include "digitalcurling/detail/simulators/simulator_fcv1_factory.hpp"
 
-namespace digitalcurling3::simulators {
+namespace digitalcurling::simulators {
 
 /// \brief FCV1シミュレータ用ストレージ
 class SimulatorFCV1Storage : public ISimulatorStorage {
@@ -35,4 +35,4 @@ public:
 void to_json(nlohmann::json &, SimulatorFCV1Storage const&);
 void from_json(nlohmann::json const&, SimulatorFCV1Storage &);
 
-} // namespace digitalcurling3::simulators
+} // namespace digitalcurling::simulators

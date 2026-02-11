@@ -3,10 +3,10 @@
 
 #include "players_player_identical.hpp"
 
-#include "digitalcurling3/detail/players/player_identical_factory.hpp"
+#include "digitalcurling/detail/players/player_identical_factory.hpp"
 #include "players_player_identical_storage.hpp"
 
-namespace digitalcurling3::players {
+namespace digitalcurling::players {
 
 moves::Shot PlayerIdentical::Play(moves::Shot const& shot)
 {
@@ -39,4 +39,4 @@ void PlayerIdentical::Load(IPlayerStorage const& storage)
     // nothing to do
 }
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling::players

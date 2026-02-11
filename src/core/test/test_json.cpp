@@ -3,7 +3,7 @@
 
 #include "common.hpp"
 
-namespace dc = digitalcurling3;
+namespace dc = digitalcurling;
 using nlohmann::json;
 
 TEST(Json, millisecondsToJson)

@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace digitalcurling3 {
+namespace digitalcurling {
 
 
 
@@ -15,4 +15,4 @@ constexpr float kPi = 3.14159265359f;
 
 
 
-} // namespace digitalcurling3
+} // namespace digitalcurling

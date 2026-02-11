@@ -7,7 +7,7 @@
 #include <algorithm>
 #include "players_player_normal_dist_storage.hpp"
 
-namespace digitalcurling3::players {
+namespace digitalcurling::players {
 
 PlayerNormalDist::PlayerNormalDist(PlayerNormalDistFactory const& factory)
     : factory_(factory)
@@ -88,4 +88,4 @@ void PlayerNormalDist::LoadEngine(
     s_angle_dist >> angle_dist_;
 }
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling::players

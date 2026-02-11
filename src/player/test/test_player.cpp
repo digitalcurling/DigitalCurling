@@ -6,7 +6,7 @@
 #include <vector>
 #include <memory>
 
-namespace dc = digitalcurling3;
+namespace dc = digitalcurling;
 using nlohmann::json;
 
 namespace {

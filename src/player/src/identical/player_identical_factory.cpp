@@ -1,10 +1,10 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-#include "digitalcurling3/detail/players/player_identical_factory.hpp"
+#include "digitalcurling/detail/players/player_identical_factory.hpp"
 #include "players_player_identical.hpp"
 
-namespace digitalcurling3::players {
+namespace digitalcurling::players {
 
 std::unique_ptr<IPlayer> PlayerIdenticalFactory::CreatePlayer() const
 {
@@ -29,4 +29,4 @@ void from_json(nlohmann::json const&, PlayerIdenticalFactory &)
     // nothing to do
 }
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling::players

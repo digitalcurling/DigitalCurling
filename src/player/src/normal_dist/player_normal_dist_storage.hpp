@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include "digitalcurling3/detail/i_player_storage.hpp"
-#include "digitalcurling3/detail/players/player_normal_dist_factory.hpp"
+#include "digitalcurling/detail/i_player_storage.hpp"
+#include "digitalcurling/detail/players/player_normal_dist_factory.hpp"
 
-namespace digitalcurling3::players {
+namespace digitalcurling::players {
 
 class PlayerNormalDistStorage : public IPlayerStorage {
 public:
@@ -38,4 +38,4 @@ public:
 void to_json(nlohmann::json &, PlayerNormalDistStorage const&);
 void from_json(nlohmann::json const&, PlayerNormalDistStorage &);
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling::players

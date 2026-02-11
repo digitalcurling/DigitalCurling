@@ -10,7 +10,7 @@
 #include "../json/common.hpp"
 #include "../i_player_factory.hpp"
 
-namespace digitalcurling3::players {
+namespace digitalcurling::players {
 
 /// \brief プレイヤーIdenticalのID
 constexpr std::string_view kPlayerIdenticalId = "identical";
@@ -39,4 +39,4 @@ void to_json(nlohmann::json &, PlayerIdenticalFactory const&);
 void from_json(nlohmann::json const&, PlayerIdenticalFactory &);
 /// \endcond
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling::players

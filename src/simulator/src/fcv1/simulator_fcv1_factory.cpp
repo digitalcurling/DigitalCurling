@@ -1,10 +1,10 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-#include "digitalcurling3/detail/simulators/simulator_fcv1_factory.hpp"
+#include "digitalcurling/detail/simulators/simulator_fcv1_factory.hpp"
 #include "simulators_simulator_fcv1.hpp"
 
-namespace digitalcurling3::simulators {
+namespace digitalcurling::simulators {
 
 std::unique_ptr<ISimulator> SimulatorFCV1Factory::CreateSimulator() const
 {
@@ -29,4 +29,4 @@ void from_json(nlohmann::json const& j, SimulatorFCV1Factory & v)
     j.at("seconds_per_frame").get_to(v.seconds_per_frame);
 }
 
-} // namespace digitalcurling3::simulators
+} // namespace digitalcurling::simulators

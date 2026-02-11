@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "digitalcurling3/detail/i_player.hpp"
+#include "digitalcurling/detail/i_player.hpp"
 
-namespace digitalcurling3::players {
+namespace digitalcurling::players {
 
 
 
@@ -23,4 +23,4 @@ public:
 
 
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling::players

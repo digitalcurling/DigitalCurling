@@ -1,10 +1,10 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-#include "digitalcurling3/detail/players/player_normal_dist_factory.hpp"
+#include "digitalcurling/detail/players/player_normal_dist_factory.hpp"
 #include "players_player_normal_dist.hpp"
 
-namespace digitalcurling3::players {
+namespace digitalcurling::players {
 
 std::unique_ptr<IPlayer> PlayerNormalDistFactory::CreatePlayer() const
 {
@@ -35,4 +35,4 @@ void from_json(nlohmann::json const& j, PlayerNormalDistFactory & v)
     j.at("seed").get_to(v.seed);
 }
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling::players

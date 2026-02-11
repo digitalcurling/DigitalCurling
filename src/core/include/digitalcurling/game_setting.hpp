@@ -11,7 +11,7 @@
 #include <array>
 #include "common.hpp"
 
-namespace digitalcurling3 {
+namespace digitalcurling {
 
 
 /// @brief 試合設定
@@ -64,4 +64,4 @@ inline void from_json(nlohmann::json const& j, GameSetting& v) {
 }
 /// @endcond
 
-} // namespace digitalcurling3
+} // namespace digitalcurling

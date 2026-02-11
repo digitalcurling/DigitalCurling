@@ -3,10 +3,10 @@
 
 #include "players_player_identical_storage.hpp"
 
-#include "digitalcurling3/detail/players/player_identical_factory.hpp"
+#include "digitalcurling/detail/players/player_identical_factory.hpp"
 #include "players_player_identical.hpp"
 
-namespace digitalcurling3::players {
+namespace digitalcurling::players {
 
 std::unique_ptr<IPlayer> PlayerIdenticalStorage::CreatePlayer() const
 {
@@ -29,4 +29,4 @@ void from_json(nlohmann::json const& j, PlayerIdenticalStorage & v)
     // nothing to do
 }
 
-} // namespace digitalcurling3::players
+} // namespace digitalcurling::players

@@ -19,7 +19,7 @@
 #include "game_setting.hpp"
 #include "i_simulator.hpp"
 
-namespace digitalcurling3 {
+namespace digitalcurling {
 
 
 /// @brief 試合の状態
@@ -325,4 +325,4 @@ inline void from_json(nlohmann::json const& j, GameState& v) {
 }
 /// @endcond
 
-} // namespace digitalcurling3
+} // namespace digitalcurling

@@ -3,8 +3,8 @@
 
 #include "common.hpp"
 
-using digitalcurling3::Vector2;
-namespace dcco = digitalcurling3::coordinate;
+using digitalcurling::Vector2;
+namespace dcco = digitalcurling::coordinate;
 
 namespace {
 
@@ -100,7 +100,7 @@ TEST(Coordinate, TransformAngle)
     float const sample[3]{
         1.f,   // simulation
         1.f,   // shot0
-        1.f + digitalcurling3::kPi, // shot1
+        1.f + digitalcurling::kPi, // shot1
     };
     for (size_t i_from = 0; i_from < 3; ++i_from) {
         for (size_t i_to = 0; i_to < 3; ++i_to) {

@@ -21,21 +21,21 @@
 
 <!-- 以下，名前空間の説明 -->
 
-\namespace digitalcurling3
+\namespace digitalcurling
 \brief Digital Curling ライブラリはこの名前空間の中に定義されます
 
 
-\namespace digitalcurling3::coordinate
+\namespace digitalcurling::coordinate
 \brief 座標変換に関連するものを定義する名前空間
 
 
-\namespace digitalcurling3::moves
+\namespace digitalcurling::moves
 \brief 試合での行動を定義する名前空間
 
 
-\namespace digitalcurling3::players
+\namespace digitalcurling::players
 \brief 選手(プレイヤー)を定義する名前空間
 
 
-\namespace digitalcurling3::simulators
+\namespace digitalcurling::simulators
 \brief 物理シミュレーターを定義する名前空間
