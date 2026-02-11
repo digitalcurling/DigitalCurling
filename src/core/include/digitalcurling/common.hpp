@@ -8,6 +8,7 @@
 
 #include <optional>
 #include <chrono>
+#include <string>
 #include <nlohmann/json.hpp>
 
 /// @cond Doxygen_Suppress

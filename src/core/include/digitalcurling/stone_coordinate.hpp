@@ -6,10 +6,11 @@
 
 #pragma once
 
-#include <array>
-#include <vector>
 #include <algorithm>
+#include <array>
 #include <iterator>
+#include <optional>
+#include <vector>
 #include "digitalcurling/common.hpp"
 #include "digitalcurling/coordinate.hpp"
 #include "digitalcurling/stone.hpp"

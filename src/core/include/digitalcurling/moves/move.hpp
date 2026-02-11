@@ -6,7 +6,10 @@
 
 #pragma once
 
+#include <stdexcept>
+#include <string>
 #include <variant>
+#include "digitalcurling/common.hpp"
 #include "digitalcurling/moves/shot.hpp"
 #include "digitalcurling/moves/concede.hpp"
 

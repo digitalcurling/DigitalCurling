@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <cmath>
 #include <cstdint>
 #include <string_view>
 #include "digitalcurling/common.hpp"

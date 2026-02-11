@@ -1,9 +1,16 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
+#include <array>
+#include <chrono>
+#include <iostream>
+#include <optional>
+#include <string>
+#include <vector>
+
 #include <gtest/gtest.h>
 #include <nlohmann/json.hpp>
-#include <digitalcurling/digitalcurling.hpp>
+#include "digitalcurling/digitalcurling.hpp"
 
 namespace dc = digitalcurling;
 using nlohmann::json;

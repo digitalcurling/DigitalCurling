@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include <cmath>
+#include <vector>
+#include "digitalcurling/common.hpp"
 #include "digitalcurling/rules/i_additional_rule.hpp"
 
 namespace digitalcurling::rules {
