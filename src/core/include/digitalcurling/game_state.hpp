@@ -11,13 +11,13 @@
 #include <optional>
 #include <vector>
 #include <chrono>
-#include "common.hpp"
-#include "coordinate.hpp"
-#include "vector2.hpp"
-#include "transform.hpp"
-#include "game_result.hpp"
-#include "game_setting.hpp"
-#include "i_simulator.hpp"
+#include "digitalcurling/common.hpp"
+#include "digitalcurling/coordinate.hpp"
+#include "digitalcurling/vector2.hpp"
+#include "digitalcurling/transform.hpp"
+#include "digitalcurling/game_result.hpp"
+#include "digitalcurling/game_setting.hpp"
+#include "digitalcurling/i_simulator.hpp"
 
 namespace digitalcurling {
 

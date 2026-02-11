@@ -7,8 +7,8 @@
 #pragma once
 
 #include <variant>
-#include "moves/shot.hpp"
-#include "moves/concede.hpp"
+#include "digitalcurling/moves/shot.hpp"
+#include "digitalcurling/moves/concede.hpp"
 
 namespace digitalcurling {
 

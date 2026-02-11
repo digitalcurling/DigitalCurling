@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <chrono>
 #include <array>
-#include "common.hpp"
+#include "digitalcurling/common.hpp"
 
 namespace digitalcurling {
 

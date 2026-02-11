@@ -8,8 +8,8 @@
 
 #include <cstdint>
 #include <string_view>
-#include "../common.hpp"
-#include "../vector2.hpp"
+#include "digitalcurling/common.hpp"
+#include "digitalcurling/vector2.hpp"
 
 namespace digitalcurling::moves {
 

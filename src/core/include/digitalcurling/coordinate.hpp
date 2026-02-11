@@ -7,7 +7,7 @@
 #pragma once
 
 #include <cassert>
-#include "vector2.hpp"
+#include "digitalcurling/vector2.hpp"
 
 namespace digitalcurling::coordinate {
 

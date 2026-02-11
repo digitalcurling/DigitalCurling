@@ -12,8 +12,8 @@
 #include <optional>
 #include <memory>
 #include <string>
-#include "vector2.hpp"
-#include "transform.hpp"
+#include "digitalcurling/vector2.hpp"
+#include "digitalcurling/transform.hpp"
 
 namespace digitalcurling {
 
