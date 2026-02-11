@@ -4,4 +4,4 @@
 #pragma once
 
 #include "gtest/gtest.h"
-#include "digitalcurling3/digitalcurling3.hpp"
+#include "digitalcurling/digitalcurling.hpp"

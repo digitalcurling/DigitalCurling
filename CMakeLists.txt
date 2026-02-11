@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.26)
 
-project(digitalcurling3
-    VERSION 1.0.0
+project(digitalcurling
+    VERSION 3.0.0
     LANGUAGES CXX
 )
 
 # --- Build options ---
-option(DIGITALCURLING3_BUILD_TEST "Build tests for DigitalCurling system" ${PROJECT_IS_TOP_LEVEL})
-option(DIGITALCURLING3_BUILD_DOCS "Build documents for DigitalCurling system" OFF)
+option(DIGITALCURLING_BUILD_TEST "Build tests for DigitalCurling system" ${PROJECT_IS_TOP_LEVEL})
+option(DIGITALCURLING_BUILD_DOCS "Build documents for DigitalCurling system" OFF)
 
 # --- Build settings ---
 set(BUILD_SHARED_LIBS OFF)
@@ -20,7 +20,7 @@ if(NOT DEFINED CMAKE_CXX_STANDARD_REQUIRED)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
-function(digitalcurling3_apply_standard_settings target_name)
+function(digitalcurling_apply_standard_settings target_name)
     set_target_properties(${target_name} PROPERTIES
         CXX_EXTENSIONS OFF
         CXX_VISIBILITY_PRESET hidden
@@ -29,7 +29,7 @@ function(digitalcurling3_apply_standard_settings target_name)
 endfunction()
 
 # --- Test preparations ---
-if(DIGITALCURLING3_BUILD_TEST)
+if(DIGITALCURLING_BUILD_TEST)
     enable_testing()
     include(FetchContent)
     FetchContent_Declare(
@@ -47,8 +47,8 @@ if(DIGITALCURLING3_BUILD_TEST)
         gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
     )
 
-    add_executable(digitalcurling3_test)
-    target_link_libraries(digitalcurling3_test PRIVATE GTest::gtest_main GTest::gmock)
+    add_executable(digitalcurling_test)
+    target_link_libraries(digitalcurling_test PRIVATE GTest::gtest_main GTest::gmock)
 endif()
 
 
@@ -57,12 +57,12 @@ add_subdirectory(src/core)
 
 
 # --- Build tests ---
-if(DIGITALCURLING3_BUILD_TEST)
+if(DIGITALCURLING_BUILD_TEST)
     include(GoogleTest)
-    gtest_discover_tests(digitalcurling3_test)
+    gtest_discover_tests(digitalcurling_test)
 endif()
 
 # --- Create documents ---
-if(DIGITALCURLING3_BUILD_DOCS)
+if(DIGITALCURLING_BUILD_DOCS)
     add_subdirectory(docs)
 endif()

@@ -15,7 +15,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(doxygen-awesome-css)
 
 # --- Doxyfile configuration ---
-set(DOXYGEN_PROJECT_NAME "DigitalCurling3")
+set(DOXYGEN_PROJECT_NAME "DigitalCurling")
 set(DOXYGEN_PROJECT_NUMBER ${PROJECT_VERSION})
 set(DOXYGEN_PROJECT_BRIEF "A curling simulation system")
 set(DOXYGEN_PROJECT_LOGO "logo.svg")
@@ -31,7 +31,7 @@ set(DOXYGEN_FULL_PATH_NAMES YES)
 set(DOXYGEN_FILE_PATTERNS "*.hpp" "*.dox")
 
 # --- Create documents ---
-doxygen_add_docs(digitalcurling3_docs
+doxygen_add_docs(digitalcurling_docs
     "${CMAKE_SOURCE_DIR}/src/core/include"
     mainpage.md
     players.md
@@ -41,9 +41,9 @@ doxygen_add_docs(digitalcurling3_docs
 )
 
 # --- Copy static files ---
-add_custom_command(TARGET digitalcurling3_docs PRE_BUILD
+add_custom_command(TARGET digitalcurling_docs PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/logo.svg ${CMAKE_CURRENT_BINARY_DIR}
 )
-add_custom_command(TARGET digitalcurling3_docs POST_BUILD
+add_custom_command(TARGET digitalcurling_docs POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/fig ${CMAKE_CURRENT_BINARY_DIR}/html/fig
 )
