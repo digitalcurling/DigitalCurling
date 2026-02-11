@@ -1,14 +1,8 @@
-# This is a basic workflow to help you get started with Actions
+name: Build and deploy documents
 
-name: Build and deploy doc
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "develop" branch
   push:
     branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 permissions:
@@ -16,35 +10,26 @@ permissions:
   pages: write
   id-token: write
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v3
-      with:
-        submodules: recursive
+    - uses: actions/checkout@v4
 
     - name: Install Doxygen
-      run: sudo apt-get update; sudo apt-get install -y doxygen
-      
+      run: sudo apt update; sudo apt install -y doxygen
+
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DDIGITALCURLING_BUILD_DOCS=ON
 
-    - name: Build Doc
+    - name: Build Documentations
       run: cmake --build ${{github.workspace}}/build --target digitalcurling_docs
-      
+
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
-      with: 
+      uses: actions/upload-pages-artifact@v3
+      with:
         path: ${{github.workspace}}/build/docs/html
-    
-  # Deployment job
+
   deploy:
     environment:
       name: github-pages
@@ -54,4 +39,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
