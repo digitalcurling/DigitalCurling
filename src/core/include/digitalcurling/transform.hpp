@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "vector2.hpp"
-#include "nlohmann/json.hpp"
+#include "digitalcurling/common.hpp"
+#include "digitalcurling/vector2.hpp"
 
 namespace digitalcurling {
 

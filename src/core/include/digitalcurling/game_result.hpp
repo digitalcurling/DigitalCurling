@@ -7,8 +7,8 @@
 #pragma once
 
 #include <cstdint>
-#include "common.hpp"
-#include "team.hpp"
+#include "digitalcurling/common.hpp"
+#include "digitalcurling/team.hpp"
 
 namespace digitalcurling {
 

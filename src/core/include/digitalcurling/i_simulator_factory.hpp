@@ -8,7 +8,7 @@
 
 #include <memory>
 #include <string>
-#include "common.hpp"
+#include "digitalcurling/common.hpp"
 
 namespace digitalcurling {
 

@@ -8,8 +8,8 @@
 
 #include <string>
 #include <memory>
-#include "vector2.hpp"
-#include "moves/shot.hpp"
+#include "digitalcurling/vector2.hpp"
+#include "digitalcurling/moves/shot.hpp"
 
 namespace digitalcurling {
 
