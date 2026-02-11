@@ -66,3 +66,31 @@ endif()
 if(DIGITALCURLING_BUILD_DOCS)
     add_subdirectory(docs)
 endif()
+
+
+# --- Install rules ---
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+set(DIGITALCURLING_CMAKE_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/DigitalCurling")
+
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/DigitalCurlingConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/DigitalCurlingConfig.cmake"
+    INSTALL_DESTINATION "${DIGITALCURLING_CMAKE_DIR}"
+)
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/DigitalCurlingConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/DigitalCurlingConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/DigitalCurlingConfigVersion.cmake"
+    DESTINATION "${DIGITALCURLING_CMAKE_DIR}"
+)
+install(EXPORT DigitalCurlingTargets
+    FILE DigitalCurlingTargets.cmake
+    NAMESPACE digitalcurling::
+    DESTINATION "${DIGITALCURLING_CMAKE_DIR}"
+)
