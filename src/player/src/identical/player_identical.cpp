@@ -1,12 +1,16 @@
 ﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-#include "players_player_identical.hpp"
-
-#include "digitalcurling/detail/players/player_identical_factory.hpp"
-#include "players_player_identical_storage.hpp"
+#include <memory>
+#include "player_identical.hpp"
 
 namespace digitalcurling::players {
+
+PlayerIdentical::PlayerIdentical(PlayerIdenticalFactory const& factory)
+    : IPlayer(), gender_(factory.gender) { }
+
+PlayerIdentical::PlayerIdentical(PlayerIdenticalStorage const& storage)
+    : IPlayer(), gender_(storage.gender) { }
 
 moves::Shot PlayerIdentical::Play(moves::Shot const& shot)
 {
@@ -16,27 +20,27 @@ moves::Shot PlayerIdentical::Play(moves::Shot const& shot)
 IPlayerFactory const& PlayerIdentical::GetFactory() const
 {
     static PlayerIdenticalFactory factory;
+    factory.gender = gender_;
     return factory;
-}
-
-std::string PlayerIdentical::GetPlayerId() const
-{
-    return std::string(kPlayerIdenticalId);
 }
 
 std::unique_ptr<IPlayerStorage> PlayerIdentical::CreateStorage() const
 {
-    return std::make_unique<PlayerIdenticalStorage>();
+    auto storage = std::make_unique<PlayerIdenticalStorage>();
+    Save(*storage);
+    return storage;
 }
 
 void PlayerIdentical::Save(IPlayerStorage & storage) const
 {
-    // nothing to do
+    auto& s = static_cast<PlayerIdenticalStorage&>(storage);
+    s.gender = gender_;
 }
 
 void PlayerIdentical::Load(IPlayerStorage const& storage)
 {
-    // nothing to do
+    auto const& s = static_cast<PlayerIdenticalStorage const&>(storage);
+    gender_ = s.gender;
 }
 
 } // namespace digitalcurling::players
