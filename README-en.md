@@ -1,4 +1,4 @@
-# DigitalCurling3
+# DigitalCurling
 
 - [README (Japanese Version)](./README.md)
 - [Manual](https://github.com/digitalcurling/DigitalCurling3/wiki)

@@ -1,21 +1,21 @@
 // Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-#include "digitalcurling3/version.hpp"
+#include "digitalcurling/version.hpp"
 
 std::string digitalcurling3::GetVersion()
 {
-    return "@digitalcurling3_VERSION@";
+    return "@digitalcurling_VERSION@";
 }
 std::uint32_t digitalcurling3::GetVersionMajor()
 {
-    return @digitalcurling3_VERSION_MAJOR@;
+    return @digitalcurling_VERSION_MAJOR@;
 }
 std::uint32_t digitalcurling3::GetVersionMinor()
 {
-    return @digitalcurling3_VERSION_MINOR@;
+    return @digitalcurling_VERSION_MINOR@;
 }
 std::uint32_t digitalcurling3::GetVersionPatch()
 {
-    return @digitalcurling3_VERSION_PATCH@;
+    return @digitalcurling_VERSION_PATCH@;
 }
