@@ -6,11 +6,15 @@ project(digitalcurling
 )
 
 # --- Build options ---
+option(DIGITALCURLING_BUILD_PLAYERS "Build player plugins for DigitalCurling system" ON)
+set(DIGITALCURLING_PLUGIN_OUTPUT_DIR "plugins" CACHE STRING "Output directory for plugins relative to build dir")
+
 option(DIGITALCURLING_BUILD_TEST "Build tests for DigitalCurling system" ${PROJECT_IS_TOP_LEVEL})
 option(DIGITALCURLING_BUILD_DOCS "Build documents for DigitalCurling system" OFF)
 
 # --- Build settings ---
 set(BUILD_SHARED_LIBS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/utf-8>)
 
 if(NOT DEFINED CMAKE_CXX_STANDARD)
@@ -18,6 +22,16 @@ if(NOT DEFINED CMAKE_CXX_STANDARD)
 endif()
 if(NOT DEFINED CMAKE_CXX_STANDARD_REQUIRED)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
+endif()
+
+set(DIGITALCURLING_ACTIVE_PLUGIN_TARGETS "")
+set(DIGITALCURLING_PLUGIN_TYPE MODULE)
+
+if(DIGITALCURLING_BUILD_PLAYERS)
+    cmake_path(ABSOLUTE_PATH DIGITALCURLING_PLUGIN_OUTPUT_DIR
+            BASE_DIRECTORY "${CMAKE_BINARY_DIR}"
+            OUTPUT_VARIABLE DIGITALCURLING_PLUGIN_OUTPUT_DIR_ABS)
+    message(STATUS "Build plugins module to ${DIGITALCURLING_PLUGIN_OUTPUT_DIR_ABS}")
 endif()
 
 function(digitalcurling_apply_standard_settings target_name)
@@ -55,6 +69,10 @@ endif()
 # --- Build libraries ---
 add_subdirectory(src/core)
 add_subdirectory(src/plugin-api)
+
+if(DIGITALCURLING_BUILD_PLAYERS)
+    add_subdirectory(src/player)
+endif()
 
 
 # --- Build tests ---

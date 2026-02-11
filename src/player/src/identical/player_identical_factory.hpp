@@ -1,42 +1,47 @@
-﻿// Copyright (c) 2022-2026 UEC Takeshi Ito Laboratory
+﻿// Copyright (c) 2022-2025 UEC Takeshi Ito Laboratory
 // SPDX-License-Identifier: MIT
 
-/// \file
-/// \brief PlayerIdenticalFactory を定義します
+/// @file
+/// @brief PlayerIdenticalFactory を定義
 
 #pragma once
 
 #include <memory>
-#include "../json/common.hpp"
-#include "../i_player_factory.hpp"
+#include "digitalcurling/common.hpp"
+#include "digitalcurling/players/i_player_factory.hpp"
+
+#include "identical.hpp"
 
 namespace digitalcurling::players {
 
-/// \brief プレイヤーIdenticalのID
-constexpr std::string_view kPlayerIdenticalId = "identical";
 
-
-/// \brief 乱数を加えないプレイヤー
+/// @brief プレイヤー Identical のファクトリー
 class PlayerIdenticalFactory : public IPlayerFactory {
 public:
-    PlayerIdenticalFactory() = default;  ///< デフォルトコンストラクタ
-    virtual ~PlayerIdenticalFactory() = default; 
-    PlayerIdenticalFactory(PlayerIdenticalFactory const&) = default;  ///< コピーコンストラクタ
-    PlayerIdenticalFactory & operator = (PlayerIdenticalFactory const&) = default;  ///< コピー代入演算子
+    /// @brief プレイヤーの性別
+    Gender gender = Gender::kUnknown;
 
+    /// @brief デフォルトコンストラクタ
+    PlayerIdenticalFactory() = default;
+    /// @brief コピーコンストラクタ
+    PlayerIdenticalFactory(PlayerIdenticalFactory const&) = default;
+    /// @brief コピー代入演算子
+    PlayerIdenticalFactory & operator = (PlayerIdenticalFactory const&) = default;
+    virtual ~PlayerIdenticalFactory() override = default;
+
+    virtual const char* GetId() const noexcept override { return DIGITALCURLING_PLUGIN_NAME; }
+    virtual nlohmann::json ToJson() const override;
+
+    virtual Gender GetGender() const override { return gender; }
     virtual std::unique_ptr<IPlayer> CreatePlayer() const override;
     virtual std::unique_ptr<IPlayerFactory> Clone() const override;
-    virtual std::string GetPlayerId() const override
-    {
-        return std::string(kPlayerIdenticalId);
-    }
 };
 
 
-/// \cond Doxygen_Suppress
+/// @cond Doxygen_Suppress
 // json
 void to_json(nlohmann::json &, PlayerIdenticalFactory const&);
 void from_json(nlohmann::json const&, PlayerIdenticalFactory &);
-/// \endcond
+/// @endcond
 
 } // namespace digitalcurling::players
