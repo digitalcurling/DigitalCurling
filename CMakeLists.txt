@@ -54,6 +54,7 @@ endif()
 
 # --- Build libraries ---
 add_subdirectory(src/core)
+add_subdirectory(src/plugin-api)
 
 
 # --- Build tests ---
