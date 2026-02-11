@@ -8,6 +8,10 @@ project(digitalcurling
 # --- Build options ---
 option(DIGITALCURLING_BUILD_PLAYERS "Build player plugins for DigitalCurling system" ON)
 option(DIGITALCURLING_BUILD_SIMULATORS "Build simulator plugins for DigitalCurling system" ON)
+
+option(DIGITALCURLING_BUILD_PLUGIN_LOADER "Build plugin loader for DigitalCurling system" ON)
+option(DIGITALCURLING_PLUGIN_LOADER_SHARED "Build plugin loader as shared library" ${BUILD_SHARED_LIBS})
+option(DIGITALCURLING_BUNDLE_PLUGINS "Statically link plugins into the loader library" OFF)
 set(DIGITALCURLING_PLUGIN_OUTPUT_DIR "plugins" CACHE STRING "Output directory for plugins relative to build dir")
 
 option(DIGITALCURLING_BUILD_TEST "Build tests for DigitalCurling system" ${PROJECT_IS_TOP_LEVEL})
@@ -26,13 +30,25 @@ if(NOT DEFINED CMAKE_CXX_STANDARD_REQUIRED)
 endif()
 
 set(DIGITALCURLING_ACTIVE_PLUGIN_TARGETS "")
-set(DIGITALCURLING_PLUGIN_TYPE MODULE)
 
 if(DIGITALCURLING_BUILD_PLAYERS OR DIGITALCURLING_BUILD_SIMULATORS)
-    cmake_path(ABSOLUTE_PATH DIGITALCURLING_PLUGIN_OUTPUT_DIR
-            BASE_DIRECTORY "${CMAKE_BINARY_DIR}"
-            OUTPUT_VARIABLE DIGITALCURLING_PLUGIN_OUTPUT_DIR_ABS)
-    message(STATUS "Build plugins module to ${DIGITALCURLING_PLUGIN_OUTPUT_DIR_ABS}")
+    if(NOT DIGITALCURLING_BUNDLE_PLUGINS)
+        cmake_path(ABSOLUTE_PATH DIGITALCURLING_PLUGIN_OUTPUT_DIR
+                BASE_DIRECTORY "${CMAKE_BINARY_DIR}"
+                OUTPUT_VARIABLE DIGITALCURLING_PLUGIN_OUTPUT_DIR_ABS)
+        message(STATUS "Build plugins module to ${DIGITALCURLING_PLUGIN_OUTPUT_DIR_ABS}")
+    endif()
+else()
+    if(DIGITALCURLING_BUILD_TEST AND DIGITALCURLING_BUILD_PLUGIN_LOADER)
+        message(WARNING "If the simulator or player are not built, the plugin loader tests may not function properly.")
+    endif()
+endif()
+
+if(DIGITALCURLING_BUNDLE_PLUGINS)
+    set(DIGITALCURLING_PLUGIN_TYPE STATIC)
+    add_compile_definitions(DIGITALCURLING_BUNDLE_PLUGINS)
+else()
+    set(DIGITALCURLING_PLUGIN_TYPE MODULE)
 endif()
 
 function(digitalcurling_apply_standard_settings target_name)
@@ -79,9 +95,21 @@ if(DIGITALCURLING_BUILD_SIMULATORS)
     add_subdirectory(src/simulator)
 endif()
 
+if(DIGITALCURLING_BUILD_PLUGIN_LOADER)
+    add_subdirectory(src/plugin-loader)
+endif()
+
 
 # --- Build tests ---
 if(DIGITALCURLING_BUILD_TEST)
+    if(DIGITALCURLING_BUILD_PLUGIN_LOADER AND DIGITALCURLING_ACTIVE_PLUGIN_TARGETS AND NOT DIGITALCURLING_BUNDLE_PLUGINS)
+        list(GET DIGITALCURLING_ACTIVE_PLUGIN_TARGETS 0 PLUGIN_TARGET)
+        target_compile_definitions(digitalcurling_test PRIVATE
+            DIGITALCURLING_TEST_DIR="$<TARGET_FILE_DIR:digitalcurling_test>"
+            DIGITALCURLING_TEST_PLUGINS_DIR="$<TARGET_FILE_DIR:${PLUGIN_TARGET}>"
+        )
+    endif()
+
     include(GoogleTest)
     gtest_discover_tests(digitalcurling_test)
 endif()
