@@ -12,6 +12,7 @@
 #include <optional>
 #include <memory>
 #include <string>
+#include <nlohmann/json.hpp>
 #include "digitalcurling/stone.hpp"
 #include "digitalcurling/stone_coordinate.hpp"
 #include "digitalcurling/vector2.hpp"

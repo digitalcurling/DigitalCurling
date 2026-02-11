@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "digitalcurling/common.hpp"
+#include <nlohmann/json.hpp>
 #include "digitalcurling/coordinate.hpp"
 #include "digitalcurling/vector2.hpp"
 

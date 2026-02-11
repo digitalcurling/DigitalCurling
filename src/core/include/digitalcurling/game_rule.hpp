@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <optional>
 #include <utility>
+#include <nlohmann/json.hpp>
 #include "digitalcurling/common.hpp"
 #include "digitalcurling/team.hpp"
 #include "digitalcurling/rules/i_additional_rule.hpp"
@@ -71,7 +72,6 @@ public:
 
 
 /// @cond Doxygen_Suppress
-//json
 NLOHMANN_JSON_SERIALIZE_ENUM(GameRuleType, {
     { GameRuleType::kStandard, "standard" },
     { GameRuleType::kMixed, "mixed" },
