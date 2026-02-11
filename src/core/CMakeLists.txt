@@ -39,7 +39,7 @@ target_sources(digitalcurling_core INTERFACE
         FILES "${DIGITALCURLING_VERSION_INFO_HPP_OUT}"
 )
 target_link_libraries(digitalcurling_core INTERFACE
-    nlohmann_json::nlohmann_json
+    $<BUILD_INTERFACE:nlohmann_json::nlohmann_json>
 )
 target_compile_features(digitalcurling_core INTERFACE cxx_std_17)
 digitalcurling_apply_standard_settings(digitalcurling_core)
@@ -53,3 +53,14 @@ if(DIGITALCURLING_BUILD_TEST AND TARGET digitalcurling_test)
     target_link_libraries(digitalcurling_test PRIVATE digitalcurling::core)
     target_include_directories(digitalcurling_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/test)
 endif()
+
+
+# --- Install rules ---
+install(TARGETS digitalcurling_core
+    EXPORT DigitalCurlingTargets
+
+    FILE_SET HEADERS
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    FILE_SET generated_headers
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+)
