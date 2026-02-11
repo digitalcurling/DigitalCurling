@@ -1,0 +1,211 @@
+name: Build native libraries
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  # 1. Windows Build (x64, arm64)
+  build-windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - preset: windows-x64
+            rid: win-x64
+          - preset: windows-arm64
+            rid: win-arm64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake --preset ${{ matrix.preset }} -DDIGITALCURLING_BUILD_TEST=OFF
+
+      - name: Build
+        run: cmake --build --preset ${{ matrix.preset }}
+
+      - name: Prepare Artifact
+        shell: powershell
+        run: |
+          $dest = "runtimes/${{ matrix.rid }}/native"
+          New-Item -ItemType Directory -Path $dest -Force
+          Copy-Item "build/${{ matrix.preset }}/bin/Release/*.dll" -Destination $dest
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.rid }}
+          path: runtimes/
+
+  # 2. Android Build (arm64, x64)
+  build-android:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - preset: android-arm64
+            rid: android-arm64
+          - preset: android-x64
+            rid: android-x64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Android NDK
+        uses: android-actions/setup-android@v3
+
+      - name: Configure CMake
+        run: |
+          cmake --preset ${{ matrix.preset }} -DDIGITALCURLING_BUILD_TEST=OFF \
+            -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake
+
+      - name: Build
+        run: cmake --build --preset ${{ matrix.preset }}
+
+      - name: Prepare Artifact
+        run: |
+          mkdir -p runtimes/${{ matrix.rid }}/native
+          cp build/${{ matrix.preset }}/lib/*.so runtimes/${{ matrix.rid }}/native/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.rid }}
+          path: runtimes/
+
+  # 3. Linux Build (glibc: x64, arm64)
+  build-linux-glibc:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - preset: linux-x64
+            rid: linux-x64
+          - preset: linux-arm64-cross
+            rid: linux-arm64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Cross-Compiler (ARM64 only)
+        if: matrix.rid == 'linux-arm64'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+
+      - name: Configure CMake
+        run: cmake --preset ${{ matrix.preset }} -DDIGITALCURLING_BUILD_TEST=OFF
+
+      - name: Build
+        run: cmake --build --preset ${{ matrix.preset }}
+
+      - name: Prepare Artifact
+        run: |
+          mkdir -p runtimes/${{ matrix.rid }}/native
+          cp build/${{ matrix.preset }}/lib/*.so runtimes/${{ matrix.rid }}/native/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.rid }}
+          path: runtimes/
+
+  # 4. Linux Build (musl: Alpine x64)
+  build-linux-musl:
+    runs-on: ubuntu-latest
+    container: alpine:latest
+    strategy:
+      matrix:
+        include:
+          - preset: linux-musl-x64
+            rid: linux-musl-x64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: apk add --no-cache build-base cmake git ninja
+
+      - name: Configure CMake
+        run: cmake --preset ${{ matrix.preset }} -DDIGITALCURLING_BUILD_TEST=OFF
+
+      - name: Build
+        run: cmake --build --preset ${{ matrix.preset }}
+
+      - name: Prepare Artifact
+        run: |
+          mkdir -p runtimes/${{ matrix.rid }}/native
+          cp build/${{ matrix.preset }}/lib/*.so runtimes/${{ matrix.rid }}/native/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.rid }}
+          path: runtimes/
+
+  # 5. Apple Build (macOS, Catalyst, iOS)
+  build-apple:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          # macOS Desktop
+          - preset: osx-x64
+            rid: osx-x64
+          - preset: osx-arm64
+            rid: osx-arm64
+          # Mac Catalyst
+          - preset: catalyst-x64
+            rid: maccatalyst-x64
+          - preset: catalyst-arm64
+            rid: maccatalyst-arm64
+          # iOS Device
+          - preset: ios-arm64
+            rid: ios-arm64
+          # iOS Simulator
+          - preset: iossimulator-x64
+            rid: iossimulator-x64
+          - preset: iossimulator-arm64
+            rid: iossimulator-arm64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake --preset ${{ matrix.preset }} -DDIGITALCURLING_BUILD_TEST=OFF
+
+      - name: Build
+        run: cmake --build --preset ${{ matrix.preset }} -- CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+
+      - name: Prepare Artifact
+        run: |
+          mkdir -p runtimes/${{ matrix.rid }}/native
+          find build/${{ matrix.preset }}/lib -name "*.dylib" -exec cp {} runtimes/${{ matrix.rid }}/native/ \;
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.rid }}
+          path: runtimes/
+
+  # 6. Merge all artifacts
+  merge-artifacts:
+    needs: [build-windows, build-android, build-linux-glibc, build-linux-musl, build-apple]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all_runtimes
+          merge-multiple: true
+
+      - name: Display Structure
+        run: ls -R all_runtimes
+
+      - name: Upload Final Zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: all_runtimes
+          path: all_runtimes/
