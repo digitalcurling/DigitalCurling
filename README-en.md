@@ -1,60 +1,99 @@
 # DigitalCurling
 
 - [README (Japanese Version)](./README.md)
-- [Manual](https://github.com/digitalcurling/DigitalCurling3/wiki)
-- [Official site](http://minerva.cs.uec.ac.jp/cgi-bin/curling/wiki.cgi)
+- [Official Website](http://minerva.cs.uec.ac.jp/cgi-bin/curling/wiki.cgi)
 
-Digital Curling is a curling simulation system for creating curling AI.
+DigitalCurling is a platform for simulating curling and developing curling AI.
+WIts modular design allows for the extension of simulators and players (AI) as plugins.
 
 ## Overview
 
-This repository provides a library for curling AI development.
-See [manual](https://github.com/digitalcurling/DigitalCurling3/wiki) for details.
+This repository provides libraries and an SDK for developing curling AI and simulators.
+The system consists of `Core`, `Plugin API`, `Plugin Loader`, and standard `Plugins` (Simulator/Player).
 
 ### Specifications
 
-- Curling simulation
-  - Using a new physics simulator close to actual measurement data.
-  - Currently normal rule (non mix-doubles rule) is only supported.
-- Language: C++17
-- Build Tool: CMake
-- Multi-platform support
-  - Tested in Windows and Ubuntu--18.04 LTS (WSL2)
-  - Not tested in Mac, but we plan to do so.
+- **Curling Reproduction**
+  - Curling simulator that behaves closely to actual measurement data (FCV1 model, etc.)
+  - Support for 4-person and 2-person (Mixed Doubles) rules
+- **Multi-platform Support**
+  - Windows 10/11
+  - macOS
+  - Linux (Ubuntu 20.04/22.04 LTS, etc.)
 
-## Building
+## Build
 
-1. Install Git
-1. Install [CMake](https://cmake.org/)
-1. Ensure CMake is in the user `PATH`
-1. Clone this repository
-1. To set up submodules, execute `git submodule update --init --recursive`
-1. Execute the following commands for building
+### Requirements
 
-```
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-cmake --build . --config Release
-```
+#### Tools
+- C++17 compatible compiler (GCC, Clang, MSVC, etc.)
+- Git
+- [CMake](https://cmake.org/) 3.26 or higher
+- [Doxygen](https://www.doxygen.nl/) (Optional: only if `DIGITALCURLING_BUILD_DOCS` is enabled)
 
-:warning: Only the static library is supported.
+#### Dependencies
+The following libraries are automatically resolved by CMake:
+- [nlohmann/json](https://github.com/nlohmann/json)
+- [cpp-uuidv7](https://github.com/chromeru0312/cpp-uuidv7)
+- [googletest](https://github.com/google/googletest) (Optional: only if `DIGITALCURLING_BUILD_TEST` is enabled)
 
-:warning: Installation is not supported now.
+### Build Options
+You can customize the build configuration by specifying the following options when running CMake.
+
+| オプション名 | デフォルト値 | 説明 |
+| :--- | :--- | :--- |
+| `DIGITALCURLING_BUILD_PLAYERS` | `ON` | Builds standard player plugins (Identical, NormalDist). |
+| `DIGITALCURLING_BUILD_SIMULATORS` | `ON` | Builds standard simulator plugin (FCV1). |
+| `DIGITALCURLING_BUILD_PLUGIN_LOADER` | `ON` | Builds the plugin loader library. |
+| `DIGITALCURLING_PLUGIN_LOADER_SHARED` | *`OFF`* *1 | Builds the `plugin-loader` as a shared library. If `OFF`, it will be a static library. |
+| `DIGITALCURLING_BUNDLE_PLUGINS` | `OFF` | If `ON`, plugins are statically linked (bundled) into the `plugin-loader`. Modules for dynamic loading are not built. |
+| `DIGITALCURLING_PLUGIN_OUTPUT_DIR` | `"plugins"` | Specifies the output destination for plugin modules as a relative path from the build directory. |
+| `DIGITALCURLING_BUILD_TEST` | `OFF` | Builds unit tests. Enabling this will automatically download GoogleTest. |
+| `DIGITALCURLING_BUILD_DOCS` | `OFF` | Adds documentation generation targets (requires Doxygen). |
+
+> *1: The default value of `DIGITALCURLING_PLUGIN_LOADER_SHARED` follows the setting of the CMake standard variable `BUILD_SHARED_LIBS` (usually `OFF`).
+
+### Instructions
+
+Since this project uses CMake's FetchContent feature, no prior submodule configuration is required.
+
+1. Clone this repository.
+   ```bash
+   git clone https://github.com/digitalcurling/DigitalCurling.git
+   cd DigitalCurling
+   ```
+
+1. Run the build using a preset.
+   ```bash
+   # Windows case (select the appropriate preset)
+   cmake --preset windows-x64
+
+   # Install
+   cmake --install . --prefix /path/to/install
+   ```
+
+## Architecture and Directory Structure
+
+- **src/core**: Basic definitions such as coordinate systems, game rules, data structures
+- **src/plugin-api**: Headers required for plugin development (SDK)
+- **src/plugin-loader**: Library for loading and managing plugins
+- **src/player**: Implementation of player (AI) plugins
+- **src/simulator**: Implementation of simulator plugins
 
 ## Versioning
 
-Compliant with [Semantic Versioning 2.0.0](https://semver.org/) about API compatibility.
+We adhere to [Semantic Versioning 2.0.0](https://semver.org/).
 
-- Major version is incremented if incompatible API changes occur.
-- Minor version is incremented if functionality is added in a API backwards compatible manner.
-- Patch version is incremented if API backwards compatible bug fix is done.
+- **Major version**: Updates incompatible with API backward compatibility
+- **Minor version**: Feature additions compatible with API backward compatibility
+- **Patch version**: Bug fixes
 
-The API backwards compatible update guarantees the operation of software (applications and libraries) linked to the library.
-This means not only that there will be no compile errors when updating the library, but also that the linked software will not behave improperly or the execution speed of library functions will not be degraded.
 
-:warning: ABI compatibility is not considered due to development costs. Therefore, this library is provided as a static library only.
+> [!WARNING]
+> Due to C++ specifications, ABI compatibility may not be maintained if compiler versions or standard library versions differ.  
+> When using dynamic loading (DLL/Shared Library), it is strongly recommended to build the main application and plugins in the exact same environment.  
+> To avoid issues caused by version mismatches, please use DIGITALCURLING_BUNDLE_PLUGINS=ON to perform static linking.
 
 ## License
 
-MIT License
+[MIT License](./LICENSE).
