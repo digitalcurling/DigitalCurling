@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.26)
 
 project(digitalcurling
-    VERSION 3.0.0
+    VERSION 4.0.0
     LANGUAGES CXX
 )
 
