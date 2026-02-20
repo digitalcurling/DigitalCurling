@@ -1,60 +1,97 @@
-# DigitalCurling3
+# DigitalCurling
 
 - [README (English Version)](./README-en.md)
-- [マニュアル](https://github.com/digitalcurling/DigitalCurling3/wiki)
 - [公式サイト](http://minerva.cs.uec.ac.jp/cgi-bin/curling/wiki.cgi)
 
-デジタルカーリングはカーリングをシミュレートし，カーリングAI開発を行うためのシステムです．
+DigitalCurling はカーリングをシミュレートし、カーリングAI開発を行うためのプラットフォームです。
+モジュール化された設計により、シミュレータやプレイヤー（AI）をプラグインとして拡張することが可能です。
 
 ## 概要
 
-このリポジトリではカーリングAIを開発するためのライブラリを提供しています．
-詳細は[マニュアル](https://github.com/digitalcurling/DigitalCurling3/wiki)を参照ください．
+このリポジトリではカーリングAIおよびシミュレータを開発するためのライブラリとSDKを提供しています。
+本システムは `Core`、`Plugin API`、`Plugin Loader`、および標準の `Plugins` (Simulator/Player) から構成されています。
 
-### 仕様
-
-- カーリングの再現
-  - 実際のカーリングの実測データに近いカーリングシミュレータ
-  - 現在は通常の4人制に相当するルールのみに対応
-- 使用言語: C++17
-- ビルドツール: CMake
-- マルチプラットフォーム対応
-  - Windows11，Ubuntu-18.04 LTS(WSL2)にて動作確認済みです．
-  - Macでの動作確認は未実施ですが，対応予定です．
+- **カーリングの再現**
+  - 実測データに近い挙動をするカーリングシミュレータ (FCV1モデル等)
+  - 4人制・2人制ルールのサポート
+- **マルチプラットフォーム対応**
+  - Windows 10/11
+  - macOS
+  - Linux (Ubuntu 20.04/22.04 LTS 等)
 
 ## ビルド
 
-1. Gitをインストールします．
-1. [CMake](https://cmake.org/)をインストールします．
-1. CMakeが `PATH` に入っていることを確認してください．
-1. このリポジトリをクローンします．
-1. サブモジュールをセットアップするために， `git submodule update --init --recursive` を実行します．
-1. 下記のビルドコマンドを実行します．
+### 必要要件
 
-```
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-cmake --build . --config Release
-```
+#### ツール
+- C++17 対応のコンパイラ (GCC, Clang, MSVC, etc.)
+- Git
+- [CMake](https://cmake.org/) 3.26 以上
+- [Doxygen](https://www.doxygen.nl/) (オプション: `DIGITALCURLING_BUILD_DOCS` 有効時のみ)
 
-:warning: スタティックライブラリのみに対応しています．
+#### 依存ライブラリ
+以下のライブラリは CMake によって自動的に解決されます。
+- [nlohmann/json](https://github.com/nlohmann/json)
+- [cpp-uuidv7](https://github.com/chromeru0312/cpp-uuidv7)
+- [googletest](https://github.com/google/googletest) (オプション: `DIGITALCURLING_BUILD_TEST` 有効時のみ)
 
-:warning: インストールは現状ではサポートしていません．
+### ビルドオプション
+
+CMake実行時に以下のオプションを指定することで、ビルド構成をカスタマイズできます。
+
+| オプション名 | デフォルト値 | 説明 |
+| :--- | :--- | :--- |
+| `DIGITALCURLING_BUILD_PLAYERS` | `ON` | 標準プレイヤー(Identical, NormalDist)プラグインをビルドします。 |
+| `DIGITALCURLING_BUILD_SIMULATORS` | `ON` | 標準シミュレータ(FCV1)プラグインをビルドします。 |
+| `DIGITALCURLING_BUILD_PLUGIN_LOADER` | `ON` | プラグイン読み込みライブラリをビルドします。 |
+| `DIGITALCURLING_PLUGIN_LOADER_SHARED` | *`OFF`* *1 | `plugin-loader` を共有ライブラリとしてビルドします。`OFF` の場合は静的ライブラリになります。 |
+| `DIGITALCURLING_BUNDLE_PLUGINS` | `OFF` | `ON` の場合、プラグインを `plugin-loader` に静的リンク(バンドル)します。動的ロード用のモジュールはビルドされません。 |
+| `DIGITALCURLING_PLUGIN_OUTPUT_DIR` | `"plugins"` | ビルドディレクトリからの相対パスで、プラグインモジュールの出力先を指定します。 |
+| `DIGITALCURLING_BUILD_TEST` | `OFF` | ユニットテストをビルドします。有効にすると GoogleTest が自動的にダウンロードされます。 |
+| `DIGITALCURLING_BUILD_DOCS` | `OFF` | ドキュメント生成ターゲットを追加します（Doxygen等が必要）。 |
+
+> *1: `DIGITALCURLING_PLUGIN_LOADER_SHARED` のデフォルト値は、CMake標準変数 `BUILD_SHARED_LIBS` の設定に従います（通常は `OFF`）。
+
+### 手順
+
+本ライブラリは CMake の `FetchContent` 機能を使用しているため、事前のサブモジュール設定は不要です。
+
+1. このリポジトリをクローンします。
+   ```bash
+   git clone https://github.com/digitalcurling/DigitalCurling.git
+   cd DigitalCurling
+   ```
+
+1. プリセットを使用し、ビルドを実行します。
+   ```bash
+   # Windows の場合 (適切なプリセットを選択)
+   cmake --preset windows-x64
+
+   #インストール (必要に応じて)
+   cmake --install . --prefix ./install
+   ```
+
+## アーキテクチャとディレクトリ構成
+
+- **src/core**: 座標系、ゲームルール、データ構造などの基本定義
+- **src/plugin-api**: プラグイン開発および利用に必要なヘッダ群 (SDK)
+- **src/plugin-loader**: プラグインのロード・管理を行うライブラリ
+- **src/player**: プレイヤープラグインの実装
+- **src/simulator**: シミュレータプラグインの実装
 
 ## バージョニング
 
-API互換性について[セマンティックバージョニング 2.0.0](https://semver.org/lang/ja/)に準拠します．
+[セマンティックバージョニング 2.0.0](https://semver.org/lang/ja/) に準拠します。
 
-- メジャーバージョン: APIの後方互換性を伴わない更新時にインクリメントします．
-- マイナーバージョン: APIの後方互換性を伴う機能追加の際にインクリメントします．
-- パッチバージョン: APIの後方互換を伴うバグ修正の際にインクリメントします．
+- **メジャーバージョン**: APIの後方互換性を伴わない更新
+- **マイナーバージョン**: APIの後方互換性を伴う機能追加
+- **パッチバージョン**: バグ修正
 
-APIの後方互換性を伴う更新ではライブラリにリンクするソフトウェア（アプリケーション，ライブラリ）の動作が保証されます．
-これはライブラリの更新時にコンパイルエラーが出ないというだけでなく，リンクするソフトウェアの動作に不具合が出たり，ライブラリ関数の実行速度が改悪されたりしないことを意味します．
-
-:warning: ABI互換性については開発コストの都合で考慮しません．従って，このライブラリはスタティックライブラリとしてのみ提供します．
+> [!WARNING]
+> C++の仕様上、コンパイラや標準ライブラリのバージョンが異なるとABI互換性が保たれない場合があります。  
+> 動的ロード（DLL/共有ライブラリ）を利用する際は、本体とプラグインを同一の環境でビルドすることを強く推奨します。  
+> バージョン不一致によるトラブルを避けたい場合は、`DIGITALCURLING_BUNDLE_PLUGINS=ON` を利用して静的リンクを行ってください。
 
 ## ライセンス
 
-MITライセンスに準拠します．
+[MIT License](./LICENSE)
