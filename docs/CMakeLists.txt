@@ -28,11 +28,18 @@ set(DOXYGEN_HTML_EXTRA_STYLESHEET "${doxygen-awesome-css_SOURCE_DIR}/doxygen-awe
 set(DOXYGEN_RECURSIVE YES)
 set(DOXYGEN_STRIP_FROM_PATH "${CMAKE_SOURCE_DIR}/src")
 set(DOXYGEN_FULL_PATH_NAMES YES)
-set(DOXYGEN_FILE_PATTERNS "*.hpp" "*.dox")
+set(DOXYGEN_FILE_PATTERNS "*.h" "*.hpp" "*.dox")
+
+set(DOXYGEN_EXCLUDE_PATTERNS "${CMAKE_SOURCE_DIR}/src/*/detail/*")
+set(DOXYGEN_EXCLUDE_SYMBOLS "*::detail::*")
 
 # --- Create documents ---
 doxygen_add_docs(digitalcurling_docs
     "${CMAKE_SOURCE_DIR}/src/core/include"
+    "${CMAKE_SOURCE_DIR}/src/plugin-api/include"
+    "${CMAKE_SOURCE_DIR}/src/plugin-loader/include"
+    "${CMAKE_SOURCE_DIR}/src/player/src"
+    "${CMAKE_SOURCE_DIR}/src/simulator/src"
     mainpage.md
     players.md
     simulators.md

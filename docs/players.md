@@ -2,13 +2,13 @@
 
 # identical
 
-乱数を加えたり，速度上限を適用したりせず，入力そのままのショットを行うプレイヤーです．
+乱数を加えたり、速度上限を適用したりせず、入力そのままのショットを行うプレイヤーです。
 
-[PlayerIdenticalFactory](@ref digitalcurling::players::PlayerIdenticalFactory)に対応します．
+[PlayerIdenticalFactory](@ref digitalcurling::players::PlayerIdenticalFactory) に対応します。
 
 Key | Type | Description
 ----|------|-------------------
-`type` | string | プレイヤーID．`"identical"`
+`type` | string | プレイヤーID (`"identical"`)
 
 ```json
 {
@@ -18,18 +18,17 @@ Key | Type | Description
 
 # normal_dist
 
-速度上限を適用した後に，
-初速度の大きさと初期角度にそれぞれ正規分布の乱数を加えるプレイヤーです．
+速度上限を適用した後に、初速度の大きさと初期角度にそれぞれ正規分布の乱数を加えるプレイヤーです。
 
-[PlayerNormalDistFactory](@ref digitalcurling::players::PlayerNormalDistFactory)に対応します．
+[PlayerNormalDistFactory](@ref digitalcurling::players::PlayerNormalDistFactory) に対応します。
 
 Key | Type | Description
 ----|------|-------------------
-`type` | string | プレイヤーID．`"normal_dist"`
+`type` | string | プレイヤーID (`"normal_dist"`)
 `max_speed` | float | ショットの最大速度
-`stddev_speed` | float | ショットの初速に加わる正規分布乱数の標準偏差．
-`stddev_angle` | float | ショットの初期角度に加わる正規分布乱数の標準偏差．
-`seed` | int or `null` | 乱数のシード値．`null`を指定するとランダムに選ばれる．
+`stddev_speed` | float | ショットの初速に加わる正規分布乱数の標準偏差
+`stddev_angle` | float | ショットの初期角度に加わる正規分布乱数の標準偏差
+`seed` | int? | 乱数のシード値 ( `null` を指定でランダム)
 
 ```json
 {
