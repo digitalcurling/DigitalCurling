@@ -1,10 +1,10 @@
 # JSONサポート
 
-デジタルカーリングライブラリのほとんどの構造体/クラスついては[nlohmann/json](https://github.com/nlohmann/json)を用いたJSON変換をサポートしています．
+デジタルカーリングライブラリのほとんどの構造体/クラスは [nlohmann/json](https://github.com/nlohmann/json) を用いたJSON変換をサポートしています。
 
 ## 構造体/クラスの変換
 
-一部を除きほぼすべての構造体/クラスは下記の手順でJSONに変換できます．
+一部を除きほぼすべての構造体/クラスは下記の手順でJSONに変換できます。
 
 ```cpp
 namespace dc = digitalcurling;

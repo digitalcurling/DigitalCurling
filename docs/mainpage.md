@@ -1,28 +1,37 @@
 # DigitalCurling について {#mainpage}
 
-デジタルカーリングはカーリングをシミュレートし，カーリングAI開発を行うためのシステムです．
+デジタルカーリングはカーリングをシミュレートし、カーリングAI開発を行うためのシステムです。
 
-このリファレンスマニュアルではカーリングAI開発をサポートするDigitalCurlingライブラリの詳細な機能について説明します．
+このリファレンスマニュアルではカーリングAI開発をサポートする DigitalCurling ライブラリの詳細な機能について説明します。
 
 # リンク
 
-- [マニュアル](https://github.com/digitalcurling/DigitalCurling3/wiki)
 - [公式サイト](http://minerva.cs.uec.ac.jp/cgi-bin/curling/wiki.cgi)
-- [GitHub](https://github.com/digitalcurling/DigitalCurling3)
+
+## ライブラリ
+
+### C++
+- [ライブラリ](https://github.com/digitalcurling/DigitalCurling) ( リファレンスマニュアル )
+- [クライアントテンプレート](https://github.com/digitalcurling/DigitalCurling4-Client-Cpp)
+
+### Python
+- [ライブラリ](https://github.com/digitalcurling/DigitalCurling4-Python) ( [リファレンスマニュアル](https://digitalcurling.github.io/DigitalCurling4-Python/) )
+- [クライアントテンプレート](https://github.com/digitalcurling/DigitalCurling4-Client-Python)
+
+
+## アプリケーション
+- [対戦サーバー](https://github.com/digitalcurling/DigitalCurling4-Server)
+- [対戦ビュワー](https://github.com/digitalcurling/DigitalCurling4-GUI)
 
 
 
 
 
 
-
-
-
-
-<!-- 以下，名前空間の説明 -->
+<!-- 名前空間の説明 -->
 
 \namespace digitalcurling
-\brief Digital Curling ライブラリはこの名前空間の中に定義されます
+\brief DigitalCurling ライブラリのルート名前空間
 
 
 \namespace digitalcurling::coordinate
